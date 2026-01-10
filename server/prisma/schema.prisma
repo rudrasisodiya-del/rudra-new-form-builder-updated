@@ -1,0 +1,233 @@
+// Pabbly Form Builder - PostgreSQL Database Schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model - Both Admin and Regular Users
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password      String
+  name          String
+  company       String?
+  role          Role     @default(USER)
+  planId        String?  @map("plan_id")
+  plan          Plan?    @relation(fields: [planId], references: [id])
+  apiKey        String?  @unique @map("api_key")
+  isActive      Boolean  @default(true) @map("is_active")
+  emailVerified Boolean  @default(false) @map("email_verified")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  forms         Form[]
+  webhooks      Webhook[]
+  integrations  Integration[]
+  submissions   Submission[]
+  apiLogs       ApiLog[]
+
+  @@map("users")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+// Subscription Plans
+model Plan {
+  id                String   @id @default(uuid())
+  name              String   @unique
+  displayName       String   @map("display_name")
+  price             Decimal  @db.Decimal(10, 2)
+  billingPeriod     String   @map("billing_period") // monthly, yearly
+  formLimit         Int      @map("form_limit")
+  submissionLimit   Int      @map("submission_limit")
+  storageLimit      Int      @map("storage_limit") // in MB
+  teamMembers       Int      @map("team_members")
+  apiCallsLimit     Int      @map("api_calls_limit")
+  features          Json     // Array of feature names
+  isActive          Boolean  @default(true) @map("is_active")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  users             User[]
+
+  @@map("plans")
+}
+
+// Forms
+model Form {
+  id              String       @id @default(uuid())
+  userId          String       @map("user_id")
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title           String
+  description     String?
+  fields          Json         // Array of form fields
+  settings        Json         // Form settings (notifications, redirects, etc.)
+  status          FormStatus   @default(DRAFT)
+  views           Int          @default(0)
+  submissionCount Int          @default(0) @map("submission_count")
+  category        String?
+  tags            String[]
+  isTemplate      Boolean      @default(false) @map("is_template")
+  publishedAt     DateTime?    @map("published_at")
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+
+  // Relations
+  submissions     Submission[]
+  webhooks        Webhook[]
+
+  @@index([userId])
+  @@index([status])
+  @@map("forms")
+}
+
+enum FormStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+// Form Submissions
+model Submission {
+  id          String   @id @default(uuid())
+  formId      String   @map("form_id")
+  form        Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
+  userId      String?  @map("user_id")
+  user        User?    @relation(fields: [userId], references: [id])
+  data        Json     // Submission data
+  ipAddress   String?  @map("ip_address")
+  userAgent   String?  @map("user_agent")
+  status      SubmissionStatus @default(NEW)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([formId])
+  @@index([status])
+  @@map("submissions")
+}
+
+enum SubmissionStatus {
+  NEW
+  ON_HOLD
+  RESOLVED
+  PARTIAL
+}
+
+// Webhooks
+model Webhook {
+  id          String       @id @default(uuid())
+  userId      String       @map("user_id")
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  formId      String?      @map("form_id")
+  form        Form?        @relation(fields: [formId], references: [id], onDelete: Cascade)
+  name        String
+  url         String
+  events      String[]     // Array of event names
+  secret      String?
+  isActive    Boolean      @default(true) @map("is_active")
+  lastTriggered DateTime?  @map("last_triggered")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  // Relations
+  logs        WebhookLog[]
+
+  @@index([userId])
+  @@index([formId])
+  @@map("webhooks")
+}
+
+// Webhook Logs
+model WebhookLog {
+  id          String   @id @default(uuid())
+  webhookId   String   @map("webhook_id")
+  webhook     Webhook  @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+  event       String
+  payload     Json
+  response    Json?
+  statusCode  Int?     @map("status_code")
+  success     Boolean
+  error       String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([webhookId])
+  @@map("webhook_logs")
+}
+
+// Integrations
+model Integration {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  service     String   // stripe, paypal, google, mailchimp, etc.
+  config      Json     // Integration configuration
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@index([service])
+  @@map("integrations")
+}
+
+// API Usage Logs
+model ApiLog {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint    String
+  method      String
+  statusCode  Int      @map("status_code")
+  ipAddress   String   @map("ip_address")
+  userAgent   String?  @map("user_agent")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("api_logs")
+}
+
+// Templates
+model Template {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  category    String
+  thumbnail   String?
+  fields      Json
+  settings    Json
+  isPremium   Boolean  @default(false) @map("is_premium")
+  usageCount  Int      @default(0) @map("usage_count")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([category])
+  @@map("templates")
+}
+
+// Payments
+model Payment {
+  id              String   @id @default(uuid())
+  userId          String   @map("user_id")
+  planId          String   @map("plan_id")
+  amount          Decimal  @db.Decimal(10, 2)
+  currency        String   @default("USD")
+  status          String
+  paymentMethod   String   @map("payment_method") // stripe, paypal
+  transactionId   String?  @map("transaction_id")
+  metadata        Json?
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@map("payments")
+}
