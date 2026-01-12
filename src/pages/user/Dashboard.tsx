@@ -297,21 +297,39 @@ const Dashboard = () => {
         {/* Header with gradient background */}
         <Box
           sx={{
-            background: `linear-gradient(135deg, ${theme.palette.mode === 'dark' ? '#1e293b' : '#ffffff'} 0%, ${theme.palette.mode === 'dark' ? '#0f172a' : '#f8fafc'} 100%)`,
-            borderRadius: 3,
-            p: 4,
+            background: theme.palette.mode === 'dark'
+              ? 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)'
+              : 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+            borderRadius: 4,
+            p: { xs: 3, md: 5 },
             mb: 4,
             position: 'relative',
             overflow: 'hidden',
+            boxShadow: theme.palette.mode === 'dark'
+              ? '0 4px 24px rgba(0, 0, 0, 0.4)'
+              : '0 4px 24px rgba(0, 0, 0, 0.06)',
+            border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
             '&::before': {
               content: '""',
               position: 'absolute',
-              top: -100,
-              right: -100,
+              top: -150,
+              right: -150,
+              width: 400,
+              height: 400,
+              borderRadius: '50%',
+              background: `radial-gradient(circle, ${alpha('#6366f1', theme.palette.mode === 'dark' ? 0.15 : 0.08)} 0%, transparent 70%)`,
+              pointerEvents: 'none',
+            },
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              bottom: -100,
+              left: -100,
               width: 300,
               height: 300,
               borderRadius: '50%',
-              background: `radial-gradient(circle, ${alpha('#6366f1', 0.1)} 0%, transparent 70%)`,
+              background: `radial-gradient(circle, ${alpha('#8b5cf6', theme.palette.mode === 'dark' ? 0.1 : 0.05)} 0%, transparent 70%)`,
+              pointerEvents: 'none',
             },
           }}
         >
@@ -319,66 +337,87 @@ const Dashboard = () => {
             direction={{ xs: 'column', md: 'row' }}
             justifyContent="space-between"
             alignItems={{ xs: 'flex-start', md: 'center' }}
-            spacing={2}
+            spacing={3}
           >
-            <Stack direction="row" alignItems="center" spacing={2} sx={{ position: 'relative', zIndex: 1 }}>
+            <Stack direction="row" alignItems="center" spacing={3} sx={{ position: 'relative', zIndex: 1 }}>
               <Box
                 sx={{
-                  width: 64,
-                  height: 64,
-                  borderRadius: '18px',
+                  width: 72,
+                  height: 72,
+                  borderRadius: '20px',
                   background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 10px 30px rgba(99, 102, 241, 0.4)',
+                  boxShadow: '0 12px 32px rgba(99, 102, 241, 0.35)',
+                  transition: 'transform 0.3s ease',
+                  '&:hover': {
+                    transform: 'scale(1.05) rotate(5deg)',
+                  },
                 }}
               >
-                <RocketIcon sx={{ fontSize: 36, color: 'white' }} />
+                <RocketIcon sx={{ fontSize: 40, color: 'white' }} />
               </Box>
               <Box>
                 <Typography
                   variant="h3"
                   fontWeight={800}
                   sx={{
-                    mb: 0.5,
-                    background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                    mb: 1,
+                    fontSize: { xs: '1.75rem', md: '2.5rem' },
+                    background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                     backgroundClip: 'text',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
-                    letterSpacing: '-1px',
+                    letterSpacing: '-1.5px',
                   }}
                 >
-                  Welcome back, {user?.name || 'User'} 👋
+                  Welcome back, {user?.name || 'User'}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" fontWeight={500} sx={{ maxWidth: 600 }}>
-                  🚀 Track your forms performance and create amazing forms with our intuitive builder
+                <Typography
+                  variant="body1"
+                  color="text.secondary"
+                  fontWeight={500}
+                  sx={{
+                    maxWidth: 600,
+                    fontSize: '0.95rem',
+                    lineHeight: 1.6,
+                  }}
+                >
+                  Track your forms performance and create amazing forms with our intuitive builder
                 </Typography>
               </Box>
             </Stack>
-            <Button
-              variant="contained"
-              size="large"
-              startIcon={<AddIcon />}
-              component={Link}
-              to="/dashboard/forms/create"
-              sx={{
-                background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
-                textTransform: 'none',
-                fontWeight: 700,
-                px: 4,
-                py: 1.5,
-                borderRadius: 2,
-                boxShadow: `0 8px 16px ${alpha('#6366f1', 0.3)}`,
-                transition: 'all 0.3s',
-                '&:hover': {
-                  transform: 'translateY(-2px)',
-                  boxShadow: `0 12px 24px ${alpha('#6366f1', 0.4)}`,
-                },
-              }}
-            >
-              Create New Form
-            </Button>
+            <Stack direction="row" spacing={2} sx={{ position: 'relative', zIndex: 1 }}>
+              <Button
+                variant="contained"
+                size="large"
+                startIcon={<AddIcon sx={{ fontSize: 24 }} />}
+                component={Link}
+                to="/dashboard/forms/create"
+                sx={{
+                  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                  textTransform: 'none',
+                  fontWeight: 700,
+                  fontSize: '1.05rem',
+                  px: 5,
+                  py: 2,
+                  borderRadius: 3,
+                  boxShadow: '0 8px 20px rgba(99, 102, 241, 0.35)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+                    transform: 'translateY(-3px)',
+                    boxShadow: '0 12px 28px rgba(99, 102, 241, 0.45)',
+                  },
+                  '&:active': {
+                    transform: 'translateY(-1px)',
+                  },
+                }}
+              >
+                Create New Form
+              </Button>
+            </Stack>
           </Stack>
         </Box>
 
@@ -400,7 +439,7 @@ const Dashboard = () => {
               title="Submissions"
               value={stats.submissions}
               icon={<CheckCircleIcon sx={{ fontSize: 32, color: 'white' }} />}
-              gradient="linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)"
+              gradient="linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)"
               percentage={8.2}
               trend="up"
               delay={0.1}

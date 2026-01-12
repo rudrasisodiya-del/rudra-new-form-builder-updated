@@ -30,7 +30,14 @@ const APIKeys = lazy(() => import('./pages/user/APIKeys'));
 const Webhooks = lazy(() => import('./pages/user/Webhooks'));
 const Pricing = lazy(() => import('./pages/Pricing'));
 const PublicFormView = lazy(() => import('./pages/PublicFormView'));
+const PublicFormViewWithPayment = lazy(() => import('./pages/PublicFormViewWithPayment'));
 const AIChatbot = lazy(() => import('./components/AIChatbot'));
+const PaymentFormBuilder = lazy(() => import('./pages/user/PaymentFormBuilder'));
+const PDFFormConverter = lazy(() => import('./pages/user/PDFFormConverter'));
+const ESignFormBuilder = lazy(() => import('./pages/user/ESignFormBuilder'));
+const ImportForm = lazy(() => import('./pages/user/ImportForm'));
+const TestFeaturesPage = lazy(() => import('./pages/user/TestFeaturesPage'));
+const HelpPage = lazy(() => import('./pages/user/HelpPage'));
 
 // Loading component
 const PageLoader = () => (
@@ -73,7 +80,7 @@ function AppContent() {
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/forms/:id" element={<PublicFormView />} />
+            <Route path="/forms/:id" element={<PublicFormViewWithPayment />} />
 
             {/* Protected routes */}
             <Route
@@ -95,6 +102,26 @@ function AppContent() {
             <Route
               path="/dashboard/forms/ai-generator"
               element={isAuthenticated ? <AIFormGenerator /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/dashboard/forms/payment"
+              element={isAuthenticated ? <PaymentFormBuilder /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/dashboard/forms/pdf-converter"
+              element={isAuthenticated ? <PDFFormConverter /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/dashboard/forms/esign"
+              element={isAuthenticated ? <ESignFormBuilder /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/dashboard/forms/import"
+              element={isAuthenticated ? <ImportForm /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/dashboard/test-features"
+              element={isAuthenticated ? <TestFeaturesPage /> : <Navigate to="/login" />}
             />
             <Route
               path="/dashboard/forms/builder/:id?"
@@ -119,6 +146,10 @@ function AppContent() {
             <Route
               path="/dashboard/settings"
               element={isAuthenticated ? <Settings /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/dashboard/help"
+              element={isAuthenticated ? <HelpPage /> : <Navigate to="/login" />}
             />
             <Route
               path="/dashboard/integration"

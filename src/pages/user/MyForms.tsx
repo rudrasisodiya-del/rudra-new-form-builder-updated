@@ -292,11 +292,18 @@ const MyForms = () => {
                   '& .MuiOutlinedInput-root': {
                     borderRadius: 2,
                     backgroundColor: alpha(theme.palette.background.default, 0.5),
+                    transition: 'all 0.3s ease',
                     '&:hover': {
                       backgroundColor: theme.palette.background.default,
+                      boxShadow: `0 0 0 2px ${alpha(theme.palette.primary.main, 0.1)}`,
                     },
                     '&.Mui-focused': {
                       backgroundColor: theme.palette.background.default,
+                      boxShadow: `0 0 0 3px ${alpha(theme.palette.primary.main, 0.15)}`,
+                      '& fieldset': {
+                        borderColor: theme.palette.primary.main,
+                        borderWidth: 2,
+                      },
                     },
                   },
                 }}
@@ -308,12 +315,24 @@ const MyForms = () => {
                   startIcon={<FilterIcon />}
                   sx={{
                     textTransform: 'none',
-                    fontWeight: 600,
+                    fontWeight: 700,
                     borderRadius: 2,
                     px: 3,
                     whiteSpace: 'nowrap',
-                    ...(filterStatus === 'all' && {
+                    transition: 'all 0.2s ease',
+                    ...(filterStatus === 'all' ? {
                       background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                      boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)',
+                      '&:hover': {
+                        background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+                        boxShadow: '0 6px 16px rgba(99, 102, 241, 0.4)',
+                        transform: 'translateY(-2px)',
+                      },
+                    } : {
+                      '&:hover': {
+                        bgcolor: alpha(theme.palette.primary.main, 0.08),
+                        borderColor: theme.palette.primary.main,
+                      },
                     }),
                   }}
                 >
@@ -324,12 +343,25 @@ const MyForms = () => {
                   onClick={() => setFilterStatus('PUBLISHED')}
                   sx={{
                     textTransform: 'none',
-                    fontWeight: 600,
+                    fontWeight: 700,
                     borderRadius: 2,
                     px: 3,
                     whiteSpace: 'nowrap',
-                    ...(filterStatus === 'PUBLISHED' && {
+                    transition: 'all 0.2s ease',
+                    ...(filterStatus === 'PUBLISHED' ? {
                       background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                      boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
+                      '&:hover': {
+                        background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+                        boxShadow: '0 6px 16px rgba(16, 185, 129, 0.4)',
+                        transform: 'translateY(-2px)',
+                      },
+                    } : {
+                      '&:hover': {
+                        bgcolor: alpha('#10b981', 0.08),
+                        borderColor: '#10b981',
+                        color: '#10b981',
+                      },
                     }),
                   }}
                 >
@@ -340,12 +372,25 @@ const MyForms = () => {
                   onClick={() => setFilterStatus('DRAFT')}
                   sx={{
                     textTransform: 'none',
-                    fontWeight: 600,
+                    fontWeight: 700,
                     borderRadius: 2,
                     px: 3,
                     whiteSpace: 'nowrap',
-                    ...(filterStatus === 'DRAFT' && {
+                    transition: 'all 0.2s ease',
+                    ...(filterStatus === 'DRAFT' ? {
                       background: 'linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)',
+                      boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)',
+                      '&:hover': {
+                        background: 'linear-gradient(135deg, #d97706 0%, #dc2626 100%)',
+                        boxShadow: '0 6px 16px rgba(245, 158, 11, 0.4)',
+                        transform: 'translateY(-2px)',
+                      },
+                    } : {
+                      '&:hover': {
+                        bgcolor: alpha('#f59e0b', 0.08),
+                        borderColor: '#f59e0b',
+                        color: '#f59e0b',
+                      },
                     }),
                   }}
                 >
@@ -781,57 +826,6 @@ const MyForms = () => {
             </MenuItem>
           ))}
         </Menu>
-
-        {/* Stats Footer */}
-        {filteredForms.length > 0 && (
-          <Box
-            sx={{
-              mt: 4,
-              p: 3,
-              borderRadius: 3,
-              background: alpha(theme.palette.primary.main, 0.05),
-              border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
-            }}
-          >
-            <Stack
-              direction={{ xs: 'column', sm: 'row' }}
-              spacing={3}
-              justifyContent="space-around"
-              divider={
-                <Box sx={{
-                  width: { xs: '100%', sm: 1 },
-                  height: { xs: 1, sm: 40 },
-                  bgcolor: alpha(theme.palette.divider, 0.1),
-                }} />
-              }
-            >
-              <Box sx={{ textAlign: 'center' }}>
-                <Typography variant="h4" fontWeight={700} color="primary">
-                  {filteredForms.length}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Total Forms
-                </Typography>
-              </Box>
-              <Box sx={{ textAlign: 'center' }}>
-                <Typography variant="h4" fontWeight={700} color="primary">
-                  {filteredForms.reduce((acc, form) => acc + (form.submissionCount || 0), 0)}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Total Submissions
-                </Typography>
-              </Box>
-              <Box sx={{ textAlign: 'center' }}>
-                <Typography variant="h4" fontWeight={700} color="primary">
-                  {filteredForms.reduce((acc, form) => acc + (form.views || 0), 0)}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Total Views
-                </Typography>
-              </Box>
-            </Stack>
-          </Box>
-        )}
       </Box>
     </UserLayout>
   );

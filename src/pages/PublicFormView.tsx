@@ -39,11 +39,16 @@ const PublicFormView = () => {
       const response = await axios.get(`http://localhost:5000/api/forms/public/${id}`);
       setForm(response.data.form);
 
+      // Debug: Log all field types
+      console.log('Form fields:', response.data.form.fields.map((f: FormField) => ({ id: f.id, label: f.label, type: f.type })));
+
       // Initialize form values
       const initialValues: Record<string, any> = {};
       response.data.form.fields.forEach((field: FormField) => {
         if (field.type === 'checkbox' || field.type === 'checklist') {
           initialValues[field.id] = [];
+        } else if (field.type === 'rating') {
+          initialValues[field.id] = 0;
         } else {
           initialValues[field.id] = '';
         }
@@ -102,6 +107,36 @@ const PublicFormView = () => {
 
   const renderField = (field: FormField) => {
     const value = formValues[field.id];
+
+    // Special handling for rating fields (check by label if type doesn't match)
+    if (field.type === 'rating' || field.label.toLowerCase().includes('satisfied') || field.label.toLowerCase().includes('rating')) {
+      return (
+        <div className="mb-6">
+          <label className="block font-semibold text-gray-700 mb-2">
+            {field.label} {field.required && <span className="text-red-500">*</span>}
+          </label>
+          <div className="flex gap-2">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <button
+                key={star}
+                type="button"
+                onClick={() => handleInputChange(field.id, star)}
+                className="text-3xl focus:outline-none transition-all hover:scale-110"
+                style={{
+                  color: (value >= star) ? '#f59e0b' : '#d1d5db',
+                  textShadow: (value >= star) ? '0 2px 4px rgba(245, 158, 11, 0.3)' : 'none'
+                }}
+              >
+                ★
+              </button>
+            ))}
+          </div>
+          {value > 0 && (
+            <p className="text-sm text-gray-600 mt-2">{value} out of 5 stars</p>
+          )}
+        </div>
+      );
+    }
 
     switch (field.type) {
       case 'heading':
@@ -346,6 +381,34 @@ const PublicFormView = () => {
               className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
               required={field.required}
             />
+          </div>
+        );
+
+      case 'rating':
+        return (
+          <div className="mb-6">
+            <label className="block font-semibold text-gray-700 mb-2">
+              {field.label} {field.required && <span className="text-red-500">*</span>}
+            </label>
+            <div className="flex gap-2">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  type="button"
+                  onClick={() => handleInputChange(field.id, star)}
+                  className="text-3xl focus:outline-none transition-all hover:scale-110"
+                  style={{
+                    color: (value >= star) ? '#f59e0b' : '#d1d5db',
+                    textShadow: (value >= star) ? '0 2px 4px rgba(245, 158, 11, 0.3)' : 'none'
+                  }}
+                >
+                  ★
+                </button>
+              ))}
+            </div>
+            {value > 0 && (
+              <p className="text-sm text-gray-600 mt-2">{value} out of 5 stars</p>
+            )}
           </div>
         );
 

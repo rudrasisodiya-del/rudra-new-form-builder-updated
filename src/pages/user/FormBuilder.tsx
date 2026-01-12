@@ -397,12 +397,13 @@ const FormBuilderPage = () => {
 
   const renderFieldPreview = (field: FormField) => {
     const isSelected = selectedField === field.id;
-    const borderClass = isSelected ? 'border-indigo-500 ring-2 ring-indigo-200 dark:ring-indigo-800' : 'border-gray-200 dark:border-gray-700';
+    const borderClass = isSelected ? 'border-indigo-500 ring-4 ring-indigo-100 dark:ring-indigo-900/50 shadow-xl shadow-indigo-500/20' : 'border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-700 hover:shadow-lg';
+    const baseClasses = `border-2 ${borderClass} rounded-xl p-6 cursor-pointer bg-white dark:bg-gray-800 backdrop-blur-sm transition-all duration-200 transform hover:scale-[1.01]`;
 
     switch (field.type) {
       case 'heading':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <input
               type="text"
               value={field.label}
@@ -415,7 +416,7 @@ const FormBuilderPage = () => {
 
       case 'fullname':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label} {field.required && <span className="text-red-500">*</span>}</label>
             <div className="grid grid-cols-2 gap-3">
               <input type="text" placeholder="First Name" className="border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-2.5 focus:border-indigo-500 dark:text-white" disabled />
@@ -426,7 +427,7 @@ const FormBuilderPage = () => {
 
       case 'address':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label} {field.required && <span className="text-red-500">*</span>}</label>
             <input type="text" placeholder="Street Address" className="border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-2.5 w-full mb-3 focus:border-indigo-500 dark:text-white" disabled />
             <div className="grid grid-cols-2 gap-3">
@@ -439,7 +440,7 @@ const FormBuilderPage = () => {
 
       case 'signature':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label} {field.required && <span className="text-red-500">*</span>}</label>
             <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg h-32 flex items-center justify-center bg-gray-50 dark:bg-gray-700/50">
               <span className="text-gray-400">Sign here</span>
@@ -449,7 +450,7 @@ const FormBuilderPage = () => {
 
       case 'takephoto':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label} {field.required && <span className="text-red-500">*</span>}</label>
             <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg h-32 flex items-center justify-center bg-gray-50 dark:bg-gray-700/50">
               <span className="text-gray-400">Take Photo</span>
@@ -460,7 +461,7 @@ const FormBuilderPage = () => {
       case 'checklist':
       case 'checkbox':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label} {field.required && <span className="text-red-500">*</span>}</label>
             {(field.options || ['Option 1', 'Option 2']).map((option, idx) => (
               <label key={idx} className="flex items-center gap-2 mb-2 dark:text-white">
@@ -473,7 +474,7 @@ const FormBuilderPage = () => {
 
       case 'radio':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label} {field.required && <span className="text-red-500">*</span>}</label>
             {(field.options || ['Option 1', 'Option 2']).map((option, idx) => (
               <label key={idx} className="flex items-center gap-2 mb-2 dark:text-white">
@@ -487,7 +488,7 @@ const FormBuilderPage = () => {
       case 'dropdown':
       case 'dynamicdropdowns':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label} {field.required && <span className="text-red-500">*</span>}</label>
             <select className="w-full border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-2.5 focus:border-indigo-500 dark:text-white" disabled>
               <option>Select...</option>
@@ -501,7 +502,7 @@ const FormBuilderPage = () => {
       case 'textarea':
       case 'longtext':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label} {field.required && <span className="text-red-500">*</span>}</label>
             <textarea
               placeholder={field.placeholder}
@@ -514,7 +515,7 @@ const FormBuilderPage = () => {
 
       case 'datagrid':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label} {field.required && <span className="text-red-500">*</span>}</label>
             <table className="w-full border-2 border-gray-300 dark:border-gray-600">
               <thead>
@@ -535,7 +536,7 @@ const FormBuilderPage = () => {
 
       case 'termsandconditions':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <div className="border-2 border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-gray-700/50 max-h-32 overflow-y-auto mb-3">
               <p className="text-sm text-gray-700 dark:text-gray-300">Terms and conditions text will appear here...</p>
             </div>
@@ -548,7 +549,7 @@ const FormBuilderPage = () => {
 
       case 'pdfembedder':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label}</label>
             <div className="border-2 border-gray-300 dark:border-gray-600 rounded-lg h-64 flex items-center justify-center bg-gray-50 dark:bg-gray-700/50">
               <span className="text-gray-400">PDF Document</span>
@@ -559,7 +560,7 @@ const FormBuilderPage = () => {
       // Widget fields
       case 'multipletextfields':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label} {field.required && <span className="text-red-500">*</span>}</label>
             <div className="space-y-3">
               <input type="text" placeholder="Field 1" className="w-full border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-2.5 focus:border-indigo-500 dark:text-white" disabled />
@@ -571,7 +572,7 @@ const FormBuilderPage = () => {
 
       case 'formcalculation':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label}</label>
             <div className="space-y-3">
               <div className="flex items-center gap-2">
@@ -588,7 +589,7 @@ const FormBuilderPage = () => {
 
       case 'configurablelist':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label}</label>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
@@ -602,7 +603,7 @@ const FormBuilderPage = () => {
 
       case 'dynamictextbox':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label}</label>
             <div className="space-y-2">
               <input type="text" placeholder="Dynamic input field" className="w-full border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-2.5 dark:text-white" disabled />
@@ -613,7 +614,7 @@ const FormBuilderPage = () => {
 
       case 'addoptions':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label}</label>
             <div className="space-y-2">
               <select className="w-full border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-2.5 dark:text-white" disabled>
@@ -696,7 +697,7 @@ const FormBuilderPage = () => {
 
       case 'phone':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label} {field.required && <span className="text-red-500">*</span>}</label>
             <div className="flex gap-2">
               <select className="border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2.5 focus:border-indigo-500 dark:text-white" disabled>
@@ -710,7 +711,7 @@ const FormBuilderPage = () => {
       case 'datepicker':
       case 'date':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label} {field.required && <span className="text-red-500">*</span>}</label>
             <div className="relative">
               <input type="date" className="w-full border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-4 py-2.5 focus:border-indigo-500 dark:text-white" disabled />
@@ -723,7 +724,7 @@ const FormBuilderPage = () => {
 
       case 'appointment':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label} {field.required && <span className="text-red-500">*</span>}</label>
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
@@ -742,7 +743,7 @@ const FormBuilderPage = () => {
 
       case 'fillintheblank':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label} {field.required && <span className="text-red-500">*</span>}</label>
             <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
               <p className="text-gray-700 dark:text-gray-300 mb-2">
@@ -754,7 +755,7 @@ const FormBuilderPage = () => {
 
       case 'file':
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label} {field.required && <span className="text-red-500">*</span>}</label>
             <div className="relative">
               <input
@@ -779,10 +780,29 @@ const FormBuilderPage = () => {
           </div>
         );
 
+      case 'rating':
+        return (
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
+            <label className="font-semibold block mb-3 dark:text-white">{field.label} {field.required && <span className="text-red-500">*</span>}</label>
+            <div className="flex gap-2">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <span
+                  key={star}
+                  className="text-3xl cursor-pointer transition-all hover:scale-110"
+                  style={{ color: '#d1d5db' }}
+                >
+                  ★
+                </span>
+              ))}
+            </div>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Click stars to rate (1-5)</p>
+          </div>
+        );
+
       // Default case for other field types
       default:
         return (
-          <div className={`border-2 ${borderClass} rounded-xl p-6 cursor-pointer hover:border-indigo-400 dark:bg-gray-800/50 backdrop-blur-sm transition-all duration-200`} onClick={() => setSelectedField(field.id)}>
+          <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label} {field.required && <span className="text-red-500">*</span>}</label>
             <input
               type={field.type === 'shorttext' ? 'text' : field.type === 'number' ? 'number' : 'text'}
@@ -879,7 +899,7 @@ const FormBuilderPage = () => {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="bg-gradient-to-r from-indigo-600 to-cyan-500 text-white px-6 py-2 rounded-lg hover:from-indigo-700 hover:to-cyan-600 font-semibold disabled:opacity-50 shadow-lg shadow-indigo-500/30 transition-all duration-200 transform hover:scale-105"
+              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-2 rounded-lg hover:from-indigo-700 hover:to-purple-700 font-semibold disabled:opacity-50 shadow-lg shadow-indigo-500/30 transition-all duration-200 transform hover:scale-105 active:scale-95"
             >
               {saving ? 'Saving...' : 'Save'}
             </button>
@@ -890,25 +910,25 @@ const FormBuilderPage = () => {
         <div className="flex gap-2 justify-center">
           <button
             onClick={() => setActiveTab('build')}
-            className={`px-6 py-2 font-semibold rounded-lg transition-all duration-200 ${activeTab === 'build' ? 'bg-gradient-to-r from-indigo-600 to-cyan-500 text-white shadow-lg' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+            className={`px-6 py-2.5 font-bold rounded-lg transition-all duration-200 ${activeTab === 'build' ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30 transform scale-105' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
           >
             Build
           </button>
           <button
             onClick={() => setActiveTab('settings')}
-            className={`px-6 py-2 font-semibold rounded-lg transition-all duration-200 ${activeTab === 'settings' ? 'bg-gradient-to-r from-indigo-600 to-cyan-500 text-white shadow-lg' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+            className={`px-6 py-2.5 font-bold rounded-lg transition-all duration-200 ${activeTab === 'settings' ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30 transform scale-105' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
           >
             Settings
           </button>
           <button
             onClick={() => setActiveTab('logic')}
-            className={`px-6 py-2 font-semibold rounded-lg transition-all duration-200 flex items-center gap-2 ${activeTab === 'logic' ? 'bg-gradient-to-r from-purple-600 to-pink-500 text-white shadow-lg' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+            className={`px-6 py-2.5 font-bold rounded-lg transition-all duration-200 flex items-center gap-2 ${activeTab === 'logic' ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30 transform scale-105' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
           >
             <span>⚡</span> Logic
           </button>
           <button
             onClick={() => setActiveTab('publish')}
-            className={`px-6 py-2 font-semibold rounded-lg transition-all duration-200 ${activeTab === 'publish' ? 'bg-gradient-to-r from-indigo-600 to-cyan-500 text-white shadow-lg' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+            className={`px-6 py-2.5 font-bold rounded-lg transition-all duration-200 ${activeTab === 'publish' ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30 transform scale-105' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
           >
             Publish
           </button>
@@ -921,34 +941,34 @@ const FormBuilderPage = () => {
           <>
             {/* Modern Sidebar with Elements */}
             {showSidebar && (
-              <aside className="w-80 bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-white h-full overflow-y-auto shadow-2xl">
+              <aside className="w-80 bg-white dark:bg-gray-900 text-gray-900 dark:text-white h-full overflow-y-auto border-r border-gray-200 dark:border-gray-800">
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-cyan-600 dark:from-indigo-400 dark:to-cyan-400 bg-clip-text text-transparent">Form Elements</h2>
-                    <button onClick={() => setShowSidebar(false)} className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <h2 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">Form Elements</h2>
+                    <button onClick={() => setShowSidebar(false)} className="p-2 rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </button>
                   </div>
 
                   {/* Horizontal Category Tabs */}
-                  <div className="flex gap-1 mb-4 bg-gray-200 dark:bg-gray-800/50 p-1 rounded-xl">
+                  <div className="flex gap-1 mb-5 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl">
                     <button
                       onClick={() => setSidebarTab('basic')}
-                      className={`flex-1 px-3 py-2 text-sm font-semibold rounded-lg transition-all duration-200 ${sidebarTab === 'basic' ? 'bg-gradient-to-r from-indigo-500 to-cyan-500 text-white shadow-lg' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
+                      className={`flex-1 px-3 py-2.5 text-sm font-bold rounded-lg transition-all duration-200 ${sidebarTab === 'basic' ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
                     >
                       Basic
                     </button>
                     <button
                       onClick={() => setSidebarTab('payments')}
-                      className={`flex-1 px-3 py-2 text-sm font-semibold rounded-lg transition-all duration-200 ${sidebarTab === 'payments' ? 'bg-gradient-to-r from-indigo-500 to-cyan-500 text-white shadow-lg' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
+                      className={`flex-1 px-3 py-2.5 text-sm font-bold rounded-lg transition-all duration-200 ${sidebarTab === 'payments' ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
                     >
                       Payments
                     </button>
                     <button
                       onClick={() => setSidebarTab('widgets')}
-                      className={`flex-1 px-3 py-2 text-sm font-semibold rounded-lg transition-all duration-200 ${sidebarTab === 'widgets' ? 'bg-gradient-to-r from-indigo-500 to-cyan-500 text-white shadow-lg' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
+                      className={`flex-1 px-3 py-2.5 text-sm font-bold rounded-lg transition-all duration-200 ${sidebarTab === 'widgets' ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
                     >
                       Widgets
                     </button>
@@ -969,7 +989,7 @@ const FormBuilderPage = () => {
                   </div>
 
                   {/* Elements List with Gradient Icons */}
-                  <div className="space-y-2">
+                  <div className="space-y-2.5">
                     {sidebarTab === 'basic' && basicElements.map((element) => (
                       <button
                         key={element.type}
@@ -977,12 +997,12 @@ const FormBuilderPage = () => {
                         draggable
                         onDragStart={handleDragStart(element.type)}
                         onDragEnd={handleDragEnd}
-                        className="w-full flex items-center gap-3 px-4 py-3.5 bg-white dark:bg-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-all duration-200 text-left group transform hover:scale-105 border border-gray-200 dark:border-transparent cursor-pointer active:cursor-grabbing"
+                        className="w-full flex items-center gap-3 px-4 py-3.5 bg-white dark:bg-gray-800 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 dark:hover:from-gray-800 dark:hover:to-gray-700 rounded-xl transition-all duration-200 text-left group transform hover:scale-[1.02] hover:shadow-lg hover:shadow-indigo-500/10 border border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-700 cursor-grab active:cursor-grabbing active:scale-[0.98]"
                       >
-                        <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${element.gradient} flex items-center justify-center text-lg shadow-lg group-hover:shadow-xl transition-shadow`}>
+                        <div className={`w-11 h-11 rounded-lg bg-gradient-to-br ${element.gradient} flex items-center justify-center text-lg shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200`}>
                           {element.icon}
                         </div>
-                        <span className="font-medium text-gray-900 dark:text-white">{element.label}</span>
+                        <span className="font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{element.label}</span>
                       </button>
                     ))}
 
@@ -993,12 +1013,12 @@ const FormBuilderPage = () => {
                         draggable
                         onDragStart={handleDragStart(element.type)}
                         onDragEnd={handleDragEnd}
-                        className="w-full flex items-center gap-3 px-4 py-3.5 bg-white dark:bg-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-all duration-200 text-left group transform hover:scale-105 border border-gray-200 dark:border-transparent cursor-pointer active:cursor-grabbing"
+                        className="w-full flex items-center gap-3 px-4 py-3.5 bg-white dark:bg-gray-800 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 dark:hover:from-gray-800 dark:hover:to-gray-700 rounded-xl transition-all duration-200 text-left group transform hover:scale-[1.02] hover:shadow-lg hover:shadow-indigo-500/10 border border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-700 cursor-grab active:cursor-grabbing active:scale-[0.98]"
                       >
-                        <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${element.gradient} flex items-center justify-center text-lg shadow-lg group-hover:shadow-xl transition-shadow`}>
+                        <div className={`w-11 h-11 rounded-lg bg-gradient-to-br ${element.gradient} flex items-center justify-center text-lg shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200`}>
                           {element.icon}
                         </div>
-                        <span className="font-medium text-gray-900 dark:text-white">{element.label}</span>
+                        <span className="font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{element.label}</span>
                       </button>
                     ))}
 
@@ -1009,12 +1029,12 @@ const FormBuilderPage = () => {
                         draggable
                         onDragStart={handleDragStart(element.type)}
                         onDragEnd={handleDragEnd}
-                        className="w-full flex items-center gap-3 px-4 py-3.5 bg-white dark:bg-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-xl transition-all duration-200 text-left group transform hover:scale-105 border border-gray-200 dark:border-transparent cursor-pointer active:cursor-grabbing"
+                        className="w-full flex items-center gap-3 px-4 py-3.5 bg-white dark:bg-gray-800 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 dark:hover:from-gray-800 dark:hover:to-gray-700 rounded-xl transition-all duration-200 text-left group transform hover:scale-[1.02] hover:shadow-lg hover:shadow-indigo-500/10 border border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-700 cursor-grab active:cursor-grabbing active:scale-[0.98]"
                       >
-                        <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${element.gradient} flex items-center justify-center text-lg shadow-lg group-hover:shadow-xl transition-shadow`}>
+                        <div className={`w-11 h-11 rounded-lg bg-gradient-to-br ${element.gradient} flex items-center justify-center text-lg shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200`}>
                           {element.icon}
                         </div>
-                        <span className="font-medium text-gray-900 dark:text-white">{element.label}</span>
+                        <span className="font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{element.label}</span>
                       </button>
                     ))}
                   </div>
@@ -1023,17 +1043,17 @@ const FormBuilderPage = () => {
             )}
 
             {/* Form Canvas */}
-            <main className="flex-1 p-8 overflow-y-auto relative">
+            <main className="flex-1 p-8 overflow-y-auto relative bg-gray-50 dark:bg-gray-900">
               {!showSidebar && (
                 <button
                   onClick={() => setShowSidebar(true)}
-                  className="mb-6 px-6 py-3 bg-gradient-to-r from-indigo-600 to-cyan-500 text-white rounded-xl hover:from-indigo-700 hover:to-cyan-600 shadow-lg shadow-indigo-500/30 transform hover:scale-105 transition-all"
+                  className="mb-6 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 shadow-lg shadow-indigo-500/30 transform hover:scale-105 active:scale-95 transition-all font-semibold"
                 >
                   Show Elements Panel
                 </button>
               )}
 
-              <div className="max-w-4xl mx-auto bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-gray-200 dark:border-gray-700">
+              <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
                 {/* Logo Upload Area */}
                 <div className="relative mb-8">
                   <input
@@ -1144,10 +1164,11 @@ const FormBuilderPage = () => {
                       {fields.map((field, index) => (
                         <div key={field.id} className="relative group">
                           {renderFieldPreview(field)}
-                          <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-200">
                             <button
                               onClick={() => removeField(field.id)}
-                              className="bg-red-500 hover:bg-red-600 text-white rounded-lg w-9 h-9 flex items-center justify-center shadow-lg transition-all transform hover:scale-110"
+                              className="bg-red-500 hover:bg-red-600 text-white rounded-lg w-10 h-10 flex items-center justify-center shadow-lg shadow-red-500/30 transition-all transform hover:scale-110 active:scale-95"
+                              title="Delete field"
                             >
                               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

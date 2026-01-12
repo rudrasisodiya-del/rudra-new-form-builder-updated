@@ -94,6 +94,14 @@ const Settings = () => {
       setName(userData.name || '');
       setEmail(userData.email || '');
       setCompany(userData.company || '');
+
+      // Load notification preferences if they exist
+      if (userData.preferences) {
+        setEmailNotifications(userData.preferences.emailNotifications ?? true);
+        setFormSubmissions(userData.preferences.formSubmissions ?? true);
+        setWeeklyReports(userData.preferences.weeklyReports ?? false);
+        setDarkMode(userData.preferences.darkMode ?? false);
+      }
     } catch (error) {
       console.error('Error fetching user:', error);
     } finally {
@@ -141,6 +149,24 @@ const Settings = () => {
     }
   };
 
+  const handlePreferencesSave = async () => {
+    setSaving(true);
+    try {
+      await api.put('/auth/preferences', {
+        emailNotifications,
+        formSubmissions,
+        weeklyReports,
+        darkMode,
+      });
+      showSuccess('Preferences saved successfully!');
+    } catch (error) {
+      console.error('Error saving preferences:', error);
+      alert('Failed to save preferences');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   if (loading) {
     return (
       <UserLayout>
@@ -181,7 +207,7 @@ const Settings = () => {
               fontWeight={800}
               sx={{
                 mb: 1,
-                background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                 backgroundClip: 'text',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
@@ -248,7 +274,7 @@ const Settings = () => {
                     '& .MuiTabs-indicator': {
                       height: 3,
                       borderRadius: '3px 3px 0 0',
-                      background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                      background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                     },
                   }}
                 >
@@ -269,7 +295,7 @@ const Settings = () => {
                           width: 120,
                           height: 120,
                           fontSize: '3rem',
-                          background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                          background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                           boxShadow: `0 8px 24px ${alpha('#6366f1', 0.3)}`,
                           mb: 2,
                         }}
@@ -381,7 +407,7 @@ const Settings = () => {
                           startIcon={<SaveIcon />}
                           disabled={saving}
                           sx={{
-                            background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                            background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                             textTransform: 'none',
                             fontWeight: 700,
                             px: 4,
@@ -682,8 +708,10 @@ const Settings = () => {
                       variant="contained"
                       size="large"
                       startIcon={<SaveIcon />}
+                      disabled={saving}
+                      onClick={handlePreferencesSave}
                       sx={{
-                        background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                        background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                         textTransform: 'none',
                         fontWeight: 700,
                         px: 4,
@@ -695,9 +723,12 @@ const Settings = () => {
                           transform: 'translateY(-2px)',
                           boxShadow: `0 6px 16px ${alpha('#6366f1', 0.4)}`,
                         },
+                        '&:disabled': {
+                          opacity: 0.6,
+                        },
                       }}
                     >
-                      Save Preferences
+                      {saving ? 'Saving...' : 'Save Preferences'}
                     </Button>
                   </Box>
                 </CardContent>

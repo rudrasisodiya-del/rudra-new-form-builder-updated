@@ -42,7 +42,7 @@ const FormTypeSelection = () => {
       icon: '💰',
       gradient: 'from-slate-700 to-slate-900',
       iconBg: 'from-green-300 to-emerald-400',
-      action: () => navigate('/dashboard/forms/builder?type=payment')
+      action: () => navigate('/dashboard/forms/payment')
     },
     {
       id: 'pdf',
@@ -51,7 +51,7 @@ const FormTypeSelection = () => {
       icon: '📄',
       gradient: 'from-blue-600 to-cyan-600',
       iconBg: 'from-blue-200 to-cyan-200',
-      action: () => navigate('/dashboard/forms/builder?type=pdf')
+      action: () => navigate('/dashboard/forms/pdf-converter')
     },
     {
       id: 'esign',
@@ -60,7 +60,7 @@ const FormTypeSelection = () => {
       icon: '✍️',
       gradient: 'from-green-500 to-emerald-600',
       iconBg: 'from-green-200 to-emerald-200',
-      action: () => navigate('/dashboard/forms/builder?type=esign')
+      action: () => navigate('/dashboard/forms/esign')
     },
     {
       id: 'import',
@@ -69,7 +69,7 @@ const FormTypeSelection = () => {
       icon: '⬇️',
       gradient: 'from-sky-400 to-blue-600',
       iconBg: 'from-sky-200 to-blue-200',
-      action: () => alert('Import form feature coming soon!')
+      action: () => navigate('/dashboard/forms/import')
     }
   ];
 

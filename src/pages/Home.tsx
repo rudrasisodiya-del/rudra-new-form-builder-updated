@@ -83,21 +83,24 @@ const Home = () => {
       role: 'Marketing Director',
       company: 'TechCorp',
       content: 'This form builder has transformed how we collect customer data. The analytics features are outstanding!',
-      avatar: 'SJ'
+      avatar: 'SJ',
+      image: 'https://i.pravatar.cc/150?img=5'
     },
     {
       name: 'Michael Chen',
       role: 'Product Manager',
       company: 'StartupXYZ',
       content: 'Integration with our existing tools was seamless. Best decision we made this year.',
-      avatar: 'MC'
+      avatar: 'MC',
+      image: 'https://i.pravatar.cc/150?img=12'
     },
     {
       name: 'Emily Rodriguez',
       role: 'Operations Lead',
       company: 'Global Services',
       content: 'The automation capabilities saved us countless hours. Highly recommended for any business.',
-      avatar: 'ER'
+      avatar: 'ER',
+      image: 'https://i.pravatar.cc/150?img=9'
     }
   ];
 
@@ -301,8 +304,12 @@ const Home = () => {
                 }`}
               >
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center text-white font-bold">
-                    {testimonial.avatar}
+                  <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-indigo-500/20 flex-shrink-0">
+                    <img
+                      src={testimonial.image}
+                      alt={testimonial.name}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <div>
                     <h4 className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>

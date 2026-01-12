@@ -151,6 +151,7 @@ const UserLayout = ({ children }: UserLayoutProps) => {
                         ? alpha(muiTheme.palette.primary.main, 0.12)
                         : alpha(muiTheme.palette.text.primary, 0.04),
                       color: active ? 'primary.main' : 'text.primary',
+                      transform: 'translateX(4px)',
                     },
                     transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                     fontWeight: active ? 600 : 500,
@@ -213,11 +214,16 @@ const UserLayout = ({ children }: UserLayoutProps) => {
 
             {/* Help */}
             <ListItemButton
+              component={Link}
+              to="/dashboard/help"
               sx={{
                 borderRadius: '12px',
                 px: 2,
                 py: 1.5,
-                color: 'text.secondary',
+                color: isActive('/dashboard/help') ? 'primary.main' : 'text.secondary',
+                bgcolor: isActive('/dashboard/help')
+                  ? alpha(muiTheme.palette.primary.main, 0.08)
+                  : 'transparent',
                 '&:hover': {
                   bgcolor: alpha(muiTheme.palette.text.primary, 0.04),
                 },

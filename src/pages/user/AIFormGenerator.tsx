@@ -14,12 +14,14 @@ import {
   Alert,
   useTheme,
   alpha,
+  Rating,
 } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon,
   AutoAwesome as AutoAwesomeIcon,
   Send as SendIcon,
   Lightbulb as LightbulbIcon,
+  Star as StarIcon,
 } from '@mui/icons-material';
 import UserLayout from '../../components/layout/UserLayout';
 
@@ -354,20 +356,40 @@ const AIFormGenerator = () => {
                               <Chip label="Required" size="small" color="error" sx={{ height: 20, fontSize: '0.7rem' }} />
                             )}
                           </Stack>
-                          <TextField
-                            fullWidth
-                            placeholder={field.placeholder || `Enter ${field.label.toLowerCase()}`}
-                            type={field.type === 'textarea' ? 'text' : field.type}
-                            multiline={field.type === 'textarea'}
-                            rows={field.type === 'textarea' ? 3 : 1}
-                            disabled
-                            select={field.type === 'select'}
-                            sx={{
-                              '& .MuiOutlinedInput-root': {
-                                bgcolor: isDark ? alpha('#fff', 0.03) : alpha('#000', 0.02),
-                              },
-                            }}
-                          />
+                          {field.type === 'rating' ? (
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, py: 1 }}>
+                              <Rating
+                                name={`rating-${field.id}`}
+                                defaultValue={0}
+                                precision={1}
+                                size="large"
+                                emptyIcon={<StarIcon style={{ opacity: 0.3 }} fontSize="inherit" />}
+                                sx={{
+                                  '& .MuiRating-iconFilled': {
+                                    color: '#f59e0b',
+                                  },
+                                  '& .MuiRating-iconHover': {
+                                    color: '#d97706',
+                                  },
+                                }}
+                              />
+                            </Box>
+                          ) : (
+                            <TextField
+                              fullWidth
+                              placeholder={field.placeholder || `Enter ${field.label.toLowerCase()}`}
+                              type={field.type === 'textarea' ? 'text' : field.type}
+                              multiline={field.type === 'textarea'}
+                              rows={field.type === 'textarea' ? 3 : 1}
+                              disabled
+                              select={field.type === 'select'}
+                              sx={{
+                                '& .MuiOutlinedInput-root': {
+                                  bgcolor: isDark ? alpha('#fff', 0.03) : alpha('#000', 0.02),
+                                },
+                              }}
+                            />
+                          )}
                         </Box>
                       ))}
                     </Stack>

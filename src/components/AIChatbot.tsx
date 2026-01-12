@@ -45,63 +45,63 @@ const AIChatbot = () => {
     // Pricing queries
     if (lowerMessage.includes('price') || lowerMessage.includes('pricing') || lowerMessage.includes('cost') || lowerMessage.includes('plan')) {
       if (lowerMessage.includes('free')) {
-        return `**Free Plan:**\n${knowledgeBase.pricing.free}\n\nWould you like to know about our other plans?`;
+        return `Free Plan: ${knowledgeBase.pricing.free}\n\nWould you like to know about our other plans?`;
       } else if (lowerMessage.includes('pro')) {
-        return `**Pro Plan:**\n${knowledgeBase.pricing.pro}\n\nThis is our most popular plan for growing businesses.`;
+        return `Pro Plan: ${knowledgeBase.pricing.pro}\n\nThis is our most popular plan for growing businesses.`;
       } else if (lowerMessage.includes('business') || lowerMessage.includes('enterprise')) {
-        return `**Business Plan:**\n${knowledgeBase.pricing.business}\n\nPerfect for large organizations with advanced needs.`;
+        return `Business Plan: ${knowledgeBase.pricing.business}\n\nPerfect for large organizations with advanced needs.`;
       }
-      return `We offer three plans:\n\n**Free** - $0/month: ${knowledgeBase.pricing.free}\n\n**Pro** - $29/month: ${knowledgeBase.pricing.pro}\n\n**Business** - $99/month: ${knowledgeBase.pricing.business}\n\nWhich plan interests you?`;
+      return `We offer three plans:\n\nFree - $0/month: ${knowledgeBase.pricing.free}\n\nPro - $29/month: ${knowledgeBase.pricing.pro}\n\nBusiness - $99/month: ${knowledgeBase.pricing.business}\n\nWhich plan interests you?`;
     }
 
     // Feature queries
     if (lowerMessage.includes('feature') || lowerMessage.includes('what can') || lowerMessage.includes('capabilities')) {
-      return `Pabbly Forms offers:\n\n• **Form Builder**: ${knowledgeBase.features.formBuilder}\n• **Webhooks**: ${knowledgeBase.features.webhooks}\n• **API Access**: ${knowledgeBase.features.api}\n• **Integrations**: ${knowledgeBase.features.integrations}\n• **Analytics**: ${knowledgeBase.features.analytics}\n• **Sharing**: ${knowledgeBase.features.sharing}\n\nWhat would you like to know more about?`;
+      return `Pabbly Forms offers:\n\nForm Builder: ${knowledgeBase.features.formBuilder}\n\nWebhooks: ${knowledgeBase.features.webhooks}\n\nAPI Access: ${knowledgeBase.features.api}\n\nIntegrations: ${knowledgeBase.features.integrations}\n\nAnalytics: ${knowledgeBase.features.analytics}\n\nSharing: ${knowledgeBase.features.sharing}\n\nWhat would you like to know more about?`;
     }
 
     // Webhook queries
     if (lowerMessage.includes('webhook')) {
       if (lowerMessage.includes('how') || lowerMessage.includes('create') || lowerMessage.includes('setup')) {
-        return `**Setting up Webhooks:**\n${knowledgeBase.howTo.addWebhook}\n\n${knowledgeBase.features.webhooks}\n\nNeed help with webhook security?`;
+        return `Setting up Webhooks: ${knowledgeBase.howTo.addWebhook}\n\n${knowledgeBase.features.webhooks}\n\nNeed help with webhook security?`;
       }
       return knowledgeBase.features.webhooks;
     }
 
     // API queries
     if (lowerMessage.includes('api')) {
-      return `**API Access:**\n${knowledgeBase.features.api}\n\nYou can find your API key in the API Keys page. Available endpoints include:\n• GET /api/forms - Get all forms\n• GET /api/forms/:id - Get specific form\n• POST /api/forms - Create form\n• GET /api/submissions - Get submissions\n\nWould you like to know about rate limits?`;
+      return `API Access: ${knowledgeBase.features.api}\n\nYou can find your API key in the API Keys page. Available endpoints include:\n\nGET /api/forms - Get all forms\nGET /api/forms/:id - Get specific form\nPOST /api/forms - Create form\nGET /api/submissions - Get submissions\n\nWould you like to know about rate limits?`;
     }
 
     // Integration queries
     if (lowerMessage.includes('integration') || lowerMessage.includes('integrate') || lowerMessage.includes('connect')) {
-      return `**Integrations:**\n${knowledgeBase.features.integrations}\n\nYou can manage integrations from the Integration page. Popular integrations include Google Sheets for automatic data sync and Slack for real-time notifications.\n\nWhich integration are you interested in?`;
+      return `Integrations: ${knowledgeBase.features.integrations}\n\nYou can manage integrations from the Integration page. Popular integrations include Google Sheets for automatic data sync and Slack for real-time notifications.\n\nWhich integration are you interested in?`;
     }
 
     // How-to queries
     if (lowerMessage.includes('how to create') || lowerMessage.includes('how do i create')) {
-      return `**Creating a Form:**\n${knowledgeBase.howTo.createForm}\n\nOur drag-and-drop builder makes it easy to create professional forms in minutes!`;
+      return `Creating a Form: ${knowledgeBase.howTo.createForm}\n\nOur drag-and-drop builder makes it easy to create professional forms in minutes!`;
     }
 
     if (lowerMessage.includes('submission') && (lowerMessage.includes('view') || lowerMessage.includes('see'))) {
-      return `**Viewing Submissions:**\n${knowledgeBase.howTo.viewSubmissions}\n\nYou can also export submissions to CSV for analysis.`;
+      return `Viewing Submissions: ${knowledgeBase.howTo.viewSubmissions}\n\nYou can also export submissions to CSV for analysis.`;
     }
 
     if (lowerMessage.includes('share') && (lowerMessage.includes('how') || lowerMessage.includes('embed'))) {
-      return `**Sharing Forms:**\n${knowledgeBase.howTo.shareForm}\n\nYou can share via direct link, embed on your website, or share on social media platforms.`;
+      return `Sharing Forms: ${knowledgeBase.howTo.shareForm}\n\nYou can share via direct link, embed on your website, or share on social media platforms.`;
     }
 
     if (lowerMessage.includes('upgrade')) {
-      return `**Upgrading Your Plan:**\n${knowledgeBase.howTo.upgradeplan}\n\nUpgrading gives you access to more forms, submissions, and advanced features. Would you like to see our pricing?`;
+      return `Upgrading Your Plan: ${knowledgeBase.howTo.upgradeplan}\n\nUpgrading gives you access to more forms, submissions, and advanced features. Would you like to see our pricing?`;
     }
 
     // Form builder queries
     if (lowerMessage.includes('form builder') || lowerMessage.includes('field type')) {
-      return `**Form Builder:**\n${knowledgeBase.features.formBuilder}\n\nYou can customize each field with labels, placeholders, and validation rules. Try our drag-and-drop builder now!`;
+      return `Form Builder: ${knowledgeBase.features.formBuilder}\n\nYou can customize each field with labels, placeholders, and validation rules. Try our drag-and-drop builder now!`;
     }
 
     // Analytics queries
     if (lowerMessage.includes('analytics') || lowerMessage.includes('track') || lowerMessage.includes('stat')) {
-      return `**Analytics & Tracking:**\n${knowledgeBase.features.analytics}\n\nView real-time analytics for each form including views, submissions, and conversion rates.`;
+      return `Analytics & Tracking: ${knowledgeBase.features.analytics}\n\nView real-time analytics for each form including views, submissions, and conversion rates.`;
     }
 
     // Greeting
@@ -115,7 +115,7 @@ const AIChatbot = () => {
     }
 
     // Default response
-    return `I can help you with:\n\n• **Pricing** - Learn about our Free, Pro, and Business plans\n• **Features** - Form builder, webhooks, API, integrations, analytics\n• **How-to guides** - Creating forms, viewing submissions, setting up webhooks\n• **Integrations** - Connecting with Google, Slack, Stripe, and more\n\nWhat would you like to know?`;
+    return `I can help you with:\n\nPricing - Learn about our Free, Pro, and Business plans\nFeatures - Form builder, webhooks, API, integrations, analytics\nHow-to guides - Creating forms, viewing submissions, setting up webhooks\nIntegrations - Connecting with Google, Slack, Stripe, and more\n\nWhat would you like to know?`;
   };
 
   const handleSend = async () => {
