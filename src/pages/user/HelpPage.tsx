@@ -88,19 +88,6 @@ const HelpPage = () => {
   return (
     <UserLayout>
       <Box sx={{ p: { xs: 2, md: 4 } }}>
-        {/* Header */}
-        <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 4 }}>
-          <HelpIcon sx={{ fontSize: 40, color: 'primary.main' }} />
-          <Box>
-            <Typography variant="h3" fontWeight={700}>
-              Help & Support
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
-              Find answers to common questions and get help
-            </Typography>
-          </Box>
-        </Stack>
-
         {/* Quick Links */}
         <Grid container spacing={3} sx={{ mb: 4 }}>
           {quickLinks.map((link, index) => (
@@ -162,7 +149,7 @@ const HelpPage = () => {
             mt: 4,
             p: 4,
             textAlign: 'center',
-            background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+            background: 'linear-gradient(135deg, #1a73e8 0%, #4285f4 100%)',
             color: 'white',
           }}
         >
@@ -179,7 +166,7 @@ const HelpPage = () => {
             onClick={() => window.location.href = 'mailto:support@pabbly.com'}
             sx={{
               bgcolor: 'white',
-              color: '#6366f1',
+              color: '#1a73e8',
               fontWeight: 600,
               '&:hover': {
                 bgcolor: 'rgba(255, 255, 255, 0.9)',

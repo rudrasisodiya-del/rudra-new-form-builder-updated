@@ -178,7 +178,7 @@ const AIFormGenerator = () => {
                   width: 56,
                   height: 56,
                   borderRadius: '14px',
-                  background: 'linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%)',
+                  background: 'linear-gradient(135deg, #4285f4 0%, #d946ef 100%)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -192,7 +192,7 @@ const AIFormGenerator = () => {
                   variant="h4"
                   fontWeight={800}
                   sx={{
-                    background: 'linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%)',
+                    background: 'linear-gradient(135deg, #4285f4 0%, #d946ef 100%)',
                     backgroundClip: 'text',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
@@ -243,10 +243,10 @@ const AIFormGenerator = () => {
                       '& .MuiOutlinedInput-root': {
                         borderRadius: 2,
                         '&:hover fieldset': {
-                          borderColor: '#8b5cf6',
+                          borderColor: '#4285f4',
                         },
                         '&.Mui-focused fieldset': {
-                          borderColor: '#8b5cf6',
+                          borderColor: '#4285f4',
                         },
                       },
                     }}
@@ -260,7 +260,7 @@ const AIFormGenerator = () => {
                   disabled={!prompt.trim() || generating}
                   startIcon={generating ? <CircularProgress size={20} /> : <SendIcon />}
                   sx={{
-                    background: 'linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%)',
+                    background: 'linear-gradient(135deg, #4285f4 0%, #d946ef 100%)',
                     textTransform: 'none',
                     fontWeight: 600,
                     py: 1.5,
@@ -269,7 +269,7 @@ const AIFormGenerator = () => {
                       background: 'linear-gradient(135deg, #7c3aed 0%, #c026d3 100%)',
                     },
                     '&:disabled': {
-                      background: alpha('#8b5cf6', 0.3),
+                      background: alpha('#4285f4', 0.3),
                     },
                   }}
                 >
@@ -301,7 +301,7 @@ const AIFormGenerator = () => {
                           },
                           cursor: 'pointer',
                           '&:hover': {
-                            bgcolor: isDark ? alpha('#8b5cf6', 0.2) : alpha('#8b5cf6', 0.1),
+                            bgcolor: isDark ? alpha('#4285f4', 0.2) : alpha('#4285f4', 0.1),
                           },
                         }}
                       />

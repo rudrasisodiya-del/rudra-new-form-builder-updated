@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { AuthRequest } from '../middleware/auth';
 import { generateWebhookSecret } from '../utils/generateApiKey';
+import { testWebhook as testWebhookDispatch } from '../utils/webhookDispatcher';
 
 const prisma = new PrismaClient();
 
@@ -81,5 +82,64 @@ export const getWebhookLogs = async (req: Request, res: Response) => {
     res.json({ success: true, logs });
   } catch (error: any) {
     res.status(500).json({ error: 'Failed to fetch webhook logs', details: error.message });
+  }
+};
+
+// Test webhook
+export const testWebhook = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const userId = (req as AuthRequest).user!.userId;
+
+    // Verify webhook belongs to user
+    const webhook = await prisma.webhook.findFirst({
+      where: { id, userId },
+    });
+
+    if (!webhook) {
+      return res.status(404).json({ error: 'Webhook not found' });
+    }
+
+    const result = await testWebhookDispatch(id);
+
+    if (result.success) {
+      res.json({ success: true, message: result.message, statusCode: result.statusCode });
+    } else {
+      res.status(400).json({ success: false, error: result.message, statusCode: result.statusCode });
+    }
+  } catch (error: any) {
+    res.status(500).json({ error: 'Failed to test webhook', details: error.message });
+  }
+};
+
+// Update webhook
+export const updateWebhook = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const userId = (req as AuthRequest).user!.userId;
+    const { name, url, formId, events, isActive } = req.body;
+
+    const webhook = await prisma.webhook.findFirst({
+      where: { id, userId },
+    });
+
+    if (!webhook) {
+      return res.status(404).json({ error: 'Webhook not found' });
+    }
+
+    const updatedWebhook = await prisma.webhook.update({
+      where: { id },
+      data: {
+        name: name !== undefined ? name : webhook.name,
+        url: url !== undefined ? url : webhook.url,
+        formId: formId !== undefined ? (formId || null) : webhook.formId,
+        events: events !== undefined ? events : webhook.events,
+        isActive: isActive !== undefined ? isActive : webhook.isActive,
+      },
+    });
+
+    res.json({ success: true, webhook: updatedWebhook });
+  } catch (error: any) {
+    res.status(500).json({ error: 'Failed to update webhook', details: error.message });
   }
 };

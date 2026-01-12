@@ -24,12 +24,14 @@ import authRoutes from './routes/auth';
 import formRoutes from './routes/forms';
 import submissionRoutes from './routes/submissions';
 import webhookRoutes from './routes/webhooks';
+import apiRoutes from './routes/api';
 
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/forms', formRoutes);
 app.use('/api/submissions', submissionRoutes);
 app.use('/api/webhooks', webhookRoutes);
+app.use('/api/v1', apiRoutes); // API key authenticated endpoints
 
 // Error handling
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

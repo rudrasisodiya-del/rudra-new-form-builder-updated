@@ -330,8 +330,8 @@ const UserLayout = ({ children }: UserLayoutProps) => {
             overflow: 'auto',
             bgcolor: 'background.default',
             backgroundImage: isDarkMode
-              ? 'radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%)'
-              : 'radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.05) 0px, transparent 50%)',
+              ? 'radial-gradient(at 0% 0%, rgba(26, 115, 232, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(66, 133, 244, 0.1) 0px, transparent 50%)'
+              : 'radial-gradient(at 0% 0%, rgba(26, 115, 232, 0.03) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(66, 133, 244, 0.03) 0px, transparent 50%)',
           }}
         >
           {children}

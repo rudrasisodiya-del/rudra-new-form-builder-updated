@@ -97,7 +97,7 @@ const Share = () => {
             sx={{
               textAlign: 'center',
               p: 8,
-              background: `linear-gradient(135deg, ${alpha('#6366f1', 0.05)} 0%, ${alpha('#06b6d4', 0.05)} 100%)`,
+              background: `linear-gradient(135deg, ${alpha('#1a73e8', 0.05)} 0%, ${alpha('#06b6d4', 0.05)} 100%)`,
             }}
           >
             <Avatar
@@ -106,7 +106,7 @@ const Share = () => {
                 height: 120,
                 margin: '0 auto',
                 mb: 3,
-                background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                background: 'linear-gradient(135deg, #1a73e8 0%, #06b6d4 100%)',
               }}
             >
               <ShareIcon sx={{ fontSize: 60, color: 'white' }} />
@@ -126,42 +126,9 @@ const Share = () => {
   return (
     <UserLayout>
       <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: '1600px', mx: 'auto' }}>
-        {/* Header with Share Icon */}
-        <Stack direction="row" alignItems="center" spacing={2} mb={4}>
-          <Box
-            sx={{
-              width: 60,
-              height: 60,
-              borderRadius: '16px',
-              background: 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 8px 24px rgba(139, 92, 246, 0.3)',
-            }}
-          >
-            <ShareIcon sx={{ fontSize: 32, color: 'white' }} />
-          </Box>
-          <Box sx={{ flex: 1 }}>
-            <Typography
-              variant="h4"
-              fontWeight={800}
-              sx={{
-                mb: 0.5,
-                background: 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)',
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                letterSpacing: '-0.5px',
-              }}
-            >
-              Share
-            </Typography>
-            <Typography variant="body2" color="text.secondary" fontWeight={500}>
-              📤 Share your form with the world
-            </Typography>
-          </Box>
-          {forms.length > 1 && (
+        {/* Actions Bar */}
+        {forms.length > 1 && (
+          <Stack direction="row" justifyContent="flex-end" sx={{ mb: 3 }}>
             <FormControl sx={{ minWidth: 280 }}>
               <Select
                 value={selectedForm?.id || ''}
@@ -174,13 +141,13 @@ const Share = () => {
                   borderRadius: 2,
                   bgcolor: 'background.paper',
                   '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: alpha('#8b5cf6', 0.2),
+                    borderColor: alpha('#1a73e8', 0.2),
                   },
                   '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#8b5cf6',
+                    borderColor: '#1a73e8',
                   },
                   '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#8b5cf6',
+                    borderColor: '#1a73e8',
                   },
                 }}
               >
@@ -191,8 +158,8 @@ const Share = () => {
                 ))}
               </Select>
             </FormControl>
-          )}
-        </Stack>
+          </Stack>
+        )}
 
         {/* Warning for unpublished form */}
         {selectedForm?.status !== 'PUBLISHED' && (
@@ -229,7 +196,7 @@ const Share = () => {
                   <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 3 }}>
                     <Avatar
                       sx={{
-                        background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                        background: 'linear-gradient(135deg, #1a73e8 0%, #06b6d4 100%)',
                         width: 56,
                         height: 56,
                       }}
@@ -252,8 +219,8 @@ const Share = () => {
                       gap: 2,
                       p: 2,
                       borderRadius: 2,
-                      bgcolor: alpha('#6366f1', 0.05),
-                      border: `1px solid ${alpha('#6366f1', 0.1)}`,
+                      bgcolor: alpha('#1a73e8', 0.05),
+                      border: `1px solid ${alpha('#1a73e8', 0.1)}`,
                     }}
                   >
                     <TextField
@@ -274,17 +241,17 @@ const Share = () => {
                       startIcon={<CopyIcon />}
                       onClick={() => copyToClipboard(formUrl, 'link')}
                       sx={{
-                        background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                        background: 'linear-gradient(135deg, #1a73e8 0%, #06b6d4 100%)',
                         textTransform: 'none',
                         fontWeight: 700,
                         px: 3,
                         borderRadius: 2,
-                        boxShadow: `0 4px 12px ${alpha('#6366f1', 0.3)}`,
+                        boxShadow: `0 4px 12px ${alpha('#1a73e8', 0.3)}`,
                         transition: 'all 0.3s',
                         whiteSpace: 'nowrap',
                         '&:hover': {
                           transform: 'translateY(-2px)',
-                          boxShadow: `0 6px 16px ${alpha('#6366f1', 0.4)}`,
+                          boxShadow: `0 6px 16px ${alpha('#1a73e8', 0.4)}`,
                         },
                       }}
                     >
@@ -383,7 +350,7 @@ const Share = () => {
                   <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 3 }}>
                     <Avatar
                       sx={{
-                        background: 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)',
+                        background: 'linear-gradient(135deg, #1a73e8 0%, #a78bfa 100%)',
                         width: 56,
                         height: 56,
                       }}
@@ -623,8 +590,8 @@ const Share = () => {
                     sx={{
                       p: 3,
                       borderRadius: 2,
-                      bgcolor: alpha('#6366f1', 0.05),
-                      border: `1px solid ${alpha('#6366f1', 0.1)}`,
+                      bgcolor: alpha('#1a73e8', 0.05),
+                      border: `1px solid ${alpha('#1a73e8', 0.1)}`,
                     }}
                   >
                     <Typography variant="h6" fontWeight={700} sx={{ mb: 1 }}>
@@ -659,7 +626,7 @@ const Share = () => {
                             Views
                           </Typography>
                           <Stack direction="row" spacing={0.5} alignItems="center">
-                            <VisibilityIcon sx={{ fontSize: 16, color: '#6366f1' }} />
+                            <VisibilityIcon sx={{ fontSize: 16, color: '#1a73e8' }} />
                             <Typography variant="body2" fontWeight={600}>
                               {selectedForm?.views || 0}
                             </Typography>
@@ -677,12 +644,12 @@ const Share = () => {
                     target="_blank"
                     sx={{
                       mt: 2,
-                      background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                      background: 'linear-gradient(135deg, #1a73e8 0%, #06b6d4 100%)',
                       textTransform: 'none',
                       fontWeight: 700,
                       '&:hover': {
                         transform: 'translateY(-2px)',
-                        boxShadow: `0 8px 16px ${alpha('#6366f1', 0.3)}`,
+                        boxShadow: `0 8px 16px ${alpha('#1a73e8', 0.3)}`,
                       },
                       transition: 'all 0.3s',
                     }}
@@ -695,13 +662,13 @@ const Share = () => {
               {/* Share Stats Card */}
               <Card
                 sx={{
-                  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                  background: 'linear-gradient(135deg, #1a73e8 0%, #1a73e8 100%)',
                   position: 'relative',
                   overflow: 'hidden',
                   transition: 'all 0.3s',
                   '&:hover': {
                     transform: 'translateY(-4px)',
-                    boxShadow: `0 12px 24px ${alpha('#6366f1', 0.4)}`,
+                    boxShadow: `0 12px 24px ${alpha('#1a73e8', 0.4)}`,
                   },
                   '&::before': {
                     content: '""',

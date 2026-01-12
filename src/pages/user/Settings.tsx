@@ -171,7 +171,7 @@ const Settings = () => {
     return (
       <UserLayout>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', py: 12 }}>
-          <CircularProgress sx={{ color: '#6366f1' }} />
+          <CircularProgress sx={{ color: '#1a73e8' }} />
         </Box>
       </UserLayout>
     );
@@ -180,47 +180,6 @@ const Settings = () => {
   return (
     <UserLayout>
       <Box sx={{ p: { xs: 2, md: 4 } }}>
-        {/* Header */}
-        <Box
-          sx={{
-            background: `linear-gradient(135deg, ${theme.palette.mode === 'dark' ? '#1e293b' : '#ffffff'} 0%, ${theme.palette.mode === 'dark' ? '#0f172a' : '#f8fafc'} 100%)`,
-            borderRadius: 3,
-            p: 4,
-            mb: 4,
-            position: 'relative',
-            overflow: 'hidden',
-            '&::before': {
-              content: '""',
-              position: 'absolute',
-              top: -100,
-              right: -100,
-              width: 300,
-              height: 300,
-              borderRadius: '50%',
-              background: `radial-gradient(circle, ${alpha('#6366f1', 0.1)} 0%, transparent 70%)`,
-            },
-          }}
-        >
-          <Box sx={{ position: 'relative', zIndex: 1 }}>
-            <Typography
-              variant="h3"
-              fontWeight={800}
-              sx={{
-                mb: 1,
-                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
-              Settings
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
-              Manage your account settings and preferences
-            </Typography>
-          </Box>
-        </Box>
-
         {/* Success Message */}
         {successMessage && (
           <Alert
@@ -264,17 +223,17 @@ const Settings = () => {
                       minHeight: 64,
                       transition: 'all 0.3s',
                       '&:hover': {
-                        color: '#6366f1',
-                        bgcolor: alpha('#6366f1', 0.05),
+                        color: '#1a73e8',
+                        bgcolor: alpha('#1a73e8', 0.05),
                       },
                       '&.Mui-selected': {
-                        color: '#6366f1',
+                        color: '#1a73e8',
                       },
                     },
                     '& .MuiTabs-indicator': {
                       height: 3,
                       borderRadius: '3px 3px 0 0',
-                      background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                      background: 'linear-gradient(135deg, #1a73e8 0%, #4285f4 100%)',
                     },
                   }}
                 >
@@ -295,8 +254,8 @@ const Settings = () => {
                           width: 120,
                           height: 120,
                           fontSize: '3rem',
-                          background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                          boxShadow: `0 8px 24px ${alpha('#6366f1', 0.3)}`,
+                          background: 'linear-gradient(135deg, #1a73e8 0%, #4285f4 100%)',
+                          boxShadow: `0 8px 24px ${alpha('#1a73e8', 0.3)}`,
                           mb: 2,
                         }}
                       >
@@ -310,11 +269,11 @@ const Settings = () => {
                           bgcolor: 'white',
                           boxShadow: 2,
                           '&:hover': {
-                            bgcolor: alpha('#6366f1', 0.1),
+                            bgcolor: alpha('#1a73e8', 0.1),
                           },
                         }}
                       >
-                        <PhotoCameraIcon sx={{ color: '#6366f1' }} />
+                        <PhotoCameraIcon sx={{ color: '#1a73e8' }} />
                       </IconButton>
                     </Box>
                     <Typography variant="h6" fontWeight={700} sx={{ mt: 2 }}>
@@ -345,10 +304,10 @@ const Settings = () => {
                             borderRadius: 2,
                             transition: 'all 0.3s',
                             '&:hover': {
-                              boxShadow: `0 0 0 2px ${alpha('#6366f1', 0.1)}`,
+                              boxShadow: `0 0 0 2px ${alpha('#1a73e8', 0.1)}`,
                             },
                             '&.Mui-focused': {
-                              boxShadow: `0 0 0 2px ${alpha('#6366f1', 0.2)}`,
+                              boxShadow: `0 0 0 2px ${alpha('#1a73e8', 0.2)}`,
                             },
                           },
                         }}
@@ -391,10 +350,10 @@ const Settings = () => {
                             borderRadius: 2,
                             transition: 'all 0.3s',
                             '&:hover': {
-                              boxShadow: `0 0 0 2px ${alpha('#6366f1', 0.1)}`,
+                              boxShadow: `0 0 0 2px ${alpha('#1a73e8', 0.1)}`,
                             },
                             '&.Mui-focused': {
-                              boxShadow: `0 0 0 2px ${alpha('#6366f1', 0.2)}`,
+                              boxShadow: `0 0 0 2px ${alpha('#1a73e8', 0.2)}`,
                             },
                           },
                         }}
@@ -407,17 +366,17 @@ const Settings = () => {
                           startIcon={<SaveIcon />}
                           disabled={saving}
                           sx={{
-                            background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                            background: 'linear-gradient(135deg, #1a73e8 0%, #4285f4 100%)',
                             textTransform: 'none',
                             fontWeight: 700,
                             px: 4,
                             py: 1.5,
                             borderRadius: 2,
-                            boxShadow: `0 4px 12px ${alpha('#6366f1', 0.3)}`,
+                            boxShadow: `0 4px 12px ${alpha('#1a73e8', 0.3)}`,
                             transition: 'all 0.3s',
                             '&:hover': {
                               transform: 'translateY(-2px)',
-                              boxShadow: `0 6px 16px ${alpha('#6366f1', 0.4)}`,
+                              boxShadow: `0 6px 16px ${alpha('#1a73e8', 0.4)}`,
                             },
                             '&:disabled': {
                               opacity: 0.6,
@@ -457,10 +416,10 @@ const Settings = () => {
                             borderRadius: 2,
                             transition: 'all 0.3s',
                             '&:hover': {
-                              boxShadow: `0 0 0 2px ${alpha('#6366f1', 0.1)}`,
+                              boxShadow: `0 0 0 2px ${alpha('#1a73e8', 0.1)}`,
                             },
                             '&.Mui-focused': {
-                              boxShadow: `0 0 0 2px ${alpha('#6366f1', 0.2)}`,
+                              boxShadow: `0 0 0 2px ${alpha('#1a73e8', 0.2)}`,
                             },
                           },
                         }}
@@ -482,10 +441,10 @@ const Settings = () => {
                             borderRadius: 2,
                             transition: 'all 0.3s',
                             '&:hover': {
-                              boxShadow: `0 0 0 2px ${alpha('#6366f1', 0.1)}`,
+                              boxShadow: `0 0 0 2px ${alpha('#1a73e8', 0.1)}`,
                             },
                             '&.Mui-focused': {
-                              boxShadow: `0 0 0 2px ${alpha('#6366f1', 0.2)}`,
+                              boxShadow: `0 0 0 2px ${alpha('#1a73e8', 0.2)}`,
                             },
                           },
                         }}
@@ -507,10 +466,10 @@ const Settings = () => {
                             borderRadius: 2,
                             transition: 'all 0.3s',
                             '&:hover': {
-                              boxShadow: `0 0 0 2px ${alpha('#6366f1', 0.1)}`,
+                              boxShadow: `0 0 0 2px ${alpha('#1a73e8', 0.1)}`,
                             },
                             '&.Mui-focused': {
-                              boxShadow: `0 0 0 2px ${alpha('#6366f1', 0.2)}`,
+                              boxShadow: `0 0 0 2px ${alpha('#1a73e8', 0.2)}`,
                             },
                           },
                         }}
@@ -523,17 +482,17 @@ const Settings = () => {
                           startIcon={<LockIcon />}
                           disabled={saving}
                           sx={{
-                            background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                            background: 'linear-gradient(135deg, #1a73e8 0%, #4285f4 100%)',
                             textTransform: 'none',
                             fontWeight: 700,
                             px: 4,
                             py: 1.5,
                             borderRadius: 2,
-                            boxShadow: `0 4px 12px ${alpha('#6366f1', 0.3)}`,
+                            boxShadow: `0 4px 12px ${alpha('#1a73e8', 0.3)}`,
                             transition: 'all 0.3s',
                             '&:hover': {
                               transform: 'translateY(-2px)',
-                              boxShadow: `0 6px 16px ${alpha('#6366f1', 0.4)}`,
+                              boxShadow: `0 6px 16px ${alpha('#1a73e8', 0.4)}`,
                             },
                             '&:disabled': {
                               opacity: 0.6,
@@ -562,10 +521,10 @@ const Settings = () => {
                         alignItems: 'center',
                         p: 2,
                         borderRadius: 2,
-                        bgcolor: alpha('#6366f1', 0.05),
+                        bgcolor: alpha('#1a73e8', 0.05),
                         transition: 'all 0.2s',
                         '&:hover': {
-                          bgcolor: alpha('#6366f1', 0.08),
+                          bgcolor: alpha('#1a73e8', 0.08),
                         },
                       }}
                     >
@@ -582,10 +541,10 @@ const Settings = () => {
                         onChange={(e) => setEmailNotifications(e.target.checked)}
                         sx={{
                           '& .MuiSwitch-switchBase.Mui-checked': {
-                            color: '#6366f1',
+                            color: '#1a73e8',
                           },
                           '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                            backgroundColor: '#6366f1',
+                            backgroundColor: '#1a73e8',
                           },
                         }}
                       />
@@ -632,10 +591,10 @@ const Settings = () => {
                         alignItems: 'center',
                         p: 2,
                         borderRadius: 2,
-                        bgcolor: alpha('#8b5cf6', 0.05),
+                        bgcolor: alpha('#4285f4', 0.05),
                         transition: 'all 0.2s',
                         '&:hover': {
-                          bgcolor: alpha('#8b5cf6', 0.08),
+                          bgcolor: alpha('#4285f4', 0.08),
                         },
                       }}
                     >
@@ -652,10 +611,10 @@ const Settings = () => {
                         onChange={(e) => setWeeklyReports(e.target.checked)}
                         sx={{
                           '& .MuiSwitch-switchBase.Mui-checked': {
-                            color: '#8b5cf6',
+                            color: '#4285f4',
                           },
                           '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                            backgroundColor: '#8b5cf6',
+                            backgroundColor: '#4285f4',
                           },
                         }}
                       />
@@ -674,10 +633,10 @@ const Settings = () => {
                       alignItems: 'center',
                       p: 2,
                       borderRadius: 2,
-                      bgcolor: alpha('#6366f1', 0.05),
+                      bgcolor: alpha('#1a73e8', 0.05),
                       transition: 'all 0.2s',
                       '&:hover': {
-                        bgcolor: alpha('#6366f1', 0.08),
+                        bgcolor: alpha('#1a73e8', 0.08),
                       },
                     }}
                   >
@@ -694,10 +653,10 @@ const Settings = () => {
                       onChange={(e) => setDarkMode(e.target.checked)}
                       sx={{
                         '& .MuiSwitch-switchBase.Mui-checked': {
-                          color: '#6366f1',
+                          color: '#1a73e8',
                         },
                         '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                          backgroundColor: '#6366f1',
+                          backgroundColor: '#1a73e8',
                         },
                       }}
                     />
@@ -711,17 +670,17 @@ const Settings = () => {
                       disabled={saving}
                       onClick={handlePreferencesSave}
                       sx={{
-                        background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                        background: 'linear-gradient(135deg, #1a73e8 0%, #4285f4 100%)',
                         textTransform: 'none',
                         fontWeight: 700,
                         px: 4,
                         py: 1.5,
                         borderRadius: 2,
-                        boxShadow: `0 4px 12px ${alpha('#6366f1', 0.3)}`,
+                        boxShadow: `0 4px 12px ${alpha('#1a73e8', 0.3)}`,
                         transition: 'all 0.3s',
                         '&:hover': {
                           transform: 'translateY(-2px)',
-                          boxShadow: `0 6px 16px ${alpha('#6366f1', 0.4)}`,
+                          boxShadow: `0 6px 16px ${alpha('#1a73e8', 0.4)}`,
                         },
                         '&:disabled': {
                           opacity: 0.6,
@@ -782,8 +741,8 @@ const Settings = () => {
                           label={user?.plan?.name || 'Free'}
                           size="small"
                           sx={{
-                            bgcolor: alpha('#6366f1', 0.1),
-                            color: '#6366f1',
+                            bgcolor: alpha('#1a73e8', 0.1),
+                            color: '#1a73e8',
                             fontWeight: 700,
                             borderRadius: 1.5,
                           }}
@@ -826,13 +785,13 @@ const Settings = () => {
               {/* Security Info Card */}
               <Card
                 sx={{
-                  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                  background: 'linear-gradient(135deg, #1a73e8 0%, #4285f4 100%)',
                   position: 'relative',
                   overflow: 'hidden',
                   transition: 'all 0.3s',
                   '&:hover': {
                     transform: 'translateY(-4px)',
-                    boxShadow: `0 12px 24px ${alpha('#6366f1', 0.4)}`,
+                    boxShadow: `0 12px 24px ${alpha('#1a73e8', 0.4)}`,
                   },
                   '&::before': {
                     content: '""',

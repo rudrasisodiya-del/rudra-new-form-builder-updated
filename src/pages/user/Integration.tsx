@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Card,
@@ -7,144 +7,205 @@ import {
   Button,
   Stack,
   Grid,
-  Avatar,
   Chip,
   useTheme,
   alpha,
   Modal,
   TextField,
   IconButton,
+  Avatar,
 } from '@mui/material';
 import {
   CheckCircle as CheckCircleIcon,
   Close as CloseIcon,
-  Settings as SettingsIcon,
-  Add as AddIcon,
   Webhook as WebhookIcon,
   Key as KeyIcon,
   Code as CodeIcon,
   Star as StarIcon,
 } from '@mui/icons-material';
 import UserLayout from '../../components/layout/UserLayout';
-import api from '../../services/api';
+
+// Real brand logos as SVG components
+const GoogleSheetsLogo = () => (
+  <svg viewBox="0 0 48 48" width="40" height="40">
+    <path fill="#43a047" d="M37 45H11c-2.2 0-4-1.8-4-4V7c0-2.2 1.8-4 4-4h19l11 11v27c0 2.2-1.8 4-4 4z"/>
+    <path fill="#c8e6c9" d="M40 14H30V4l10 10z"/>
+    <path fill="#fff" d="M30 22H18v12h12V22zm-10 2h3v3h-3v-3zm0 5h3v3h-3v-3zm5-5h3v3h-3v-3zm0 5h3v3h-3v-3z"/>
+  </svg>
+);
+
+const SlackLogo = () => (
+  <svg viewBox="0 0 48 48" width="40" height="40">
+    <path fill="#33d375" d="M33 8a4 4 0 0 0-8 0v11h4a4 4 0 0 0 4-4V8z"/>
+    <path fill="#33d375" d="M43 19a4 4 0 0 0-4-4h-4v4a4 4 0 0 0 4 4h4v-4z"/>
+    <path fill="#40c4ff" d="M8 15a4 4 0 0 0 0 8h11v-4a4 4 0 0 0-4-4H8z"/>
+    <path fill="#40c4ff" d="M19 5a4 4 0 0 0-4 4v4h4a4 4 0 0 0 4-4V5h-4z"/>
+    <path fill="#e91e63" d="M15 40a4 4 0 0 0 8 0V29h-4a4 4 0 0 0-4 4v7z"/>
+    <path fill="#e91e63" d="M5 29a4 4 0 0 0 4 4h4v-4a4 4 0 0 0-4-4H5v4z"/>
+    <path fill="#ffc107" d="M40 33a4 4 0 0 0 0-8H29v4a4 4 0 0 0 4 4h7z"/>
+    <path fill="#ffc107" d="M29 43a4 4 0 0 0 4-4v-4h-4a4 4 0 0 0-4 4v4h4z"/>
+  </svg>
+);
+
+const WebhookLogo = () => (
+  <svg viewBox="0 0 48 48" width="40" height="40">
+    <circle cx="24" cy="24" r="20" fill="#1a73e8"/>
+    <path fill="#fff" d="M24 14c-5.5 0-10 4.5-10 10s4.5 10 10 10 10-4.5 10-10-4.5-10-10-10zm0 16c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"/>
+    <circle cx="24" cy="24" r="3" fill="#fff"/>
+    <path fill="#fff" d="M24 10v4M24 34v4M10 24h4M34 24h4" stroke="#fff" strokeWidth="2"/>
+  </svg>
+);
+
+const ZapierLogo = () => (
+  <svg viewBox="0 0 48 48" width="40" height="40">
+    <circle cx="24" cy="24" r="20" fill="#ff4a00"/>
+    <path fill="#fff" d="M32 18l-6 6 6 6h-6l-3-3-3 3h-6l6-6-6-6h6l3 3 3-3h6z"/>
+  </svg>
+);
+
+const StripeLogo = () => (
+  <svg viewBox="0 0 48 48" width="40" height="40">
+    <rect width="48" height="48" rx="8" fill="#635bff"/>
+    <path fill="#fff" d="M24 16.5c-3.4 0-5.6 1.8-5.6 4.5 0 3.5 5.1 3.9 5.1 5.9 0 .8-.7 1.1-1.7 1.1-1.5 0-3.4-.6-4.9-1.5v3.6c1.7.7 3.4 1 4.9 1 3.5 0 5.8-1.7 5.8-4.5 0-3.7-5.1-4.1-5.1-6 0-.7.6-1 1.5-1 1.3 0 3 .5 4.2 1.2v-3.5c-1.4-.5-2.8-.8-4.2-.8z"/>
+  </svg>
+);
+
+const MailchimpLogo = () => (
+  <svg viewBox="0 0 48 48" width="40" height="40">
+    <circle cx="24" cy="24" r="20" fill="#ffe01b"/>
+    <path fill="#000" d="M24 14c-5.5 0-10 4.5-10 10s4.5 10 10 10 10-4.5 10-10-4.5-10-10-10zm-3 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm6 0c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm-3 10c-2.8 0-5-1.3-5-3h10c0 1.7-2.2 3-5 3z"/>
+  </svg>
+);
+
+const DropboxLogo = () => (
+  <svg viewBox="0 0 48 48" width="40" height="40">
+    <path fill="#1e88e5" d="M24 4L12 12l12 8-12 8 12 8 12-8-12-8 12-8-12-8zM12 28l12 8 12-8"/>
+  </svg>
+);
+
+const GoogleDriveLogo = () => (
+  <svg viewBox="0 0 48 48" width="40" height="40">
+    <path fill="#ffc107" d="M17 7l-12 21h10l12-21z"/>
+    <path fill="#1976d2" d="M43 28H17l-5 9h26z"/>
+    <path fill="#4caf50" d="M38 7H17l12 21h14z"/>
+  </svg>
+);
+
+const AirtableLogo = () => (
+  <svg viewBox="0 0 48 48" width="40" height="40">
+    <rect width="48" height="48" rx="8" fill="#fcb400"/>
+    <path fill="#fff" d="M12 16h24v4H12zM12 24h24v4H12zM12 32h16v4H12z"/>
+  </svg>
+);
+
+const PayPalLogo = () => (
+  <svg viewBox="0 0 48 48" width="40" height="40">
+    <path fill="#1565c0" d="M37 18c0-6-5-10-11-10H16c-1 0-2 1-2 2l-4 26c0 1 0 1 1 1h6l2-10v1c0-1 1-2 2-2h4c7 0 12-3 13-10 0 0 0-1 0-1"/>
+    <path fill="#039be5" d="M38 18c-1 7-6 10-13 10h-4c-1 0-2 1-2 2v-1l-2 10h6c1 0 2-1 2-2l1-8h3c6 0 10-2 11-8v-3"/>
+  </svg>
+);
+
+const HubSpotLogo = () => (
+  <svg viewBox="0 0 48 48" width="40" height="40">
+    <circle cx="24" cy="24" r="20" fill="#ff7a59"/>
+    <path fill="#fff" d="M30 18v-3c1.1-.5 2-1.6 2-3 0-1.7-1.3-3-3-3s-3 1.3-3 3c0 1.4.9 2.5 2 3v3c-2.8.5-5 2.9-5 5.8 0 1.5.5 2.8 1.4 3.9l-3.1 3.1c-.1 0-.2-.1-.3-.1-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2c0-.1 0-.2-.1-.3l3.1-3.1c1.1.9 2.4 1.4 3.9 1.4 3.3 0 6-2.7 6-6 .1-2.9-2.1-5.2-4.9-5.7z"/>
+  </svg>
+);
+
+const SalesforceLogo = () => (
+  <svg viewBox="0 0 48 48" width="40" height="40">
+    <path fill="#00a1e0" d="M20 8c-4 0-7 3-7 7 0 1 0 2 .5 3-3.5 1-6.5 4.5-6.5 8.5 0 5 4 9 9 9h20c4 0 8-3.5 8-8 0-3-1.5-5.5-4-7 0-5-4-9-9-9-2 0-4 1-5.5 2.5C23.5 10.5 22 8 20 8z"/>
+  </svg>
+);
 
 const Integration = () => {
-  const [integrations, setIntegrations] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const [configModal, setConfigModal] = useState(false);
   const [selectedIntegration, setSelectedIntegration] = useState<any>(null);
   const theme = useTheme();
-
-  useEffect(() => {
-    fetchIntegrations();
-  }, []);
-
-  const fetchIntegrations = async () => {
-    try {
-      const response = await api.get('/integrations');
-      setIntegrations(response.data.integrations || []);
-    } catch (error) {
-      console.error('Error fetching integrations:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const availableIntegrations = [
     {
       name: 'Google Sheets',
       description: 'Send form submissions directly to Google Sheets',
-      icon: '📊',
+      Logo: GoogleSheetsLogo,
       status: 'available',
-      gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
       popular: true,
     },
     {
       name: 'Slack',
       description: 'Get notified in Slack when someone submits a form',
-      icon: '💬',
+      Logo: SlackLogo,
       status: 'available',
-      gradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
       popular: true,
     },
     {
       name: 'Webhooks',
       description: 'Send form data to any endpoint via HTTP POST',
-      icon: '🔗',
+      Logo: WebhookLogo,
       status: 'active',
-      gradient: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
       popular: true,
     },
     {
       name: 'Mailchimp',
       description: 'Add form respondents to your Mailchimp lists',
-      icon: '📧',
+      Logo: MailchimpLogo,
       status: 'available',
-      gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
       popular: false,
     },
     {
       name: 'Zapier',
       description: 'Connect to 5000+ apps through Zapier',
-      icon: '⚡',
+      Logo: ZapierLogo,
       status: 'available',
-      gradient: 'linear-gradient(135deg, #ff6b35 0%, #f7931e 100%)',
       popular: true,
     },
     {
       name: 'Dropbox',
       description: 'Store file uploads in your Dropbox account',
-      icon: '📦',
+      Logo: DropboxLogo,
       status: 'available',
-      gradient: 'linear-gradient(135deg, #0061ff 0%, #0051d5 100%)',
       popular: false,
     },
     {
       name: 'Google Drive',
       description: 'Save form submissions and files to Google Drive',
-      icon: '💾',
+      Logo: GoogleDriveLogo,
       status: 'available',
-      gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
       popular: false,
     },
     {
       name: 'Airtable',
       description: 'Send submissions to your Airtable base',
-      icon: '🗂️',
+      Logo: AirtableLogo,
       status: 'available',
-      gradient: 'linear-gradient(135deg, #f43f5e 0%, #e11d48 100%)',
       popular: false,
     },
     {
       name: 'Stripe',
       description: 'Accept payments through your forms',
-      icon: '💳',
+      Logo: StripeLogo,
       status: 'available',
-      gradient: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
       popular: true,
     },
     {
       name: 'PayPal',
       description: 'Accept PayPal payments in your forms',
-      icon: '💰',
+      Logo: PayPalLogo,
       status: 'available',
-      gradient: 'linear-gradient(135deg, #0070ba 0%, #003087 100%)',
       popular: false,
     },
     {
       name: 'HubSpot',
       description: 'Sync form data with HubSpot CRM',
-      icon: '🎯',
+      Logo: HubSpotLogo,
       status: 'available',
-      gradient: 'linear-gradient(135deg, #ff7a59 0%, #ff5c35 100%)',
       popular: false,
     },
     {
       name: 'Salesforce',
       description: 'Send leads directly to Salesforce',
-      icon: '☁️',
+      Logo: SalesforceLogo,
       status: 'available',
-      gradient: 'linear-gradient(135deg, #00a1e0 0%, #0176d3 100%)',
       popular: false,
     },
   ];
@@ -161,60 +222,9 @@ const Integration = () => {
   const popularIntegrations = availableIntegrations.filter(i => i.popular);
   const otherIntegrations = availableIntegrations.filter(i => !i.popular);
 
-  if (loading) {
-    return (
-      <UserLayout>
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', py: 12 }}>
-          <Typography color="text.secondary">Loading integrations...</Typography>
-        </Box>
-      </UserLayout>
-    );
-  }
-
   return (
     <UserLayout>
       <Box sx={{ p: { xs: 2, md: 4 } }}>
-        {/* Header */}
-        <Box
-          sx={{
-            background: `linear-gradient(135deg, ${theme.palette.mode === 'dark' ? '#1e293b' : '#ffffff'} 0%, ${theme.palette.mode === 'dark' ? '#0f172a' : '#f8fafc'} 100%)`,
-            borderRadius: 3,
-            p: 4,
-            mb: 4,
-            position: 'relative',
-            overflow: 'hidden',
-            '&::before': {
-              content: '""',
-              position: 'absolute',
-              top: -100,
-              right: -100,
-              width: 300,
-              height: 300,
-              borderRadius: '50%',
-              background: `radial-gradient(circle, ${alpha('#6366f1', 0.1)} 0%, transparent 70%)`,
-            },
-          }}
-        >
-          <Box sx={{ position: 'relative', zIndex: 1 }}>
-            <Typography
-              variant="h3"
-              fontWeight={800}
-              sx={{
-                mb: 1,
-                background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
-              Integrations
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
-              Connect your forms with your favorite tools and services
-            </Typography>
-          </Box>
-        </Box>
-
         {/* Popular Integrations */}
         <Box sx={{ mb: 5 }}>
           <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 3 }}>
@@ -224,90 +234,88 @@ const Integration = () => {
             </Typography>
           </Stack>
           <Grid container spacing={3}>
-            {popularIntegrations.map((integration) => (
-              <Grid size={{ xs: 12, sm: 6, lg: 4 }} key={integration.name}>
-                <Card
-                  sx={{
-                    height: '100%',
-                    transition: 'all 0.3s',
-                    position: 'relative',
-                    overflow: 'hidden',
-                    '&:hover': {
-                      transform: 'translateY(-8px)',
-                      boxShadow: theme.shadows[12],
-                    },
-                    '&::before': {
-                      content: '""',
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      height: 4,
-                      background: integration.gradient,
-                    },
-                  }}
-                >
-                  <CardContent sx={{ p: 3 }}>
-                    <Stack direction="row" justifyContent="space-between" alignItems="flex-start" sx={{ mb: 2 }}>
-                      <Avatar
+            {popularIntegrations.map((integration) => {
+              const LogoComponent = integration.Logo;
+              return (
+                <Grid size={{ xs: 12, sm: 6, lg: 4 }} key={integration.name}>
+                  <Card
+                    sx={{
+                      height: '100%',
+                      transition: 'all 0.2s',
+                      border: '1px solid',
+                      borderColor: 'divider',
+                      boxShadow: 'none',
+                      '&:hover': {
+                        borderColor: '#1a73e8',
+                        boxShadow: '0 4px 12px rgba(26, 115, 232, 0.15)',
+                      },
+                    }}
+                  >
+                    <CardContent sx={{ p: 3 }}>
+                      <Stack direction="row" justifyContent="space-between" alignItems="flex-start" sx={{ mb: 2 }}>
+                        <Box
+                          sx={{
+                            width: 52,
+                            height: 52,
+                            borderRadius: 2,
+                            bgcolor: '#f8fafc',
+                            border: '1px solid',
+                            borderColor: 'divider',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <LogoComponent />
+                        </Box>
+                        <Chip
+                          label={integration.status === 'active' ? 'Active' : 'Available'}
+                          size="small"
+                          icon={integration.status === 'active' ? <CheckCircleIcon sx={{ fontSize: 14 }} /> : undefined}
+                          sx={{
+                            bgcolor: integration.status === 'active'
+                              ? alpha('#10b981', 0.1)
+                              : alpha('#1a73e8', 0.08),
+                            color: integration.status === 'active' ? '#10b981' : '#1a73e8',
+                            fontWeight: 600,
+                            fontSize: '0.75rem',
+                            height: 24,
+                          }}
+                        />
+                      </Stack>
+                      <Typography variant="subtitle1" fontWeight={700} sx={{ mb: 0.5, color: '#1e293b' }}>
+                        {integration.name}
+                      </Typography>
+                      <Typography variant="body2" sx={{ mb: 3, minHeight: 40, color: '#64748b' }}>
+                        {integration.description}
+                      </Typography>
+                      <Button
+                        fullWidth
+                        variant={integration.status === 'active' ? 'outlined' : 'contained'}
+                        onClick={() => handleConnect(integration)}
                         sx={{
-                          width: 56,
-                          height: 56,
-                          fontSize: '2rem',
-                          background: integration.gradient,
+                          bgcolor: integration.status === 'active' ? 'transparent' : '#1a73e8',
+                          color: integration.status === 'active' ? '#475569' : 'white',
+                          borderColor: integration.status === 'active' ? '#e2e8f0' : '#1a73e8',
+                          textTransform: 'none',
+                          fontWeight: 600,
+                          py: 1.25,
+                          borderRadius: 2,
+                          boxShadow: 'none',
+                          '&:hover': {
+                            bgcolor: integration.status === 'active' ? '#f8fafc' : '#1557b0',
+                            borderColor: integration.status === 'active' ? '#cbd5e1' : '#1557b0',
+                            boxShadow: 'none',
+                          },
                         }}
                       >
-                        {integration.icon}
-                      </Avatar>
-                      <Chip
-                        label={integration.status === 'active' ? 'Active' : 'Available'}
-                        size="small"
-                        icon={integration.status === 'active' ? <CheckCircleIcon sx={{ fontSize: 16 }} /> : undefined}
-                        sx={{
-                          bgcolor: integration.status === 'active'
-                            ? alpha('#10b981', 0.1)
-                            : alpha('#6366f1', 0.1),
-                          color: integration.status === 'active' ? '#10b981' : '#6366f1',
-                          fontWeight: 700,
-                          borderRadius: 1.5,
-                        }}
-                      />
-                    </Stack>
-                    <Typography variant="h6" fontWeight={700} sx={{ mb: 1 }}>
-                      {integration.name}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 3, minHeight: 40 }}>
-                      {integration.description}
-                    </Typography>
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      onClick={() => handleConnect(integration)}
-                      sx={{
-                        background: integration.status === 'active'
-                          ? alpha(theme.palette.divider, 0.1)
-                          : integration.gradient,
-                        color: integration.status === 'active' ? 'text.primary' : 'white',
-                        textTransform: 'none',
-                        fontWeight: 700,
-                        py: 1.5,
-                        borderRadius: 2,
-                        boxShadow: integration.status === 'active' ? 'none' : `0 4px 12px ${alpha('#6366f1', 0.3)}`,
-                        '&:hover': {
-                          transform: 'translateY(-2px)',
-                          boxShadow: integration.status === 'active'
-                            ? theme.shadows[2]
-                            : `0 6px 16px ${alpha('#6366f1', 0.4)}`,
-                        },
-                        transition: 'all 0.3s',
-                      }}
-                    >
-                      {integration.status === 'active' ? 'Manage' : 'Connect'}
-                    </Button>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
+                        {integration.status === 'active' ? 'Manage' : 'Connect'}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              );
+            })}
           </Grid>
         </Box>
 
@@ -317,83 +325,96 @@ const Integration = () => {
             All Integrations
           </Typography>
           <Grid container spacing={3}>
-            {otherIntegrations.map((integration) => (
-              <Grid size={{ xs: 12, sm: 6, lg: 4 }} key={integration.name}>
-                <Card
-                  sx={{
-                    height: '100%',
-                    transition: 'all 0.3s',
-                    '&:hover': {
-                      transform: 'translateY(-4px)',
-                      boxShadow: theme.shadows[8],
-                    },
-                  }}
-                >
-                  <CardContent sx={{ p: 3 }}>
-                    <Stack direction="row" justifyContent="space-between" alignItems="flex-start" sx={{ mb: 2 }}>
-                      <Avatar
+            {otherIntegrations.map((integration) => {
+              const LogoComponent = integration.Logo;
+              return (
+                <Grid size={{ xs: 12, sm: 6, lg: 4 }} key={integration.name}>
+                  <Card
+                    sx={{
+                      height: '100%',
+                      transition: 'all 0.2s',
+                      border: '1px solid',
+                      borderColor: 'divider',
+                      boxShadow: 'none',
+                      '&:hover': {
+                        borderColor: '#1a73e8',
+                        boxShadow: '0 4px 12px rgba(26, 115, 232, 0.15)',
+                      },
+                    }}
+                  >
+                    <CardContent sx={{ p: 3 }}>
+                      <Stack direction="row" justifyContent="space-between" alignItems="flex-start" sx={{ mb: 2 }}>
+                        <Box
+                          sx={{
+                            width: 52,
+                            height: 52,
+                            borderRadius: 2,
+                            bgcolor: '#f8fafc',
+                            border: '1px solid',
+                            borderColor: 'divider',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <LogoComponent />
+                        </Box>
+                        <Chip
+                          label="Available"
+                          size="small"
+                          sx={{
+                            bgcolor: alpha('#1a73e8', 0.08),
+                            color: '#1a73e8',
+                            fontWeight: 600,
+                            fontSize: '0.75rem',
+                            height: 24,
+                          }}
+                        />
+                      </Stack>
+                      <Typography variant="subtitle1" fontWeight={700} sx={{ mb: 0.5, color: '#1e293b' }}>
+                        {integration.name}
+                      </Typography>
+                      <Typography variant="body2" sx={{ mb: 3, minHeight: 40, color: '#64748b' }}>
+                        {integration.description}
+                      </Typography>
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        onClick={() => handleConnect(integration)}
                         sx={{
-                          width: 48,
-                          height: 48,
-                          fontSize: '1.5rem',
-                          background: integration.gradient,
+                          bgcolor: '#1a73e8',
+                          color: 'white',
+                          textTransform: 'none',
+                          fontWeight: 600,
+                          py: 1.25,
+                          borderRadius: 2,
+                          boxShadow: 'none',
+                          '&:hover': {
+                            bgcolor: '#1557b0',
+                            boxShadow: 'none',
+                          },
                         }}
                       >
-                        {integration.icon}
-                      </Avatar>
-                      <Chip
-                        label="Available"
-                        size="small"
-                        sx={{
-                          bgcolor: alpha('#6366f1', 0.1),
-                          color: '#6366f1',
-                          fontWeight: 700,
-                          borderRadius: 1.5,
-                        }}
-                      />
-                    </Stack>
-                    <Typography variant="h6" fontWeight={700} sx={{ mb: 1 }}>
-                      {integration.name}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 3, minHeight: 40 }}>
-                      {integration.description}
-                    </Typography>
-                    <Button
-                      fullWidth
-                      variant="outlined"
-                      onClick={() => handleConnect(integration)}
-                      sx={{
-                        borderColor: alpha('#6366f1', 0.3),
-                        color: '#6366f1',
-                        textTransform: 'none',
-                        fontWeight: 700,
-                        py: 1.5,
-                        borderRadius: 2,
-                        '&:hover': {
-                          borderColor: '#6366f1',
-                          bgcolor: alpha('#6366f1', 0.05),
-                        },
-                      }}
-                    >
-                      Connect
-                    </Button>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
+                        Connect
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              );
+            })}
           </Grid>
         </Box>
 
         {/* Custom Integration Banner */}
         <Card
           sx={{
-            background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+            background: 'linear-gradient(135deg, #1a73e8 0%, #4285f4 100%)',
             position: 'relative',
             overflow: 'hidden',
             transition: 'all 0.3s',
             '&:hover': {
               transform: 'translateY(-4px)',
-              boxShadow: `0 12px 24px ${alpha('#6366f1', 0.4)}`,
+              boxShadow: `0 12px 24px ${alpha('#1a73e8', 0.4)}`,
             },
             '&::before': {
               content: '""',
@@ -440,7 +461,7 @@ const Integration = () => {
                     onClick={() => window.location.href = '/dashboard/api-keys'}
                     sx={{
                       bgcolor: 'white',
-                      color: '#6366f1',
+                      color: '#1a73e8',
                       fontWeight: 700,
                       textTransform: 'none',
                       py: 1.5,
@@ -503,16 +524,21 @@ const Integration = () => {
             <CardContent sx={{ p: 4 }}>
               <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 3 }}>
                 <Stack direction="row" spacing={2} alignItems="center">
-                  <Avatar
+                  <Box
                     sx={{
                       width: 48,
                       height: 48,
-                      fontSize: '1.5rem',
-                      background: selectedIntegration?.gradient,
+                      borderRadius: 2,
+                      bgcolor: '#f8fafc',
+                      border: '1px solid',
+                      borderColor: 'divider',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
-                    {selectedIntegration?.icon}
-                  </Avatar>
+                    {selectedIntegration?.Logo && <selectedIntegration.Logo />}
+                  </Box>
                   <Box>
                     <Typography variant="h5" fontWeight={700}>
                       Configure {selectedIntegration?.name}
@@ -579,11 +605,14 @@ const Integration = () => {
                     variant="contained"
                     disabled
                     sx={{
-                      background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                      bgcolor: '#1a73e8',
                       textTransform: 'none',
                       fontWeight: 700,
                       py: 1.5,
                       borderRadius: 2,
+                      '&:hover': {
+                        bgcolor: '#1557b0',
+                      },
                     }}
                   >
                     Connect

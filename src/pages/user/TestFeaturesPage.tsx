@@ -104,8 +104,8 @@ const TestFeaturesPage = () => {
       id: 'import',
       title: 'Import Form',
       icon: <ImportIcon sx={{ fontSize: 40 }} />,
-      color: '#8b5cf6',
-      gradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+      color: '#4285f4',
+      gradient: 'linear-gradient(135deg, #4285f4 0%, #7c3aed 100%)',
       description: 'Test form import from URL or HTML',
       tests: [
         'Import from a Google Form URL',
@@ -284,7 +284,7 @@ const TestFeaturesPage = () => {
           sx={{
             mt: 4,
             p: 4,
-            background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+            background: 'linear-gradient(135deg, #1a73e8 0%, #4285f4 100%)',
             color: 'white',
           }}
         >

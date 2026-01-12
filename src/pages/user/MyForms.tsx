@@ -36,6 +36,7 @@ import {
   ContentCopy as CopyIcon,
   Folder as FolderIcon,
   FolderOpen as FolderOpenIcon,
+  CheckCircle as CheckCircleIcon,
 } from '@mui/icons-material';
 import UserLayout from '../../components/layout/UserLayout';
 import api from '../../services/api';
@@ -160,17 +161,19 @@ const MyForms = () => {
     });
   }, [forms, searchQuery, filterStatus, currentFolder]);
 
-  // Gradient colors for cards
-  const gradients = [
-    'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-    'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
-    'linear-gradient(135deg, #ec4899 0%, #f43f5e 100%)',
-    'linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)',
-    'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-    'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
+  // Pabbly-style light pastel colors for cards
+  const pastelColors = [
+    { bg: '#dcfce7', accent: '#10b981' }, // Light mint green
+    { bg: '#dbeafe', accent: '#1a73e8' }, // Light blue
+    { bg: '#fef3c7', accent: '#f59e0b' }, // Light amber
+    { bg: '#ede9fe', accent: '#8b5cf6' }, // Light purple
+    { bg: '#cffafe', accent: '#06b6d4' }, // Light cyan
+    { bg: '#fce7f3', accent: '#ec4899' }, // Light pink
+    { bg: '#fee2e2', accent: '#ef4444' }, // Light red
+    { bg: '#ccfbf1', accent: '#14b8a6' }, // Light teal
   ];
 
-  const getGradient = (index: number) => gradients[index % gradients.length];
+  const getPastelColor = (index: number) => pastelColors[index % pastelColors.length];
 
   return (
     <UserLayout>
@@ -179,80 +182,44 @@ const MyForms = () => {
         maxWidth: '1400px',
         mx: 'auto',
       }}>
-        {/* Header */}
+        {/* Actions Bar */}
         <Stack
-          direction={{ xs: 'column', sm: 'row' }}
+          direction="row"
           justifyContent="space-between"
-          alignItems={{ xs: 'stretch', sm: 'center' }}
-          spacing={2}
-          sx={{ mb: 4 }}
+          alignItems="center"
+          sx={{ mb: 3 }}
         >
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <Box
+          {currentFolder && (
+            <Chip
+              icon={<FolderOpenIcon sx={{ fontSize: 16 }} />}
+              label={`Folder: ${currentFolder.name}`}
+              onDelete={() => setCurrentFolder(null)}
+              size="small"
               sx={{
-                width: 60,
-                height: 60,
-                borderRadius: '16px',
-                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 8px 24px rgba(99, 102, 241, 0.3)',
+                bgcolor: alpha(theme.palette.primary.main, 0.1),
+                color: 'primary.main',
+                fontWeight: 600,
               }}
-            >
-              <DescriptionIcon sx={{ fontSize: 32, color: 'white' }} />
-            </Box>
-            <Box>
-              <Typography
-                variant="h4"
-                fontWeight={800}
-                sx={{
-                  mb: 0.5,
-                  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                  letterSpacing: '-0.5px',
-                }}
-              >
-                My Forms
-              </Typography>
-              <Typography variant="body2" color="text.secondary" fontWeight={500}>
-                📋 Create, manage, and track your forms
-              </Typography>
-              {currentFolder && (
-                <Chip
-                  icon={<FolderOpenIcon sx={{ fontSize: 16 }} />}
-                  label={`Folder: ${currentFolder.name}`}
-                  onDelete={() => setCurrentFolder(null)}
-                  size="small"
-                  sx={{
-                    mt: 1,
-                    bgcolor: alpha(theme.palette.primary.main, 0.1),
-                    color: 'primary.main',
-                    fontWeight: 600,
-                  }}
-                />
-              )}
-            </Box>
-          </Stack>
+            />
+          )}
+          <Box sx={{ flex: 1 }} />
           <Button
             variant="contained"
             startIcon={<AddIcon />}
             component={Link}
             to="/dashboard/forms/create"
             sx={{
-              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+              background: '#1a73e8',
               textTransform: 'none',
               fontWeight: 600,
               px: 3,
               py: 1.25,
               borderRadius: 2,
-              boxShadow: '0 4px 14px 0 rgba(99, 102, 241, 0.39)',
+              boxShadow: '0 2px 8px rgba(26, 115, 232, 0.25)',
               transition: 'all 0.3s ease',
               '&:hover': {
-                background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
-                boxShadow: '0 6px 20px 0 rgba(99, 102, 241, 0.5)',
+                background: '#1557b0',
+                boxShadow: '0 4px 12px rgba(26, 115, 232, 0.35)',
                 transform: 'translateY(-2px)',
               },
             }}
@@ -315,23 +282,24 @@ const MyForms = () => {
                   startIcon={<FilterIcon />}
                   sx={{
                     textTransform: 'none',
-                    fontWeight: 700,
+                    fontWeight: 600,
                     borderRadius: 2,
                     px: 3,
                     whiteSpace: 'nowrap',
                     transition: 'all 0.2s ease',
                     ...(filterStatus === 'all' ? {
-                      background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                      boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)',
+                      background: '#1a73e8',
+                      boxShadow: 'none',
                       '&:hover': {
-                        background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
-                        boxShadow: '0 6px 16px rgba(99, 102, 241, 0.4)',
-                        transform: 'translateY(-2px)',
+                        background: '#1557b0',
                       },
                     } : {
+                      borderColor: theme.palette.divider,
+                      color: theme.palette.text.secondary,
                       '&:hover': {
-                        bgcolor: alpha(theme.palette.primary.main, 0.08),
+                        bgcolor: alpha(theme.palette.primary.main, 0.04),
                         borderColor: theme.palette.primary.main,
+                        color: theme.palette.primary.main,
                       },
                     }),
                   }}
@@ -343,22 +311,22 @@ const MyForms = () => {
                   onClick={() => setFilterStatus('PUBLISHED')}
                   sx={{
                     textTransform: 'none',
-                    fontWeight: 700,
+                    fontWeight: 600,
                     borderRadius: 2,
                     px: 3,
                     whiteSpace: 'nowrap',
                     transition: 'all 0.2s ease',
                     ...(filterStatus === 'PUBLISHED' ? {
-                      background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                      boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
+                      background: '#10b981',
+                      boxShadow: 'none',
                       '&:hover': {
-                        background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
-                        boxShadow: '0 6px 16px rgba(16, 185, 129, 0.4)',
-                        transform: 'translateY(-2px)',
+                        background: '#059669',
                       },
                     } : {
+                      borderColor: theme.palette.divider,
+                      color: theme.palette.text.secondary,
                       '&:hover': {
-                        bgcolor: alpha('#10b981', 0.08),
+                        bgcolor: alpha('#10b981', 0.04),
                         borderColor: '#10b981',
                         color: '#10b981',
                       },
@@ -372,22 +340,22 @@ const MyForms = () => {
                   onClick={() => setFilterStatus('DRAFT')}
                   sx={{
                     textTransform: 'none',
-                    fontWeight: 700,
+                    fontWeight: 600,
                     borderRadius: 2,
                     px: 3,
                     whiteSpace: 'nowrap',
                     transition: 'all 0.2s ease',
                     ...(filterStatus === 'DRAFT' ? {
-                      background: 'linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)',
-                      boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)',
+                      background: '#f59e0b',
+                      boxShadow: 'none',
                       '&:hover': {
-                        background: 'linear-gradient(135deg, #d97706 0%, #dc2626 100%)',
-                        boxShadow: '0 6px 16px rgba(245, 158, 11, 0.4)',
-                        transform: 'translateY(-2px)',
+                        background: '#d97706',
                       },
                     } : {
+                      borderColor: theme.palette.divider,
+                      color: theme.palette.text.secondary,
                       '&:hover': {
-                        bgcolor: alpha('#f59e0b', 0.08),
+                        bgcolor: alpha('#f59e0b', 0.04),
                         borderColor: '#f59e0b',
                         color: '#f59e0b',
                       },
@@ -406,7 +374,7 @@ const MyForms = () => {
             <CircularProgress
               size={48}
               sx={{
-                color: '#6366f1',
+                color: '#1a73e8',
                 '& .MuiCircularProgress-circle': {
                   strokeLinecap: 'round',
                 }
@@ -417,9 +385,9 @@ const MyForms = () => {
           <Fade in={true}>
             <Card
               sx={{
-                borderRadius: 4,
-                boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
-                border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+                borderRadius: 3,
+                boxShadow: 'none',
+                border: `1px solid ${theme.palette.divider}`,
                 overflow: 'hidden',
               }}
             >
@@ -427,19 +395,16 @@ const MyForms = () => {
                 <Box
                   sx={{
                     display: 'inline-flex',
-                    p: 4,
+                    p: 3,
                     borderRadius: '50%',
                     mb: 3,
-                    background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)',
+                    background: alpha('#1a73e8', 0.1),
                   }}
                 >
                   <DescriptionIcon
                     sx={{
-                      fontSize: 72,
-                      background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text',
+                      fontSize: 64,
+                      color: '#1a73e8',
                     }}
                   />
                 </Box>
@@ -459,16 +424,16 @@ const MyForms = () => {
                     component={Link}
                     to="/dashboard/forms/create"
                     sx={{
-                      background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                      background: '#1a73e8',
                       textTransform: 'none',
                       fontWeight: 600,
                       px: 4,
                       py: 1.5,
                       borderRadius: 2,
-                      boxShadow: '0 4px 14px 0 rgba(99, 102, 241, 0.39)',
+                      boxShadow: '0 2px 8px rgba(26, 115, 232, 0.25)',
                       '&:hover': {
-                        background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
-                        boxShadow: '0 6px 20px 0 rgba(99, 102, 241, 0.5)',
+                        background: '#1557b0',
+                        boxShadow: '0 4px 12px rgba(26, 115, 232, 0.35)',
                         transform: 'translateY(-2px)',
                       },
                     }}
@@ -505,34 +470,25 @@ const MyForms = () => {
                       },
                     }}
                   >
-                    {/* Card Header with Gradient */}
+                    {/* Card Header with Light Pastel Background */}
                     <Box
                       sx={{
                         height: 140,
-                        background: getGradient(index),
+                        background: getPastelColor(index).bg,
                         position: 'relative',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         overflow: 'hidden',
-                        '&::before': {
-                          content: '""',
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          background: 'radial-gradient(circle at 30% 50%, rgba(255,255,255,0.2) 0%, transparent 60%)',
-                        },
                       }}
                     >
                       <FileIcon
                         className="card-header-icon"
                         sx={{
                           fontSize: 56,
-                          color: 'white',
-                          opacity: 0.95,
-                          filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.1))',
+                          color: getPastelColor(index).accent,
+                          opacity: 0.9,
+                          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.05))',
                           transition: 'all 0.3s ease',
                           zIndex: 1,
                         }}
@@ -542,13 +498,11 @@ const MyForms = () => {
                           label={form.status === 'PUBLISHED' ? 'Published' : 'Draft'}
                           size="small"
                           sx={{
-                            bgcolor: 'rgba(255,255,255,0.25)',
-                            backdropFilter: 'blur(10px)',
+                            bgcolor: form.status === 'PUBLISHED' ? '#10b981' : '#f59e0b',
                             color: 'white',
                             fontWeight: 700,
                             fontSize: '0.75rem',
-                            border: '1px solid rgba(255,255,255,0.3)',
-                            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
                           }}
                         />
                       </Box>
@@ -607,10 +561,10 @@ const MyForms = () => {
                                 width: 32,
                                 height: 32,
                                 borderRadius: 1.5,
-                                bgcolor: alpha('#6366f1', 0.1),
+                                bgcolor: alpha('#1a73e8', 0.1),
                               }}
                             >
-                              <AssignmentIcon sx={{ fontSize: 16, color: '#6366f1' }} />
+                              <AssignmentIcon sx={{ fontSize: 16, color: '#1a73e8' }} />
                             </Box>
                             <Box>
                               <Typography variant="caption" color="text.secondary" display="block" sx={{ lineHeight: 1 }}>
@@ -632,10 +586,10 @@ const MyForms = () => {
                                 width: 32,
                                 height: 32,
                                 borderRadius: 1.5,
-                                bgcolor: alpha('#06b6d4', 0.1),
+                                bgcolor: alpha('#1a73e8', 0.1),
                               }}
                             >
-                              <ViewIcon sx={{ fontSize: 16, color: '#06b6d4' }} />
+                              <ViewIcon sx={{ fontSize: 16, color: '#1a73e8' }} />
                             </Box>
                             <Box>
                               <Typography variant="caption" color="text.secondary" display="block" sx={{ lineHeight: 1 }}>
@@ -659,7 +613,7 @@ const MyForms = () => {
                             to={`/dashboard/forms/builder/${form.id}`}
                             fullWidth
                             sx={{
-                              background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                              background: '#1a73e8',
                               textTransform: 'none',
                               fontWeight: 600,
                               fontSize: '0.875rem',
@@ -667,8 +621,7 @@ const MyForms = () => {
                               borderRadius: 2,
                               boxShadow: 'none',
                               '&:hover': {
-                                background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
-                                boxShadow: '0 4px 12px rgba(99, 102, 241, 0.4)',
+                                background: '#1557b0',
                               },
                             }}
                           >
@@ -679,11 +632,11 @@ const MyForms = () => {
                           <IconButton
                             onClick={(e) => handleFolderMenuClick(e, form)}
                             sx={{
-                              border: `2px solid ${alpha('#f59e0b', 0.2)}`,
+                              border: `1px solid ${theme.palette.divider}`,
                               color: '#f59e0b',
                               borderRadius: 2,
                               '&:hover': {
-                                bgcolor: alpha('#f59e0b', 0.1),
+                                bgcolor: alpha('#f59e0b', 0.08),
                                 borderColor: '#f59e0b',
                               },
                             }}
@@ -696,12 +649,12 @@ const MyForms = () => {
                             component={Link}
                             to={`/dashboard/submissions/${form.id}`}
                             sx={{
-                              border: `2px solid ${alpha('#06b6d4', 0.2)}`,
-                              color: '#06b6d4',
+                              border: `1px solid ${theme.palette.divider}`,
+                              color: '#1a73e8',
                               borderRadius: 2,
                               '&:hover': {
-                                bgcolor: alpha('#06b6d4', 0.1),
-                                borderColor: '#06b6d4',
+                                bgcolor: alpha('#1a73e8', 0.08),
+                                borderColor: '#1a73e8',
                               },
                             }}
                           >

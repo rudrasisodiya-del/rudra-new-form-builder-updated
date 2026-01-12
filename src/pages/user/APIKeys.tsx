@@ -90,13 +90,12 @@ const APIKeys = () => {
   };
 
   const apiEndpoints = [
-    { method: 'GET', path: '/api/forms', description: 'Get all your forms', color: '#10b981' },
-    { method: 'GET', path: '/api/forms/:id', description: 'Get a specific form', color: '#10b981' },
-    { method: 'POST', path: '/api/forms', description: 'Create a new form', color: '#06b6d4' },
-    { method: 'PUT', path: '/api/forms/:id', description: 'Update a form', color: '#f59e0b' },
-    { method: 'DELETE', path: '/api/forms/:id', description: 'Delete a form', color: '#ef4444' },
-    { method: 'GET', path: '/api/submissions?formId=:id', description: 'Get form submissions', color: '#10b981' },
-    { method: 'GET', path: '/api/webhooks', description: 'Get all webhooks', color: '#10b981' },
+    { method: 'GET', path: '/api/v1/forms', description: 'Get all your forms', color: '#10b981' },
+    { method: 'GET', path: '/api/v1/forms/:id', description: 'Get a specific form with submissions', color: '#10b981' },
+    { method: 'GET', path: '/api/v1/forms/:id/submissions', description: 'Get submissions for a form', color: '#10b981' },
+    { method: 'GET', path: '/api/v1/submissions/:id', description: 'Get a specific submission', color: '#10b981' },
+    { method: 'GET', path: '/api/v1/webhooks', description: 'Get all webhooks', color: '#10b981' },
+    { method: 'GET', path: '/api/v1/usage', description: 'Get API usage statistics', color: '#06b6d4' },
   ];
 
   if (loading) {
@@ -112,47 +111,6 @@ const APIKeys = () => {
   return (
     <UserLayout>
       <Box sx={{ p: { xs: 2, md: 4 } }}>
-        {/* Header */}
-        <Box
-          sx={{
-            background: `linear-gradient(135deg, ${theme.palette.mode === 'dark' ? '#1e293b' : '#ffffff'} 0%, ${theme.palette.mode === 'dark' ? '#0f172a' : '#f8fafc'} 100%)`,
-            borderRadius: 3,
-            p: 4,
-            mb: 4,
-            position: 'relative',
-            overflow: 'hidden',
-            '&::before': {
-              content: '""',
-              position: 'absolute',
-              top: -100,
-              right: -100,
-              width: 300,
-              height: 300,
-              borderRadius: '50%',
-              background: `radial-gradient(circle, ${alpha('#6366f1', 0.1)} 0%, transparent 70%)`,
-            },
-          }}
-        >
-          <Box sx={{ position: 'relative', zIndex: 1 }}>
-            <Typography
-              variant="h3"
-              fontWeight={800}
-              sx={{
-                mb: 1,
-                background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
-              API Keys
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
-              Manage your API credentials for programmatic access
-            </Typography>
-          </Box>
-        </Box>
-
         <Grid container spacing={3}>
           {/* Left Column */}
           <Grid size={{ xs: 12, lg: 8 }}>
@@ -171,7 +129,7 @@ const APIKeys = () => {
                     <Stack direction="row" alignItems="center" spacing={2}>
                       <Avatar
                         sx={{
-                          background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                          background: 'linear-gradient(135deg, #1a73e8 0%, #06b6d4 100%)',
                           width: 56,
                           height: 56,
                         }}
@@ -212,8 +170,8 @@ const APIKeys = () => {
                     sx={{
                       p: 3,
                       borderRadius: 2,
-                      bgcolor: alpha('#6366f1', 0.05),
-                      border: `2px dashed ${alpha('#6366f1', 0.2)}`,
+                      bgcolor: alpha('#1a73e8', 0.05),
+                      border: `2px dashed ${alpha('#1a73e8', 0.2)}`,
                       mb: 2,
                     }}
                   >
@@ -235,9 +193,9 @@ const APIKeys = () => {
                       <IconButton
                         onClick={() => setShowKey(!showKey)}
                         sx={{
-                          color: '#6366f1',
+                          color: '#1a73e8',
                           '&:hover': {
-                            bgcolor: alpha('#6366f1', 0.1),
+                            bgcolor: alpha('#1a73e8', 0.1),
                           },
                         }}
                       >
@@ -248,16 +206,16 @@ const APIKeys = () => {
                         startIcon={<CopyIcon />}
                         onClick={() => copyToClipboard(user?.apiKey)}
                         sx={{
-                          background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                          background: 'linear-gradient(135deg, #1a73e8 0%, #06b6d4 100%)',
                           textTransform: 'none',
                           fontWeight: 700,
                           px: 3,
                           whiteSpace: 'nowrap',
                           borderRadius: 2,
-                          boxShadow: `0 4px 12px ${alpha('#6366f1', 0.3)}`,
+                          boxShadow: `0 4px 12px ${alpha('#1a73e8', 0.3)}`,
                           '&:hover': {
                             transform: 'translateY(-2px)',
-                            boxShadow: `0 6px 16px ${alpha('#6366f1', 0.4)}`,
+                            boxShadow: `0 6px 16px ${alpha('#1a73e8', 0.4)}`,
                           },
                           transition: 'all 0.3s',
                         }}
@@ -324,8 +282,8 @@ const APIKeys = () => {
                         display: 'block',
                       }}
                     >
-                      {`curl -H "Authorization: Bearer ${user?.apiKey || 'YOUR_API_KEY'}" \\
-     https://api.pabbly.com/forms`}
+                      {`curl -H "X-API-Key: ${user?.apiKey || 'YOUR_API_KEY'}" \\
+     http://localhost:5000/api/v1/forms`}
                     </code>
                   </Paper>
                 </CardContent>
@@ -344,7 +302,7 @@ const APIKeys = () => {
                   <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 3 }}>
                     <Avatar
                       sx={{
-                        background: 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)',
+                        background: 'linear-gradient(135deg, #4285f4 0%, #a78bfa 100%)',
                         width: 56,
                         height: 56,
                       }}
@@ -371,7 +329,7 @@ const APIKeys = () => {
                   >
                     <Table>
                       <TableHead>
-                        <TableRow sx={{ bgcolor: alpha('#6366f1', 0.05) }}>
+                        <TableRow sx={{ bgcolor: alpha('#1a73e8', 0.05) }}>
                           <TableCell sx={{ fontWeight: 700 }}>Method</TableCell>
                           <TableCell sx={{ fontWeight: 700 }}>Endpoint</TableCell>
                           <TableCell sx={{ fontWeight: 700 }}>Description</TableCell>
@@ -384,7 +342,7 @@ const APIKeys = () => {
                             sx={{
                               transition: 'all 0.2s',
                               '&:hover': {
-                                bgcolor: alpha('#6366f1', 0.02),
+                                bgcolor: alpha('#1a73e8', 0.02),
                               },
                             }}
                           >
@@ -436,7 +394,7 @@ const APIKeys = () => {
               >
                 <CardContent sx={{ p: 3 }}>
                   <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 3 }}>
-                    <TrendingUpIcon sx={{ color: '#6366f1' }} />
+                    <TrendingUpIcon sx={{ color: '#1a73e8' }} />
                     <Typography variant="h6" fontWeight={700}>
                       Rate Limits
                     </Typography>
@@ -486,8 +444,8 @@ const APIKeys = () => {
                           label={user?.plan?.name || 'Free'}
                           size="small"
                           sx={{
-                            bgcolor: alpha('#6366f1', 0.1),
-                            color: '#6366f1',
+                            bgcolor: alpha('#1a73e8', 0.1),
+                            color: '#1a73e8',
                             fontWeight: 700,
                           }}
                         />
@@ -501,14 +459,14 @@ const APIKeys = () => {
                     onClick={() => window.location.href = '/dashboard/pricing'}
                     sx={{
                       mt: 3,
-                      background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                      background: 'linear-gradient(135deg, #1a73e8 0%, #06b6d4 100%)',
                       textTransform: 'none',
                       fontWeight: 700,
                       py: 1.5,
                       borderRadius: 2,
                       '&:hover': {
                         transform: 'translateY(-2px)',
-                        boxShadow: `0 8px 16px ${alpha('#6366f1', 0.3)}`,
+                        boxShadow: `0 8px 16px ${alpha('#1a73e8', 0.3)}`,
                       },
                       transition: 'all 0.3s',
                     }}
@@ -521,13 +479,13 @@ const APIKeys = () => {
               {/* Documentation Card */}
               <Card
                 sx={{
-                  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                  background: 'linear-gradient(135deg, #1a73e8 0%, #4285f4 100%)',
                   position: 'relative',
                   overflow: 'hidden',
                   transition: 'all 0.3s',
                   '&:hover': {
                     transform: 'translateY(-4px)',
-                    boxShadow: `0 12px 24px ${alpha('#6366f1', 0.4)}`,
+                    boxShadow: `0 12px 24px ${alpha('#1a73e8', 0.4)}`,
                   },
                   '&::before': {
                     content: '""',
@@ -556,7 +514,7 @@ const APIKeys = () => {
                     variant="contained"
                     sx={{
                       bgcolor: 'white',
-                      color: '#6366f1',
+                      color: '#1a73e8',
                       fontWeight: 700,
                       textTransform: 'none',
                       py: 1.5,

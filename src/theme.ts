@@ -1,17 +1,17 @@
 import { createTheme, type Theme } from '@mui/material/styles';
 
-// Modern color palette with vibrant, professional colors
+// Pabbly-style professional color palette
 const lightPalette = {
   primary: {
-    main: '#6366f1', // Modern indigo
-    light: '#818cf8',
-    dark: '#4f46e5',
+    main: '#1a73e8', // Pabbly blue
+    light: '#4285f4',
+    dark: '#1557b0',
     contrastText: '#ffffff',
   },
   secondary: {
-    main: '#06b6d4', // Vibrant cyan
-    light: '#22d3ee',
-    dark: '#0891b2',
+    main: '#4285f4', // Lighter blue
+    light: '#5a9cf4',
+    dark: '#1a73e8',
     contrastText: '#ffffff',
   },
   warning: {
@@ -47,15 +47,15 @@ const lightPalette = {
 
 const darkPalette = {
   primary: {
-    main: '#818cf8', // Lighter indigo for dark mode
-    light: '#a5b4fc',
-    dark: '#6366f1',
+    main: '#4285f4', // Lighter Pabbly blue for dark mode
+    light: '#5a9cf4',
+    dark: '#1a73e8',
     contrastText: '#ffffff',
   },
   secondary: {
-    main: '#22d3ee', // Lighter cyan for dark mode
-    light: '#67e8f9',
-    dark: '#06b6d4',
+    main: '#5a9cf4', // Even lighter blue for dark mode
+    light: '#7aabf5',
+    dark: '#4285f4',
     contrastText: '#0f172a',
   },
   warning: {
@@ -200,10 +200,10 @@ const commonComponents = {
           borderRadius: '10px',
           transition: 'all 0.2s ease-in-out',
           '&:hover': {
-            boxShadow: '0 0 0 1px rgba(99, 102, 241, 0.2)',
+            boxShadow: '0 0 0 1px rgba(26, 115, 232, 0.2)',
           },
           '&.Mui-focused': {
-            boxShadow: '0 0 0 2px rgba(99, 102, 241, 0.2)',
+            boxShadow: '0 0 0 2px rgba(26, 115, 232, 0.2)',
           },
         },
       },

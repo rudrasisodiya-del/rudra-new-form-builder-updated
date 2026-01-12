@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -46,12 +46,12 @@ import {
 import UserLayout from '../../components/layout/UserLayout';
 import api from '../../services/api';
 
-// Modern Animated Stat Card Component
+// Modern Stat Card Component - Clean Professional Style
 const AnimatedStatCard = ({
   title,
   value,
   icon,
-  gradient,
+  accentColor,
   percentage,
   trend = 'up',
   delay = 0
@@ -64,51 +64,30 @@ const AnimatedStatCard = ({
       sx={{
         position: 'relative',
         overflow: 'hidden',
-        background: gradient,
-        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-        animation: `slideUp 0.6s ease-out ${delay}s both`,
+        background: isDark ? alpha('#1e293b', 0.8) : '#ffffff',
+        border: '1px solid',
+        borderColor: isDark ? alpha('#fff', 0.1) : '#e2e8f0',
+        borderRadius: 3,
+        boxShadow: isDark ? 'none' : '0 1px 3px rgba(0,0,0,0.04)',
+        transition: 'all 0.3s ease',
         '&:hover': {
-          transform: 'translateY(-8px)',
-          boxShadow: '0 12px 24px rgba(99, 102, 241, 0.3)',
-        },
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: isDark ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.1)',
-          opacity: 0,
-          transition: 'opacity 0.3s',
-        },
-        '&:hover::before': {
-          opacity: 1,
-        },
-        '@keyframes slideUp': {
-          from: {
-            opacity: 0,
-            transform: 'translateY(30px)',
-          },
-          to: {
-            opacity: 1,
-            transform: 'translateY(0)',
-          },
+          transform: 'translateY(-2px)',
+          boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.3)' : '0 4px 12px rgba(0,0,0,0.08)',
+          borderColor: accentColor,
         },
       }}
     >
-      <CardContent sx={{ p: 3, position: 'relative', zIndex: 1 }}>
+      <CardContent sx={{ p: 3 }}>
         <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
           <Box sx={{ flex: 1 }}>
             <Typography
-              variant="body2"
               sx={{
-                color: 'rgba(255,255,255,0.9)',
+                color: isDark ? alpha('#fff', 0.6) : '#64748b',
                 fontWeight: 600,
-                mb: 1,
-                textTransform: 'uppercase',
                 letterSpacing: '0.5px',
-                fontSize: '0.75rem',
+                textTransform: 'uppercase',
+                fontSize: '0.7rem',
+                mb: 1,
               }}
             >
               {title}
@@ -116,10 +95,11 @@ const AnimatedStatCard = ({
             <Typography
               variant="h3"
               sx={{
-                color: 'white',
-                fontWeight: 800,
-                mb: 1,
-                fontSize: { xs: '2rem', md: '2.5rem' },
+                color: isDark ? '#fff' : '#1e293b',
+                fontWeight: 700,
+                fontSize: '1.875rem',
+                lineHeight: 1.2,
+                mb: 1.5,
               }}
             >
               {value}
@@ -127,39 +107,41 @@ const AnimatedStatCard = ({
             {percentage !== undefined && (
               <Stack direction="row" alignItems="center" spacing={0.5}>
                 {trend === 'up' ? (
-                  <ArrowUpwardIcon sx={{ fontSize: 16, color: '#4ade80' }} />
+                  <ArrowUpwardIcon sx={{ fontSize: 14, color: '#10b981' }} />
                 ) : (
-                  <ArrowDownwardIcon sx={{ fontSize: 16, color: '#f87171' }} />
+                  <ArrowDownwardIcon sx={{ fontSize: 14, color: '#ef4444' }} />
                 )}
                 <Typography
                   variant="caption"
                   sx={{
-                    color: trend === 'up' ? '#4ade80' : '#f87171',
-                    fontWeight: 700,
+                    color: trend === 'up' ? '#10b981' : '#ef4444',
+                    fontWeight: 600,
+                    fontSize: '0.75rem',
                   }}
                 >
-                  {percentage}%
-                </Typography>
-                <Typography
-                  variant="caption"
-                  sx={{ color: 'rgba(255,255,255,0.7)' }}
-                >
-                  vs last month
+                  {percentage}% vs last month
                 </Typography>
               </Stack>
             )}
           </Box>
-          <Avatar
+          <Box
             sx={{
-              width: 64,
-              height: 64,
-              bgcolor: 'rgba(255,255,255,0.2)',
-              backdropFilter: 'blur(10px)',
-              boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
+              width: 52,
+              height: 52,
+              borderRadius: 2.5,
+              bgcolor: alpha(accentColor, 0.1),
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
-            {icon}
-          </Avatar>
+            {React.cloneElement(icon, {
+              sx: {
+                fontSize: 26,
+                color: accentColor,
+              }
+            })}
+          </Box>
         </Stack>
       </CardContent>
     </Card>
@@ -243,7 +225,7 @@ const Dashboard = () => {
   const handleCreateFolder = () => {
     if (!newFolderName.trim()) return;
 
-    const colors = ['#3b82f6', '#10b981', '#8b5cf6', '#f59e0b', '#ec4899', '#06b6d4'];
+    const colors = ['#3b82f6', '#10b981', '#1a73e8', '#f59e0b', '#ec4899', '#06b6d4'];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
     const newFolder = {
@@ -294,43 +276,19 @@ const Dashboard = () => {
   return (
     <UserLayout>
       <Box sx={{ p: { xs: 2, md: 4 } }}>
-        {/* Header with gradient background */}
+        {/* Header - Pabbly Style */}
         <Box
           sx={{
             background: theme.palette.mode === 'dark'
-              ? 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)'
-              : 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
-            borderRadius: 4,
-            p: { xs: 3, md: 5 },
+              ? alpha(theme.palette.background.paper, 0.6)
+              : '#ffffff',
+            borderRadius: 3,
+            p: { xs: 3, md: 4 },
             mb: 4,
             position: 'relative',
             overflow: 'hidden',
-            boxShadow: theme.palette.mode === 'dark'
-              ? '0 4px 24px rgba(0, 0, 0, 0.4)'
-              : '0 4px 24px rgba(0, 0, 0, 0.06)',
-            border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
-            '&::before': {
-              content: '""',
-              position: 'absolute',
-              top: -150,
-              right: -150,
-              width: 400,
-              height: 400,
-              borderRadius: '50%',
-              background: `radial-gradient(circle, ${alpha('#6366f1', theme.palette.mode === 'dark' ? 0.15 : 0.08)} 0%, transparent 70%)`,
-              pointerEvents: 'none',
-            },
-            '&::after': {
-              content: '""',
-              position: 'absolute',
-              bottom: -100,
-              left: -100,
-              width: 300,
-              height: 300,
-              borderRadius: '50%',
-              background: `radial-gradient(circle, ${alpha('#8b5cf6', theme.palette.mode === 'dark' ? 0.1 : 0.05)} 0%, transparent 70%)`,
-              pointerEvents: 'none',
-            },
+            boxShadow: 'none',
+            border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)'}`,
           }}
         >
           <Stack
@@ -342,34 +300,31 @@ const Dashboard = () => {
             <Stack direction="row" alignItems="center" spacing={3} sx={{ position: 'relative', zIndex: 1 }}>
               <Box
                 sx={{
-                  width: 72,
-                  height: 72,
-                  borderRadius: '20px',
-                  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                  width: 64,
+                  height: 64,
+                  borderRadius: '16px',
+                  background: '#1a73e8',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 12px 32px rgba(99, 102, 241, 0.35)',
+                  boxShadow: '0 4px 12px rgba(26, 115, 232, 0.25)',
                   transition: 'transform 0.3s ease',
                   '&:hover': {
-                    transform: 'scale(1.05) rotate(5deg)',
+                    transform: 'scale(1.05)',
                   },
                 }}
               >
-                <RocketIcon sx={{ fontSize: 40, color: 'white' }} />
+                <RocketIcon sx={{ fontSize: 32, color: 'white' }} />
               </Box>
               <Box>
                 <Typography
                   variant="h3"
-                  fontWeight={800}
+                  fontWeight={700}
                   sx={{
                     mb: 1,
-                    fontSize: { xs: '1.75rem', md: '2.5rem' },
-                    background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                    backgroundClip: 'text',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    letterSpacing: '-1.5px',
+                    fontSize: { xs: '1.75rem', md: '2.25rem' },
+                    color: theme.palette.text.primary,
+                    letterSpacing: '-0.5px',
                   }}
                 >
                   Welcome back, {user?.name || 'User'}
@@ -377,7 +332,7 @@ const Dashboard = () => {
                 <Typography
                   variant="body1"
                   color="text.secondary"
-                  fontWeight={500}
+                  fontWeight={400}
                   sx={{
                     maxWidth: 600,
                     fontSize: '0.95rem',
@@ -392,26 +347,26 @@ const Dashboard = () => {
               <Button
                 variant="contained"
                 size="large"
-                startIcon={<AddIcon sx={{ fontSize: 24 }} />}
+                startIcon={<AddIcon sx={{ fontSize: 20 }} />}
                 component={Link}
                 to="/dashboard/forms/create"
                 sx={{
-                  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                  background: '#1a73e8',
                   textTransform: 'none',
-                  fontWeight: 700,
-                  fontSize: '1.05rem',
-                  px: 5,
-                  py: 2,
-                  borderRadius: 3,
-                  boxShadow: '0 8px 20px rgba(99, 102, 241, 0.35)',
+                  fontWeight: 600,
+                  fontSize: '0.95rem',
+                  px: 3,
+                  py: 1.5,
+                  borderRadius: 2,
+                  boxShadow: '0 2px 8px rgba(26, 115, 232, 0.25)',
                   transition: 'all 0.3s ease',
                   '&:hover': {
-                    background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
-                    transform: 'translateY(-3px)',
-                    boxShadow: '0 12px 28px rgba(99, 102, 241, 0.45)',
+                    background: '#1557b0',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 4px 12px rgba(26, 115, 232, 0.35)',
                   },
                   '&:active': {
-                    transform: 'translateY(-1px)',
+                    transform: 'translateY(0)',
                   },
                 }}
               >
@@ -421,50 +376,46 @@ const Dashboard = () => {
           </Stack>
         </Box>
 
-        {/* Animated Stats Cards */}
+        {/* Stats Cards */}
         <Grid container spacing={3} sx={{ mb: 4 }}>
           <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
             <AnimatedStatCard
               title="Total Forms"
               value={stats.forms}
-              icon={<DescriptionIcon sx={{ fontSize: 32, color: 'white' }} />}
-              gradient="linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)"
+              icon={<DescriptionIcon />}
+              accentColor="#f59e0b"
               percentage={12.5}
               trend="up"
-              delay={0}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
             <AnimatedStatCard
               title="Submissions"
               value={stats.submissions}
-              icon={<CheckCircleIcon sx={{ fontSize: 32, color: 'white' }} />}
-              gradient="linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)"
+              icon={<CheckCircleIcon />}
+              accentColor="#1a73e8"
               percentage={8.2}
               trend="up"
-              delay={0.1}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
             <AnimatedStatCard
               title="Total Views"
               value={stats.views}
-              icon={<VisibilityIcon sx={{ fontSize: 32, color: 'white' }} />}
-              gradient="linear-gradient(135deg, #f59e0b 0%, #d97706 100%)"
+              icon={<VisibilityIcon />}
+              accentColor="#06b6d4"
               percentage={15.3}
               trend="up"
-              delay={0.2}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
             <AnimatedStatCard
               title="Conversion Rate"
               value={stats.forms > 0 ? `${Math.round((stats.submissions / (stats.views || 1)) * 100)}%` : '0%'}
-              icon={<AutoGraphIcon sx={{ fontSize: 32, color: 'white' }} />}
-              gradient="linear-gradient(135deg, #10b981 0%, #059669 100%)"
+              icon={<AutoGraphIcon />}
+              accentColor="#10b981"
               percentage={3.1}
               trend="up"
-              delay={0.3}
             />
           </Grid>
         </Grid>
@@ -475,7 +426,7 @@ const Dashboard = () => {
             title="Form Usage"
             current={formsUsed}
             total={FREE_FORMS_LIMIT}
-            color="#6366f1"
+            color="#1a73e8"
           />
         </Box>
 
@@ -505,8 +456,8 @@ const Dashboard = () => {
                     <Chip
                       label={`All ${stats.forms}`}
                       sx={{
-                        bgcolor: alpha('#6366f1', 0.1),
-                        color: '#6366f1',
+                        bgcolor: alpha('#1a73e8', 0.1),
+                        color: '#1a73e8',
                         fontWeight: 700,
                       }}
                     />
@@ -514,7 +465,7 @@ const Dashboard = () => {
                       label={`Active ${stats.forms}`}
                       variant="outlined"
                       sx={{
-                        borderColor: alpha('#6366f1', 0.3),
+                        borderColor: alpha('#1a73e8', 0.3),
                         color: 'text.secondary',
                       }}
                     />
@@ -530,10 +481,10 @@ const Dashboard = () => {
                       borderRadius: 2,
                       transition: 'all 0.3s',
                       '&:hover': {
-                        boxShadow: `0 0 0 2px ${alpha('#6366f1', 0.1)}`,
+                        boxShadow: `0 0 0 2px ${alpha('#1a73e8', 0.1)}`,
                       },
                       '&.Mui-focused': {
-                        boxShadow: `0 0 0 2px ${alpha('#6366f1', 0.2)}`,
+                        boxShadow: `0 0 0 2px ${alpha('#1a73e8', 0.2)}`,
                       },
                     },
                   }}
@@ -556,7 +507,7 @@ const Dashboard = () => {
                 >
                   <Table>
                     <TableHead>
-                      <TableRow sx={{ bgcolor: alpha('#6366f1', 0.05) }}>
+                      <TableRow sx={{ bgcolor: alpha('#1a73e8', 0.05) }}>
                         <TableCell sx={{ fontWeight: 700, color: 'text.primary' }}>Status</TableCell>
                         <TableCell sx={{ fontWeight: 700, color: 'text.primary' }}>Form Name</TableCell>
                         <TableCell sx={{ fontWeight: 700, color: 'text.primary' }}>Submissions</TableCell>
@@ -587,10 +538,10 @@ const Dashboard = () => {
                                 sx={{
                                   width: 80,
                                   height: 80,
-                                  bgcolor: alpha('#6366f1', 0.1),
+                                  bgcolor: alpha('#1a73e8', 0.1),
                                 }}
                               >
-                                <DescriptionIcon sx={{ fontSize: 40, color: '#6366f1' }} />
+                                <DescriptionIcon sx={{ fontSize: 40, color: '#1a73e8' }} />
                               </Avatar>
                               <Box sx={{ textAlign: 'center' }}>
                                 <Typography
@@ -617,10 +568,13 @@ const Dashboard = () => {
                                 variant="contained"
                                 startIcon={<AddIcon />}
                                 sx={{
-                                  background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                                  background: '#1a73e8',
                                   textTransform: 'none',
                                   fontWeight: 600,
                                   color: 'white',
+                                  '&:hover': {
+                                    background: '#1557b0',
+                                  },
                                 }}
                               >
                                 Create Your First Form
@@ -636,7 +590,7 @@ const Dashboard = () => {
                             sx={{
                               transition: 'all 0.2s',
                               '&:hover': {
-                                bgcolor: alpha('#6366f1', 0.02),
+                                bgcolor: alpha('#1a73e8', 0.02),
                               },
                             }}
                           >
@@ -678,13 +632,13 @@ const Dashboard = () => {
                                 size="small"
                                 variant="contained"
                                 sx={{
-                                  bgcolor: alpha('#6366f1', 0.1),
-                                  color: '#6366f1',
+                                  bgcolor: alpha('#1a73e8', 0.1),
+                                  color: '#1a73e8',
                                   textTransform: 'none',
                                   fontWeight: 700,
                                   px: 2.5,
                                   '&:hover': {
-                                    bgcolor: alpha('#6366f1', 0.2),
+                                    bgcolor: alpha('#1a73e8', 0.2),
                                   },
                                 }}
                               >
@@ -722,10 +676,10 @@ const Dashboard = () => {
                       size="small"
                       onClick={() => setFolderDialogOpen(true)}
                       sx={{
-                        bgcolor: alpha('#6366f1', 0.1),
-                        color: '#6366f1',
+                        bgcolor: alpha('#1a73e8', 0.1),
+                        color: '#1a73e8',
                         '&:hover': {
-                          bgcolor: alpha('#6366f1', 0.2),
+                          bgcolor: alpha('#1a73e8', 0.2),
                         },
                       }}
                     >
@@ -746,7 +700,7 @@ const Dashboard = () => {
                           cursor: 'pointer',
                           transition: 'all 0.2s',
                           '&:hover': {
-                            bgcolor: alpha('#6366f1', 0.05),
+                            bgcolor: alpha('#1a73e8', 0.05),
                             transform: 'translateX(4px)',
                           },
                         }}
@@ -773,8 +727,8 @@ const Dashboard = () => {
                           label={folder.count}
                           size="small"
                           sx={{
-                            bgcolor: alpha('#6366f1', 0.1),
-                            color: '#6366f1',
+                            bgcolor: alpha('#1a73e8', 0.1),
+                            color: '#1a73e8',
                             fontWeight: 700,
                           }}
                         />
@@ -784,57 +738,46 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
 
-              {/* Upgrade Card */}
+              {/* Upgrade Card - Pabbly Style */}
               <Card
                 sx={{
-                  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                  background: '#1a73e8',
                   position: 'relative',
                   overflow: 'hidden',
                   transition: 'all 0.3s',
                   '&:hover': {
                     transform: 'translateY(-4px)',
-                    boxShadow: `0 12px 24px ${alpha('#6366f1', 0.4)}`,
-                  },
-                  '&::before': {
-                    content: '""',
-                    position: 'absolute',
-                    top: -50,
-                    right: -50,
-                    width: 200,
-                    height: 200,
-                    borderRadius: '50%',
-                    background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)',
+                    boxShadow: '0 8px 24px rgba(26, 115, 232, 0.3)',
                   },
                 }}
               >
                 <CardContent sx={{ p: 3, position: 'relative', zIndex: 1 }}>
                   <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
-                    <RocketIcon sx={{ color: 'white', fontSize: 28 }} />
-                    <Typography variant="h5" color="white" fontWeight={800}>
+                    <RocketIcon sx={{ color: 'white', fontSize: 24 }} />
+                    <Typography variant="h6" color="white" fontWeight={700}>
                       Upgrade to Pro
                     </Typography>
                   </Stack>
-                  <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.95)', mb: 3, lineHeight: 1.6 }}>
-                    Unlock unlimited forms, advanced analytics, custom branding, and priority support to supercharge your workflow
+                  <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.9)', mb: 3, lineHeight: 1.6 }}>
+                    Unlock unlimited forms, advanced analytics, custom branding, and priority support
                   </Typography>
                   <Button
                     component={Link}
                     to="/pricing"
                     variant="contained"
                     fullWidth
-                    size="large"
+                    size="medium"
                     sx={{
                       bgcolor: 'white',
-                      color: '#6366f1',
-                      fontWeight: 800,
+                      color: '#1a73e8',
+                      fontWeight: 600,
                       textTransform: 'none',
-                      py: 1.5,
+                      py: 1.25,
                       borderRadius: 2,
-                      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                      boxShadow: 'none',
                       '&:hover': {
                         bgcolor: 'rgba(255,255,255,0.95)',
-                        transform: 'translateY(-2px)',
-                        boxShadow: '0 6px 16px rgba(0,0,0,0.15)',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                       },
                     }}
                   >
@@ -896,7 +839,7 @@ const Dashboard = () => {
               sx={{
                 textTransform: 'none',
                 fontWeight: 600,
-                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                background: 'linear-gradient(135deg, #1a73e8 0%, #1a73e8 100%)',
                 '&:hover': {
                   background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
                 },

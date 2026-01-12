@@ -164,3 +164,58 @@ export const getCurrentUser = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Failed to get user', details: error.message });
   }
 };
+
+// Regenerate API key
+export const regenerateApiKey = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.userId;
+
+    const newApiKey = generateApiKey();
+
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: { apiKey: newApiKey },
+      select: {
+        id: true,
+        apiKey: true,
+      },
+    });
+
+    res.json({
+      success: true,
+      message: 'API key regenerated successfully',
+      apiKey: user.apiKey
+    });
+  } catch (error: any) {
+    console.error('Regenerate API key error:', error);
+    res.status(500).json({ error: 'Failed to regenerate API key', details: error.message });
+  }
+};
+
+// Get API key
+export const getApiKey = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.userId;
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        apiKey: true,
+        createdAt: true,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({
+      success: true,
+      apiKey: user.apiKey,
+      createdAt: user.createdAt
+    });
+  } catch (error: any) {
+    console.error('Get API key error:', error);
+    res.status(500).json({ error: 'Failed to get API key', details: error.message });
+  }
+};

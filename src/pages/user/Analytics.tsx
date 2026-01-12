@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Card,
@@ -42,7 +42,7 @@ import UserLayout from '../../components/layout/UserLayout';
 import api from '../../services/api';
 
 // Modern SVG Line Chart Component
-const LineChart = ({ data, color = '#6366f1', height = 200 }: any) => {
+const LineChart = ({ data, color = '#1a73e8', height = 200 }: any) => {
   if (!data || data.length === 0) return null;
 
   const maxValue = Math.max(...data.map((d: any) => d.value), 1);
@@ -87,7 +87,7 @@ const LineChart = ({ data, color = '#6366f1', height = 200 }: any) => {
 };
 
 // Modern SVG Bar Chart Component
-const BarChart = ({ data, colors = ['#6366f1', '#06b6d4', '#10b981', '#f59e0b'] }: any) => {
+const BarChart = ({ data, colors = ['#1a73e8', '#06b6d4', '#10b981', '#f59e0b'] }: any) => {
   if (!data || data.length === 0) return null;
 
   const maxValue = Math.max(...data.map((d: any) => d.value), 1);
@@ -175,12 +175,12 @@ const RadialProgress = ({ value, color, size = 120 }: any) => {
   );
 };
 
-// Modern Animated Stat Card
+// Clean Stat Card with Light Pastel Background - Pabbly Style
 const AnimatedStatCard = ({
   title,
   value,
   icon,
-  gradient,
+  accentColor,
   percentage,
   trend = 'up',
   delay = 0,
@@ -193,65 +193,84 @@ const AnimatedStatCard = ({
       sx={{
         position: 'relative',
         overflow: 'hidden',
-        background: gradient,
-        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-        animation: `slideUp 0.6s ease-out ${delay}s both`,
+        background: isDark ? alpha('#1e293b', 0.8) : '#ffffff',
+        border: '1px solid',
+        borderColor: isDark ? alpha('#fff', 0.1) : '#e2e8f0',
+        borderRadius: 3,
+        transition: 'all 0.3s ease',
+        boxShadow: isDark ? 'none' : '0 1px 3px rgba(0,0,0,0.04)',
         '&:hover': {
-          transform: 'translateY(-8px)',
-          boxShadow: '0 12px 24px rgba(99, 102, 241, 0.3)',
-        },
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: isDark ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.1)',
-          opacity: 0,
-          transition: 'opacity 0.3s',
-        },
-        '&:hover::before': {
-          opacity: 1,
-        },
-        '@keyframes slideUp': {
-          from: { opacity: 0, transform: 'translateY(30px)' },
-          to: { opacity: 1, transform: 'translateY(0)' },
+          transform: 'translateY(-2px)',
+          boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.3)' : '0 4px 12px rgba(0,0,0,0.08)',
+          borderColor: accentColor,
         },
       }}
     >
-      <CardContent sx={{ p: 3, position: 'relative', zIndex: 1 }}>
+      <CardContent sx={{ p: 3 }}>
         <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
           <Box sx={{ flex: 1 }}>
-            <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.9)', mb: 1, fontWeight: 600 }}>
+            <Typography
+              sx={{
+                color: isDark ? alpha('#fff', 0.6) : '#64748b',
+                fontWeight: 600,
+                letterSpacing: '0.5px',
+                textTransform: 'uppercase',
+                fontSize: '0.7rem',
+                mb: 1,
+              }}
+            >
               {title}
             </Typography>
-            <Typography variant="h3" fontWeight={700} sx={{ color: 'white', mb: 1 }}>
+            <Typography
+              variant="h3"
+              sx={{
+                color: isDark ? '#fff' : '#1e293b',
+                fontWeight: 700,
+                fontSize: '1.875rem',
+                lineHeight: 1.2,
+                mb: 1.5,
+              }}
+            >
               {value}
             </Typography>
             {percentage !== undefined && (
               <Stack direction="row" alignItems="center" spacing={0.5}>
                 {trend === 'up' ? (
-                  <ArrowUpwardIcon sx={{ fontSize: 16, color: '#10b981' }} />
+                  <ArrowUpwardIcon sx={{ fontSize: 14, color: '#10b981' }} />
                 ) : (
-                  <ArrowDownwardIcon sx={{ fontSize: 16, color: '#ef4444' }} />
+                  <ArrowDownwardIcon sx={{ fontSize: 14, color: '#ef4444' }} />
                 )}
-                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.9)', fontWeight: 600 }}>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    color: trend === 'up' ? '#10b981' : '#ef4444',
+                    fontWeight: 600,
+                    fontSize: '0.75rem',
+                  }}
+                >
                   {percentage}% vs last period
                 </Typography>
               </Stack>
             )}
           </Box>
-          <Avatar
+          <Box
             sx={{
-              width: 56,
-              height: 56,
-              bgcolor: 'rgba(255,255,255,0.2)',
-              backdropFilter: 'blur(10px)',
+              width: 52,
+              height: 52,
+              borderRadius: 2.5,
+              bgcolor: alpha(accentColor, 0.1),
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
-            {icon}
-          </Avatar>
+            {React.cloneElement(icon, {
+              sx: {
+                fontSize: 26,
+                color: accentColor,
+              }
+            })}
+          </Box>
         </Stack>
       </CardContent>
     </Card>
@@ -351,7 +370,7 @@ const Analytics = () => {
     return (
       <UserLayout>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', py: 12 }}>
-          <CircularProgress sx={{ color: '#6366f1' }} />
+          <CircularProgress sx={{ color: '#1a73e8' }} />
         </Box>
       </UserLayout>
     );
@@ -366,9 +385,9 @@ const Analytics = () => {
             py: 12,
             m: 3,
             background: isDark
-              ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%)'
-              : 'linear-gradient(135deg, rgba(99, 102, 241, 0.03) 0%, rgba(6, 182, 212, 0.03) 100%)',
-            border: `2px dashed ${isDark ? alpha('#6366f1', 0.3) : alpha('#6366f1', 0.2)}`,
+              ? 'linear-gradient(135deg, rgba(26, 115, 232, 0.05) 0%, rgba(66, 133, 244, 0.05) 100%)'
+              : 'linear-gradient(135deg, rgba(26, 115, 232, 0.03) 0%, rgba(66, 133, 244, 0.03) 100%)',
+            border: `2px dashed ${isDark ? alpha('#1a73e8', 0.3) : alpha('#1a73e8', 0.2)}`,
           }}
         >
           <CardContent>
@@ -377,13 +396,13 @@ const Analytics = () => {
                 width: 100,
                 height: 100,
                 borderRadius: '50%',
-                background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                background: '#1a73e8',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 margin: '0 auto',
                 mb: 3,
-                boxShadow: `0 8px 24px ${alpha('#6366f1', 0.3)}`,
+                boxShadow: `0 8px 24px ${alpha('#1a73e8', 0.3)}`,
               }}
             >
               <ChartIcon sx={{ fontSize: 50, color: 'white' }} />
@@ -413,96 +432,55 @@ const Analytics = () => {
   return (
     <UserLayout>
       <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: '1600px', mx: 'auto' }}>
-        {/* Header */}
-        <Box sx={{ mb: 4 }}>
-          <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
-            <Stack direction="row" alignItems="center" spacing={2}>
-              <Box
+        {/* Actions Bar */}
+        {forms.length > 1 && (
+          <Stack direction="row" justifyContent="flex-end" spacing={2} alignItems="center" sx={{ mb: 3 }}>
+            <Tooltip title="Refresh Data">
+              <IconButton
+                onClick={fetchAnalytics}
                 sx={{
-                  width: 60,
-                  height: 60,
-                  borderRadius: '16px',
-                  background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 8px 24px rgba(99, 102, 241, 0.3)',
+                  background: isDark ? alpha('#fff', 0.05) : alpha('#000', 0.03),
+                  '&:hover': {
+                    background: '#1a73e8',
+                    color: 'white',
+                  },
                 }}
               >
-                <BarChartIcon sx={{ fontSize: 32, color: 'white' }} />
-              </Box>
-              <Box>
-                <Typography
-                  variant="h4"
-                  fontWeight={800}
-                  sx={{
-                    background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
-                    backgroundClip: 'text',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    mb: 0.5,
-                    letterSpacing: '-0.5px',
-                  }}
-                >
-                  Analytics & Insights
-                </Typography>
-                <Typography variant="body2" color="text.secondary" fontWeight={500}>
-                  📊 Track performance metrics and gain valuable insights
-                </Typography>
-              </Box>
-            </Stack>
-            <Stack direction="row" spacing={2} alignItems="center">
-              <Tooltip title="Refresh Data">
-                <IconButton
-                  onClick={fetchAnalytics}
-                  sx={{
-                    background: isDark ? alpha('#fff', 0.05) : alpha('#000', 0.03),
-                    '&:hover': {
-                      background: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
-                      color: 'white',
-                      transform: 'rotate(180deg)',
-                    },
-                    transition: 'all 0.4s',
-                  }}
-                >
-                  <RefreshIcon />
-                </IconButton>
-              </Tooltip>
-              {forms.length > 1 && (
-                <FormControl size="small" sx={{ minWidth: 250 }}>
-                  <InputLabel>Select Form</InputLabel>
-                  <Select
-                    value={selectedForm.id}
-                    label="Select Form"
-                    onChange={(e) => {
-                      const form = forms.find((f) => f.id === e.target.value);
-                      setSelectedForm(form);
-                      setLoading(true);
-                    }}
-                    sx={{
-                      borderRadius: 3,
-                      '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: isDark ? alpha('#fff', 0.1) : '#e2e8f0',
-                      },
-                      '&:hover .MuiOutlinedInput-notchedOutline': {
-                        borderColor: '#6366f1',
-                      },
-                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                        borderColor: '#6366f1',
-                      },
-                    }}
-                  >
-                    {forms.map((form) => (
-                      <MenuItem key={form.id} value={form.id}>
-                        {form.title}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              )}
-            </Stack>
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>
+            <FormControl size="small" sx={{ minWidth: 250 }}>
+              <InputLabel>Select Form</InputLabel>
+              <Select
+                value={selectedForm.id}
+                label="Select Form"
+                onChange={(e) => {
+                  const form = forms.find((f) => f.id === e.target.value);
+                  setSelectedForm(form);
+                  setLoading(true);
+                }}
+                sx={{
+                  borderRadius: 2,
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: isDark ? alpha('#fff', 0.1) : '#e2e8f0',
+                  },
+                  '&:hover .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#1a73e8',
+                  },
+                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#1a73e8',
+                  },
+                }}
+              >
+                {forms.map((form) => (
+                  <MenuItem key={form.id} value={form.id}>
+                    {form.title}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Stack>
-        </Box>
+        )}
 
         {/* Key Metrics Cards */}
         <Grid container spacing={3} sx={{ mb: 4 }}>
@@ -510,44 +488,40 @@ const Analytics = () => {
             <AnimatedStatCard
               title="TOTAL VIEWS"
               value={totalViews.toLocaleString()}
-              icon={<ViewIcon sx={{ fontSize: 28, color: 'white' }} />}
-              gradient="linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)"
+              icon={<ViewIcon />}
+              accentColor="#1a73e8"
               percentage={12}
               trend="up"
-              delay={0}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <AnimatedStatCard
               title="SUBMISSIONS"
               value={totalSubmissions.toLocaleString()}
-              icon={<DescriptionIcon sx={{ fontSize: 28, color: 'white' }} />}
-              gradient="linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)"
+              icon={<DescriptionIcon />}
+              accentColor="#06b6d4"
               percentage={8}
               trend="up"
-              delay={0.1}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <AnimatedStatCard
               title="CONVERSION RATE"
               value={`${conversionRate}%`}
-              icon={<TrendingUpIcon sx={{ fontSize: 28, color: 'white' }} />}
-              gradient="linear-gradient(135deg, #10b981 0%, #059669 100%)"
+              icon={<TrendingUpIcon />}
+              accentColor="#10b981"
               percentage={5}
               trend="up"
-              delay={0.2}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 6, md: 3 }}>
             <AnimatedStatCard
               title="AVG FIELDS/SUBMISSION"
               value={avgFields}
-              icon={<ChartIcon sx={{ fontSize: 28, color: 'white' }} />}
-              gradient="linear-gradient(135deg, #f59e0b 0%, #d97706 100%)"
+              icon={<ChartIcon />}
+              accentColor="#f59e0b"
               percentage={3}
               trend="down"
-              delay={0.3}
             />
           </Grid>
         </Grid>
@@ -571,7 +545,7 @@ const Analytics = () => {
                         sx={{
                           width: 40,
                           height: 40,
-                          background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+                          background: '#1a73e8',
                         }}
                       >
                         <ShowChartIcon />
@@ -589,16 +563,16 @@ const Analytics = () => {
                     label="7 Days"
                     size="small"
                     sx={{
-                      background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(79, 70, 229, 0.1) 100%)',
-                      color: '#6366f1',
+                      background: alpha('#1a73e8', 0.1),
+                      color: '#1a73e8',
                       fontWeight: 600,
-                      border: `1px solid ${alpha('#6366f1', 0.2)}`,
+                      border: `1px solid ${alpha('#1a73e8', 0.2)}`,
                     }}
                   />
                 </Stack>
 
                 <Box sx={{ mb: 2 }}>
-                  <LineChart data={submissionsOverTime} color="#6366f1" height={200} />
+                  <LineChart data={submissionsOverTime} color="#1a73e8" height={200} />
                 </Box>
 
                 <Stack direction="row" justifyContent="space-between" sx={{ mt: 2 }}>
@@ -660,11 +634,11 @@ const Analytics = () => {
                       sx={{
                         p: 1.5,
                         textAlign: 'center',
-                        bgcolor: isDark ? alpha('#6366f1', 0.05) : alpha('#6366f1', 0.03),
-                        borderColor: alpha('#6366f1', 0.2),
+                        bgcolor: isDark ? alpha('#1a73e8', 0.05) : alpha('#1a73e8', 0.03),
+                        borderColor: alpha('#1a73e8', 0.2),
                       }}
                     >
-                      <Typography variant="h6" fontWeight={700} color="#6366f1">
+                      <Typography variant="h6" fontWeight={700} color="#1a73e8">
                         {totalViews}
                       </Typography>
                       <Typography variant="caption" color="text.secondary" fontWeight={600}>
@@ -712,7 +686,7 @@ const Analytics = () => {
                     sx={{
                       width: 40,
                       height: 40,
-                      background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                      background: 'linear-gradient(135deg, #1a73e8 0%, #7c3aed 100%)',
                     }}
                   >
                     <BarChartIcon />
@@ -735,7 +709,7 @@ const Analytics = () => {
                       { label: 'On Hold', value: statusBreakdown.onHold },
                       { label: 'Partial', value: statusBreakdown.partial },
                     ]}
-                    colors={['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6']}
+                    colors={['#3b82f6', '#10b981', '#f59e0b', '#1a73e8']}
                   />
                 </Box>
 
@@ -815,12 +789,12 @@ const Analytics = () => {
                   <Box>
                     <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
                       <Stack direction="row" alignItems="center" spacing={1}>
-                        <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#8b5cf6' }} />
+                        <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#1a73e8' }} />
                         <Typography variant="body2" fontWeight={600}>
                           Partial
                         </Typography>
                       </Stack>
-                      <Typography variant="h6" fontWeight={700} color="#8b5cf6">
+                      <Typography variant="h6" fontWeight={700} color="#1a73e8">
                         {statusBreakdown.partial}
                       </Typography>
                     </Stack>
@@ -830,8 +804,8 @@ const Analytics = () => {
                       sx={{
                         height: 6,
                         borderRadius: 3,
-                        bgcolor: alpha('#8b5cf6', 0.1),
-                        '& .MuiLinearProgress-bar': { bgcolor: '#8b5cf6', borderRadius: 3 },
+                        bgcolor: alpha('#1a73e8', 0.1),
+                        '& .MuiLinearProgress-bar': { bgcolor: '#1a73e8', borderRadius: 3 },
                       }}
                     />
                   </Box>
@@ -887,7 +861,7 @@ const Analytics = () => {
                           case 'ON_HOLD':
                             return { color: '#f59e0b', bg: alpha('#f59e0b', 0.1) };
                           case 'PARTIAL':
-                            return { color: '#8b5cf6', bg: alpha('#8b5cf6', 0.1) };
+                            return { color: '#1a73e8', bg: alpha('#1a73e8', 0.1) };
                           default:
                             return { color: '#6b7280', bg: alpha('#6b7280', 0.1) };
                         }

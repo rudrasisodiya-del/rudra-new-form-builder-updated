@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
+import { dispatchWebhooks } from '../utils/webhookDispatcher';
 
 const prisma = new PrismaClient();
 
@@ -29,6 +30,11 @@ export const submitForm = async (req: Request, res: Response) => {
     await prisma.form.update({
       where: { id: formId },
       data: { submissionCount: { increment: 1 } },
+    });
+
+    // Dispatch webhooks asynchronously (don't wait for completion)
+    dispatchWebhooks(formId, form.title, submission.id, data).catch(err => {
+      console.error('Webhook dispatch error:', err);
     });
 
     res.status(201).json({ success: true, message: 'Form submitted successfully', submission });

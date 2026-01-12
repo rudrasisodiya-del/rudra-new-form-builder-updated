@@ -98,9 +98,9 @@ const AnimatedSubmissionCard = ({ submission, onView, onDelete, onUpdateStatus, 
         };
       case 'PARTIAL':
         return {
-          color: '#8b5cf6',
-          bg: isDark ? alpha('#8b5cf6', 0.15) : '#ede9fe',
-          gradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+          color: '#1a73e8',
+          bg: isDark ? alpha('#1a73e8', 0.15) : '#ede9fe',
+          gradient: 'linear-gradient(135deg, #1a73e8 0%, #7c3aed 100%)',
         };
       default:
         return {
@@ -205,10 +205,10 @@ const AnimatedSubmissionCard = ({ submission, onView, onDelete, onUpdateStatus, 
                 size="small"
                 onClick={() => onView(submission)}
                 sx={{
-                  bgcolor: alpha('#6366f1', 0.1),
-                  color: '#6366f1',
+                  bgcolor: alpha('#1a73e8', 0.1),
+                  color: '#1a73e8',
                   '&:hover': {
-                    bgcolor: alpha('#6366f1', 0.2),
+                    bgcolor: alpha('#1a73e8', 0.2),
                     transform: 'scale(1.1)',
                   },
                 }}
@@ -485,7 +485,7 @@ const Submissions = () => {
       { name: 'New', value: stats.new, color: '#3b82f6' },
       { name: 'Resolved', value: stats.resolved, color: '#10b981' },
       { name: 'On Hold', value: stats.onHold, color: '#f59e0b' },
-      { name: 'Partial', value: stats.partial, color: '#8b5cf6' },
+      { name: 'Partial', value: stats.partial, color: '#1a73e8' },
     ].filter((item) => item.value > 0);
   };
 
@@ -505,89 +505,46 @@ const Submissions = () => {
   return (
     <UserLayout>
       <Box sx={{ p: { xs: 2, md: 3 }, maxWidth: '1600px', mx: 'auto' }}>
-        {/* Header */}
-        <Box sx={{ mb: 4 }}>
-          <Stack direction={{ xs: 'column', sm: 'row' }} alignItems={{ xs: 'flex-start', sm: 'center' }} justifyContent="space-between" spacing={2} mb={3}>
-            <Stack direction="row" alignItems="center" spacing={2}>
-              <Box
+        {/* Actions Bar */}
+        {submissions.length > 0 && (
+          <Stack direction="row" justifyContent="flex-end" spacing={1.5} sx={{ mb: 3 }}>
+            <Tooltip title="Refresh Data">
+              <IconButton
+                onClick={fetchSubmissions}
+                size="small"
                 sx={{
-                  width: 60,
-                  height: 60,
-                  borderRadius: '16px',
-                  background: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 8px 24px rgba(6, 182, 212, 0.3)',
+                  background: isDark ? alpha('#fff', 0.05) : alpha('#000', 0.03),
+                  '&:hover': {
+                    background: '#1a73e8',
+                    color: 'white',
+                  },
                 }}
               >
-                <DescriptionIcon sx={{ fontSize: 32, color: 'white' }} />
-              </Box>
-              <Box>
-                <Typography
-                  variant="h4"
-                  fontWeight={800}
-                  sx={{
-                    background: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
-                    backgroundClip: 'text',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    mb: 0.5,
-                    letterSpacing: '-0.5px',
-                  }}
-                >
-                  Submissions Dashboard
-                </Typography>
-                <Typography variant="body2" color="text.secondary" fontWeight={500}>
-                  📝 Manage and track all form submissions in one place
-                </Typography>
-              </Box>
-            </Stack>
-            {submissions.length > 0 && (
-              <Stack direction="row" spacing={1.5}>
-                <Tooltip title="Refresh Data">
-                  <IconButton
-                    onClick={fetchSubmissions}
-                    size="small"
-                    sx={{
-                      background: isDark ? alpha('#fff', 0.05) : alpha('#000', 0.03),
-                      '&:hover': {
-                        background: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
-                        color: 'white',
-                        transform: 'rotate(180deg)',
-                      },
-                      transition: 'all 0.4s',
-                    }}
-                  >
-                    <RefreshIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-                <Button
-                  variant="contained"
-                  size="small"
-                  startIcon={<FileDownloadIcon />}
-                  onClick={exportToCSV}
-                  sx={{
-                    background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
-                    textTransform: 'none',
-                    fontWeight: 600,
-                    px: 2,
-                    py: 1,
-                    boxShadow: `0 2px 8px ${alpha('#6366f1', 0.25)}`,
-                    '&:hover': {
-                      background: 'linear-gradient(135deg, #4f46e5 0%, #4338ca 100%)',
-                      boxShadow: `0 4px 12px ${alpha('#6366f1', 0.35)}`,
-                      transform: 'translateY(-1px)',
-                    },
-                    transition: 'all 0.3s',
-                  }}
-                >
-                  Export CSV
-                </Button>
-              </Stack>
-            )}
+                <RefreshIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<FileDownloadIcon />}
+              onClick={exportToCSV}
+              sx={{
+                background: '#1a73e8',
+                textTransform: 'none',
+                fontWeight: 600,
+                px: 2,
+                py: 1,
+                boxShadow: '0 2px 8px rgba(26, 115, 232, 0.25)',
+                '&:hover': {
+                  background: '#1557b0',
+                  boxShadow: '0 4px 12px rgba(26, 115, 232, 0.35)',
+                },
+              }}
+            >
+              Export CSV
+            </Button>
           </Stack>
-        </Box>
+        )}
 
         {forms.length === 0 ? (
           <Card
@@ -597,7 +554,7 @@ const Submissions = () => {
               background: isDark
                 ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%)'
                 : 'linear-gradient(135deg, rgba(99, 102, 241, 0.03) 0%, rgba(6, 182, 212, 0.03) 100%)',
-              border: `2px dashed ${isDark ? alpha('#6366f1', 0.3) : alpha('#6366f1', 0.2)}`,
+              border: `2px dashed ${isDark ? alpha('#1a73e8', 0.3) : alpha('#1a73e8', 0.2)}`,
             }}
           >
             <CardContent>
@@ -606,13 +563,13 @@ const Submissions = () => {
                   width: 100,
                   height: 100,
                   borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                  background: 'linear-gradient(135deg, #1a73e8 0%, #06b6d4 100%)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   margin: '0 auto',
                   mb: 3,
-                  boxShadow: `0 8px 24px ${alpha('#6366f1', 0.3)}`,
+                  boxShadow: `0 8px 24px ${alpha('#1a73e8', 0.3)}`,
                 }}
               >
                 <DescriptionIcon sx={{ fontSize: 50, color: 'white' }} />
@@ -629,7 +586,7 @@ const Submissions = () => {
                 startIcon={<AddIcon />}
                 onClick={() => navigate('/dashboard/forms/builder')}
                 sx={{
-                  background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+                  background: 'linear-gradient(135deg, #1a73e8 0%, #4f46e5 100%)',
                   textTransform: 'none',
                   fontWeight: 600,
                   px: 4,
@@ -659,13 +616,13 @@ const Submissions = () => {
                       size="small"
                       sx={{
                         '& .MuiOutlinedInput-notchedOutline': {
-                          borderColor: alpha('#6366f1', 0.2),
+                          borderColor: alpha('#1a73e8', 0.2),
                         },
                         '&:hover .MuiOutlinedInput-notchedOutline': {
-                          borderColor: '#6366f1',
+                          borderColor: '#1a73e8',
                         },
                         '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                          borderColor: '#6366f1',
+                          borderColor: '#1a73e8',
                         },
                       }}
                     >
@@ -694,7 +651,7 @@ const Submissions = () => {
                         InputProps={{
                           startAdornment: (
                             <InputAdornment position="start">
-                              <SearchIcon sx={{ color: '#6366f1' }} />
+                              <SearchIcon sx={{ color: '#1a73e8' }} />
                             </InputAdornment>
                           ),
                         }}
@@ -702,10 +659,10 @@ const Submissions = () => {
                           '& .MuiOutlinedInput-root': {
                             borderRadius: 3,
                             '&:hover fieldset': {
-                              borderColor: '#6366f1',
+                              borderColor: '#1a73e8',
                             },
                             '&.Mui-focused fieldset': {
-                              borderColor: '#6366f1',
+                              borderColor: '#1a73e8',
                             },
                           },
                         }}
@@ -723,10 +680,10 @@ const Submissions = () => {
                             sx={{
                               borderRadius: 3,
                               '&:hover .MuiOutlinedInput-notchedOutline': {
-                                borderColor: '#6366f1',
+                                borderColor: '#1a73e8',
                               },
                               '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                borderColor: '#6366f1',
+                                borderColor: '#1a73e8',
                               },
                             }}
                           >
@@ -753,7 +710,7 @@ const Submissions = () => {
                       width: 80,
                       height: 80,
                       borderRadius: '50%',
-                      background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                      background: 'linear-gradient(135deg, #1a73e8 0%, #06b6d4 100%)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -795,7 +752,7 @@ const Submissions = () => {
             {submissions.length > 0 && (
               <Grid container spacing={2} mt={4} mb={3}>
                 <Grid size={{ xs: 6, sm: 3 }}>
-                  <Card sx={{ bgcolor: isDark ? alpha('#fff', 0.05) : '#f8fafc', borderLeft: `4px solid #6366f1` }}>
+                  <Card sx={{ bgcolor: isDark ? alpha('#fff', 0.05) : '#f8fafc', borderLeft: `4px solid #1a73e8` }}>
                     <CardContent sx={{ p: 2.5, textAlign: 'center' }}>
                       <Typography variant="h3" fontWeight={700} color="text.primary" mb={0.5}>
                         {stats.total}
@@ -861,14 +818,14 @@ const Submissions = () => {
                             Last 7 days activity
                           </Typography>
                         </Box>
-                        <TrendingUpIcon sx={{ color: '#6366f1', fontSize: 28 }} />
+                        <TrendingUpIcon sx={{ color: '#1a73e8', fontSize: 28 }} />
                       </Box>
                       <ResponsiveContainer width="100%" height={280}>
                         <LineChart data={trendData}>
                           <defs>
                             <linearGradient id="colorSubmissions" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3} />
-                              <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
+                              <stop offset="5%" stopColor="#1a73e8" stopOpacity={0.3} />
+                              <stop offset="95%" stopColor="#1a73e8" stopOpacity={0} />
                             </linearGradient>
                           </defs>
                           <CartesianGrid strokeDasharray="3 3" stroke={isDark ? alpha('#fff', 0.1) : alpha('#000', 0.1)} />
@@ -893,9 +850,9 @@ const Submissions = () => {
                           <Line
                             type="monotone"
                             dataKey="submissions"
-                            stroke="#6366f1"
+                            stroke="#1a73e8"
                             strokeWidth={3}
-                            dot={{ fill: '#6366f1', r: 5 }}
+                            dot={{ fill: '#1a73e8', r: 5 }}
                             activeDot={{ r: 7, fill: '#4f46e5' }}
                             fill="url(#colorSubmissions)"
                           />
@@ -976,7 +933,7 @@ const Submissions = () => {
             <>
               <DialogTitle
                 sx={{
-                  background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+                  background: 'linear-gradient(135deg, #1a73e8 0%, #4f46e5 100%)',
                   color: 'white',
                   display: 'flex',
                   justifyContent: 'space-between',
@@ -1006,21 +963,21 @@ const Submissions = () => {
                       sx={{
                         p: 2,
                         background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(79, 70, 229, 0.1) 100%)',
-                        borderColor: alpha('#6366f1', 0.3),
+                        borderColor: alpha('#1a73e8', 0.3),
                         borderRadius: 2,
                       }}
                     >
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                         <Avatar
                           sx={{
-                            background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
-                            boxShadow: `0 4px 12px ${alpha('#6366f1', 0.3)}`,
+                            background: 'linear-gradient(135deg, #1a73e8 0%, #4f46e5 100%)',
+                            boxShadow: `0 4px 12px ${alpha('#1a73e8', 0.3)}`,
                           }}
                         >
                           <CalendarIcon />
                         </Avatar>
                         <Box>
-                          <Typography variant="caption" sx={{ color: '#6366f1', fontWeight: 600 }}>
+                          <Typography variant="caption" sx={{ color: '#1a73e8', fontWeight: 600 }}>
                             SUBMITTED
                           </Typography>
                           <Typography variant="body2" fontWeight={700}>
@@ -1119,7 +1076,7 @@ const Submissions = () => {
                     gutterBottom
                     sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                   >
-                    <PersonIcon sx={{ color: '#6366f1' }} />
+                    <PersonIcon sx={{ color: '#1a73e8' }} />
                     Submitter Information
                   </Typography>
                   <Divider sx={{ my: 2 }} />
@@ -1212,11 +1169,11 @@ const Submissions = () => {
                                 <Typography
                                   component="span"
                                   sx={{
-                                    color: '#6366f1',
+                                    color: '#1a73e8',
                                     fontWeight: 700,
                                     px: 1,
                                     py: 0.5,
-                                    bgcolor: alpha('#6366f1', 0.1),
+                                    bgcolor: alpha('#1a73e8', 0.1),
                                     borderRadius: 1,
                                     fontSize: '0.875rem',
                                   }}
@@ -1249,9 +1206,9 @@ const Submissions = () => {
                               variant="outlined"
                               sx={{
                                 p: 2,
-                                bgcolor: isDark ? alpha('#6366f1', 0.05) : alpha('#6366f1', 0.03),
+                                bgcolor: isDark ? alpha('#1a73e8', 0.05) : alpha('#1a73e8', 0.03),
                                 borderLeft: '4px solid',
-                                borderLeftColor: '#6366f1',
+                                borderLeftColor: '#1a73e8',
                                 borderRadius: 2,
                               }}
                             >
@@ -1289,7 +1246,7 @@ const Submissions = () => {
                   variant="contained"
                   onClick={() => setSelectedSubmission(null)}
                   sx={{
-                    background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+                    background: 'linear-gradient(135deg, #1a73e8 0%, #4f46e5 100%)',
                     textTransform: 'none',
                     fontWeight: 600,
                     px: 3,

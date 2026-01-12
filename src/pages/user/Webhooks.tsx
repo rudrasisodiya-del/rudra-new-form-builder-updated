@@ -46,9 +46,11 @@ const Webhooks = () => {
   const [webhooks, setWebhooks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [name, setName] = useState('');
   const [url, setUrl] = useState('');
   const [events, setEvents] = useState<string[]>(['form.submitted']);
   const [creating, setCreating] = useState(false);
+  const [testing, setTesting] = useState<string | null>(null);
   const theme = useTheme();
 
   useEffect(() => {
@@ -70,9 +72,10 @@ const Webhooks = () => {
     e.preventDefault();
     setCreating(true);
     try {
-      const response = await api.post('/webhooks', { url, events });
+      const response = await api.post('/webhooks', { name: name || 'My Webhook', url, events });
       setWebhooks([...webhooks, response.data.webhook]);
       setShowCreateModal(false);
+      setName('');
       setUrl('');
       setEvents(['form.submitted']);
       alert('Webhook created successfully!');
@@ -108,6 +111,23 @@ const Webhooks = () => {
     }
   };
 
+  const handleTestWebhook = async (id: string) => {
+    setTesting(id);
+    try {
+      const response = await api.post(`/webhooks/${id}/test`);
+      if (response.data.success) {
+        alert(`Webhook test successful! Status: ${response.data.statusCode}`);
+      } else {
+        alert(`Webhook test failed: ${response.data.error}`);
+      }
+    } catch (error: any) {
+      console.error('Error testing webhook:', error);
+      alert(`Failed to test webhook: ${error.response?.data?.error || error.message}`);
+    } finally {
+      setTesting(null);
+    }
+  };
+
   const availableEvents = [
     { value: 'form.submitted', label: 'Form Submitted', description: 'Triggered when a form is submitted' },
     { value: 'form.created', label: 'Form Created', description: 'Triggered when a new form is created' },
@@ -128,76 +148,29 @@ const Webhooks = () => {
   return (
     <UserLayout>
       <Box sx={{ p: { xs: 2, md: 4 } }}>
-        {/* Header */}
-        <Box
-          sx={{
-            background: `linear-gradient(135deg, ${theme.palette.mode === 'dark' ? '#1e293b' : '#ffffff'} 0%, ${theme.palette.mode === 'dark' ? '#0f172a' : '#f8fafc'} 100%)`,
-            borderRadius: 3,
-            p: 4,
-            mb: 4,
-            position: 'relative',
-            overflow: 'hidden',
-            '&::before': {
-              content: '""',
-              position: 'absolute',
-              top: -100,
-              right: -100,
-              width: 300,
-              height: 300,
-              borderRadius: '50%',
-              background: `radial-gradient(circle, ${alpha('#6366f1', 0.1)} 0%, transparent 70%)`,
-            },
-          }}
-        >
-          <Stack
-            direction={{ xs: 'column', md: 'row' }}
-            justifyContent="space-between"
-            alignItems={{ xs: 'flex-start', md: 'center' }}
-            spacing={2}
-            sx={{ position: 'relative', zIndex: 1 }}
+        {/* Actions Bar */}
+        <Stack direction="row" justifyContent="flex-end" sx={{ mb: 3 }}>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={() => setShowCreateModal(true)}
+            sx={{
+              background: '#1a73e8',
+              textTransform: 'none',
+              fontWeight: 600,
+              px: 3,
+              py: 1.25,
+              borderRadius: 2,
+              boxShadow: '0 2px 8px rgba(26, 115, 232, 0.25)',
+              '&:hover': {
+                background: '#1557b0',
+                boxShadow: '0 4px 12px rgba(26, 115, 232, 0.35)',
+              },
+            }}
           >
-            <Box>
-              <Typography
-                variant="h3"
-                fontWeight={800}
-                sx={{
-                  mb: 1,
-                  background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
-                  backgroundClip: 'text',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
-                Webhooks
-              </Typography>
-              <Typography variant="body1" color="text.secondary">
-                Receive real-time notifications when events occur
-              </Typography>
-            </Box>
-            <Button
-              variant="contained"
-              size="large"
-              startIcon={<AddIcon />}
-              onClick={() => setShowCreateModal(true)}
-              sx={{
-                background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
-                textTransform: 'none',
-                fontWeight: 700,
-                px: 4,
-                py: 1.5,
-                borderRadius: 2,
-                boxShadow: `0 8px 16px ${alpha('#6366f1', 0.3)}`,
-                transition: 'all 0.3s',
-                '&:hover': {
-                  transform: 'translateY(-2px)',
-                  boxShadow: `0 12px 24px ${alpha('#6366f1', 0.4)}`,
-                },
-              }}
-            >
-              Create Webhook
-            </Button>
-          </Stack>
-        </Box>
+            Create Webhook
+          </Button>
+        </Stack>
 
         {/* Webhooks List or Empty State */}
         {webhooks.length === 0 ? (
@@ -205,7 +178,7 @@ const Webhooks = () => {
             sx={{
               textAlign: 'center',
               p: 8,
-              background: `linear-gradient(135deg, ${alpha('#6366f1', 0.05)} 0%, ${alpha('#06b6d4', 0.05)} 100%)`,
+              background: `linear-gradient(135deg, ${alpha('#1a73e8', 0.05)} 0%, ${alpha('#06b6d4', 0.05)} 100%)`,
             }}
           >
             <Avatar
@@ -214,7 +187,7 @@ const Webhooks = () => {
                 height: 120,
                 margin: '0 auto',
                 mb: 3,
-                background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                background: 'linear-gradient(135deg, #1a73e8 0%, #06b6d4 100%)',
               }}
             >
               <WebhookIcon sx={{ fontSize: 60, color: 'white' }} />
@@ -231,7 +204,7 @@ const Webhooks = () => {
               startIcon={<AddIcon />}
               onClick={() => setShowCreateModal(true)}
               sx={{
-                background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                background: 'linear-gradient(135deg, #1a73e8 0%, #06b6d4 100%)',
                 textTransform: 'none',
                 fontWeight: 700,
                 px: 4,
@@ -325,8 +298,8 @@ const Webhooks = () => {
                               label={event}
                               size="small"
                               sx={{
-                                bgcolor: alpha('#6366f1', 0.1),
-                                color: '#6366f1',
+                                bgcolor: alpha('#1a73e8', 0.1),
+                                color: '#1a73e8',
                                 fontWeight: 600,
                                 fontSize: '0.75rem',
                               }}
@@ -340,7 +313,7 @@ const Webhooks = () => {
                           sx={{
                             p: 2,
                             borderRadius: 2,
-                            bgcolor: alpha('#6366f1', 0.05),
+                            bgcolor: alpha('#1a73e8', 0.05),
                             mb: 3,
                           }}
                         >
@@ -365,6 +338,8 @@ const Webhooks = () => {
                           variant="outlined"
                           size="small"
                           startIcon={<PlayArrowIcon />}
+                          onClick={() => handleTestWebhook(webhook.id)}
+                          disabled={testing === webhook.id}
                           sx={{
                             borderColor: '#06b6d4',
                             color: '#06b6d4',
@@ -376,7 +351,7 @@ const Webhooks = () => {
                             },
                           }}
                         >
-                          Test
+                          {testing === webhook.id ? 'Testing...' : 'Test'}
                         </Button>
                         <Button
                           variant="outlined"
@@ -435,7 +410,7 @@ const Webhooks = () => {
                 >
                   <CardContent sx={{ p: 3 }}>
                     <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 3 }}>
-                      <TrendingUpIcon sx={{ color: '#6366f1' }} />
+                      <TrendingUpIcon sx={{ color: '#1a73e8' }} />
                       <Typography variant="h6" fontWeight={700}>
                         Statistics
                       </Typography>
@@ -450,8 +425,8 @@ const Webhooks = () => {
                             label={webhooks.length}
                             size="small"
                             sx={{
-                              bgcolor: alpha('#6366f1', 0.1),
-                              color: '#6366f1',
+                              bgcolor: alpha('#1a73e8', 0.1),
+                              color: '#1a73e8',
                               fontWeight: 700,
                             }}
                           />
@@ -498,13 +473,13 @@ const Webhooks = () => {
                 {/* Security Card */}
                 <Card
                   sx={{
-                    background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                    background: 'linear-gradient(135deg, #1a73e8 0%, #4285f4 100%)',
                     position: 'relative',
                     overflow: 'hidden',
                     transition: 'all 0.3s',
                     '&:hover': {
                       transform: 'translateY(-4px)',
-                      boxShadow: `0 12px 24px ${alpha('#6366f1', 0.4)}`,
+                      boxShadow: `0 12px 24px ${alpha('#1a73e8', 0.4)}`,
                     },
                     '&::before': {
                       content: '""',
@@ -580,7 +555,7 @@ const signature = req.headers['x-webhook-signature'];`}
                 <Stack direction="row" spacing={2} alignItems="center">
                   <Avatar
                     sx={{
-                      background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                      background: 'linear-gradient(135deg, #1a73e8 0%, #06b6d4 100%)',
                       width: 48,
                       height: 48,
                     }}
@@ -605,11 +580,25 @@ const signature = req.headers['x-webhook-signature'];`}
                 <Stack spacing={3}>
                   <TextField
                     fullWidth
+                    label="Webhook Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="My Pabbly Connect Webhook"
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                      },
+                    }}
+                    helperText="Optional: Give your webhook a friendly name"
+                  />
+
+                  <TextField
+                    fullWidth
                     label="Webhook URL"
                     type="url"
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
-                    placeholder="https://your-domain.com/webhook"
+                    placeholder="https://connect.pabbly.com/workflow/sendwebhookdata/..."
                     required
                     sx={{
                       '& .MuiOutlinedInput-root': {
@@ -630,11 +619,11 @@ const signature = req.headers['x-webhook-signature'];`}
                           sx={{
                             p: 2,
                             borderRadius: 2,
-                            border: `1px solid ${alpha('#6366f1', events.includes(event.value) ? 0.3 : 0.1)}`,
-                            bgcolor: events.includes(event.value) ? alpha('#6366f1', 0.05) : 'transparent',
+                            border: `1px solid ${alpha('#1a73e8', events.includes(event.value) ? 0.3 : 0.1)}`,
+                            bgcolor: events.includes(event.value) ? alpha('#1a73e8', 0.05) : 'transparent',
                             transition: 'all 0.2s',
                             '&:hover': {
-                              bgcolor: alpha('#6366f1', 0.05),
+                              bgcolor: alpha('#1a73e8', 0.05),
                             },
                           }}
                         >
@@ -650,9 +639,9 @@ const signature = req.headers['x-webhook-signature'];`}
                                   }
                                 }}
                                 sx={{
-                                  color: '#6366f1',
+                                  color: '#1a73e8',
                                   '&.Mui-checked': {
-                                    color: '#6366f1',
+                                    color: '#1a73e8',
                                   },
                                 }}
                               />
@@ -693,7 +682,7 @@ const signature = req.headers['x-webhook-signature'];`}
                       variant="contained"
                       disabled={creating || events.length === 0}
                       sx={{
-                        background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+                        background: 'linear-gradient(135deg, #1a73e8 0%, #06b6d4 100%)',
                         textTransform: 'none',
                         fontWeight: 700,
                         py: 1.5,
