@@ -505,47 +505,6 @@ const Submissions = () => {
   return (
     <UserLayout>
       <Box sx={{ p: { xs: 2, md: 3 }, maxWidth: '1600px', mx: 'auto' }}>
-        {/* Actions Bar */}
-        {submissions.length > 0 && (
-          <Stack direction="row" justifyContent="flex-end" spacing={1.5} sx={{ mb: 3 }}>
-            <Tooltip title="Refresh Data">
-              <IconButton
-                onClick={fetchSubmissions}
-                size="small"
-                sx={{
-                  background: isDark ? alpha('#fff', 0.05) : alpha('#000', 0.03),
-                  '&:hover': {
-                    background: '#1a73e8',
-                    color: 'white',
-                  },
-                }}
-              >
-                <RefreshIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-            <Button
-              variant="contained"
-              size="small"
-              startIcon={<FileDownloadIcon />}
-              onClick={exportToCSV}
-              sx={{
-                background: '#1a73e8',
-                textTransform: 'none',
-                fontWeight: 600,
-                px: 2,
-                py: 1,
-                boxShadow: '0 2px 8px rgba(26, 115, 232, 0.25)',
-                '&:hover': {
-                  background: '#1557b0',
-                  boxShadow: '0 4px 12px rgba(26, 115, 232, 0.35)',
-                },
-              }}
-            >
-              Export CSV
-            </Button>
-          </Stack>
-        )}
-
         {forms.length === 0 ? (
           <Card
             sx={{
@@ -602,40 +561,133 @@ const Submissions = () => {
           </Card>
         ) : (
           <>
-            {/* Form Selector */}
-            <Card sx={{ mb: 3 }}>
-              <CardContent sx={{ p: 2.5 }}>
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center">
-                  <Typography variant="body2" sx={{ color: 'text.secondary', fontWeight: 600, minWidth: 100 }}>
-                    SELECT FORM
-                  </Typography>
-                  <FormControl fullWidth sx={{ maxWidth: { sm: 400 } }}>
-                    <Select
-                      value={selectedForm}
-                      onChange={(e) => setSelectedForm(e.target.value)}
-                      size="small"
+            {/* Actions Bar with Form Selector */}
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} sx={{ mb: 3 }}>
+              {/* Form Selector */}
+              <Stack direction="row" spacing={1.5} alignItems="center">
+                <Select
+                  value={selectedForm}
+                  onChange={(e) => setSelectedForm(e.target.value)}
+                  size="small"
+                  displayEmpty
+                  renderValue={(value) => {
+                    const form = forms.find((f) => f.id === value);
+                    return (
+                      <Stack direction="row" alignItems="center" spacing={1}>
+                        <DescriptionIcon sx={{ fontSize: 16, color: '#1a73e8' }} />
+                        <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>
+                          {form?.title || 'Select Form'} ({form?._count?.submissions || 0})
+                        </Typography>
+                      </Stack>
+                    );
+                  }}
+                  sx={{
+                    minWidth: 200,
+                    height: 36,
+                    bgcolor: isDark ? alpha('#fff', 0.05) : '#ffffff',
+                    borderRadius: 2,
+                    '& .MuiSelect-select': {
+                      py: 0.75,
+                      px: 1.5,
+                    },
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderColor: isDark ? alpha('#fff', 0.1) : '#e2e8f0',
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#1a73e8',
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: '#1a73e8',
+                      borderWidth: 1,
+                    },
+                  }}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        mt: 0.5,
+                        borderRadius: 2,
+                        boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+                        border: '1px solid',
+                        borderColor: isDark ? alpha('#fff', 0.1) : '#e2e8f0',
+                      },
+                    },
+                  }}
+                >
+                  {forms.map((form) => (
+                    <MenuItem
+                      key={form.id}
+                      value={form.id}
                       sx={{
-                        '& .MuiOutlinedInput-notchedOutline': {
-                          borderColor: alpha('#1a73e8', 0.2),
+                        py: 1,
+                        px: 2,
+                        '&:hover': {
+                          bgcolor: alpha('#1a73e8', 0.08),
                         },
-                        '&:hover .MuiOutlinedInput-notchedOutline': {
-                          borderColor: '#1a73e8',
-                        },
-                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                          borderColor: '#1a73e8',
+                        '&.Mui-selected': {
+                          bgcolor: alpha('#1a73e8', 0.12),
+                          '&:hover': {
+                            bgcolor: alpha('#1a73e8', 0.16),
+                          },
                         },
                       }}
                     >
-                      {forms.map((form) => (
-                        <MenuItem key={form.id} value={form.id}>
+                      <Stack direction="row" alignItems="center" spacing={1.5}>
+                        <DescriptionIcon sx={{ fontSize: 16, color: '#64748b' }} />
+                        <Typography sx={{ fontSize: '0.875rem' }}>
                           {form.title} ({form._count?.submissions || 0})
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Stack>
-              </CardContent>
-            </Card>
+                        </Typography>
+                      </Stack>
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Stack>
+
+              {/* Action Buttons */}
+              <Stack direction="row" spacing={1.5} alignItems="center">
+                <Tooltip title="Refresh Data">
+                  <IconButton
+                    onClick={fetchSubmissions}
+                    size="small"
+                    sx={{
+                      width: 36,
+                      height: 36,
+                      background: isDark ? alpha('#fff', 0.05) : '#ffffff',
+                      border: '1px solid',
+                      borderColor: isDark ? alpha('#fff', 0.1) : '#e2e8f0',
+                      '&:hover': {
+                        background: '#1a73e8',
+                        borderColor: '#1a73e8',
+                        color: 'white',
+                      },
+                    }}
+                  >
+                    <RefreshIcon sx={{ fontSize: 18 }} />
+                  </IconButton>
+                </Tooltip>
+                <Button
+                  variant="contained"
+                  size="small"
+                  startIcon={<FileDownloadIcon sx={{ fontSize: 18 }} />}
+                  onClick={exportToCSV}
+                  disabled={submissions.length === 0}
+                  sx={{
+                    height: 36,
+                    background: '#1a73e8',
+                    textTransform: 'none',
+                    fontWeight: 600,
+                    px: 2,
+                    borderRadius: 2,
+                    boxShadow: 'none',
+                    '&:hover': {
+                      background: '#1557b0',
+                      boxShadow: 'none',
+                    },
+                  }}
+                >
+                  Export CSV
+                </Button>
+              </Stack>
+            </Stack>
 
             {/* Search & Filters */}
             {submissions.length > 0 && (

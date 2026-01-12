@@ -815,123 +815,239 @@ const FormBuilderPage = () => {
     }
   };
 
+  // SVG Icon Components for professional look
+  const IconHeading = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M4 6h16M4 12h16M4 18h10" strokeLinecap="round"/>
+    </svg>
+  );
+  const IconUser = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+  const IconMail = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+    </svg>
+  );
+  const IconAddress = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+    </svg>
+  );
+  const IconPhone = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+    </svg>
+  );
+  const IconCalendar = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
+    </svg>
+  );
+  const IconSignature = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/>
+    </svg>
+  );
+  const IconText = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M17 6.1H3M21 12.1H3M15.1 18H3"/>
+    </svg>
+  );
+  const IconTextarea = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h10M7 12h10M7 17h6"/>
+    </svg>
+  );
+  const IconNumber = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M4 17h6m-6-6h8m-8-4h12"/><path d="M17 3v18M14 8l3-3 3 3M14 16l3 3 3-3"/>
+    </svg>
+  );
+  const IconDropdown = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="3" y="3" width="18" height="18" rx="2"/><path d="m8 10 4 4 4-4"/>
+    </svg>
+  );
+  const IconCheckbox = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="3" y="3" width="18" height="18" rx="2"/><path d="m9 12 2 2 4-4"/>
+    </svg>
+  );
+  const IconRadio = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4" fill="currentColor"/>
+    </svg>
+  );
+  const IconFile = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6"/>
+    </svg>
+  );
+  const IconCreditCard = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/>
+    </svg>
+  );
+  const IconCalculator = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h8M8 14h2M8 18h2M14 14h2M14 18h2"/>
+    </svg>
+  );
+  const IconList = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
+    </svg>
+  );
+  const IconCamera = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>
+    </svg>
+  );
+  const IconGrid = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+    </svg>
+  );
+  const IconPdf = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 15h6"/>
+    </svg>
+  );
+
   const basicElements = [
-    { type: 'heading' as FieldType, icon: '📝', label: 'Heading', gradient: 'from-purple-500 to-pink-500' },
-    { type: 'fullname' as FieldType, icon: '👤', label: 'Full Name', gradient: 'from-blue-500 to-cyan-500' },
-    { type: 'email' as FieldType, icon: '📧', label: 'Email', gradient: 'from-green-500 to-teal-500' },
-    { type: 'address' as FieldType, icon: '📍', label: 'Address', gradient: 'from-red-500 to-orange-500' },
-    { type: 'phone' as FieldType, icon: '📞', label: 'Phone', gradient: 'from-indigo-500 to-purple-500' },
-    { type: 'datepicker' as FieldType, icon: '📅', label: 'Date Picker', gradient: 'from-cyan-500 to-blue-500' },
-    { type: 'appointment' as FieldType, icon: '🗓️', label: 'Appointment', gradient: 'from-violet-500 to-purple-500' },
-    { type: 'signature' as FieldType, icon: '✍️', label: 'Signature', gradient: 'from-amber-500 to-orange-500' },
-    { type: 'fillintheblank' as FieldType, icon: '📝', label: 'Fill in the Blank', gradient: 'from-emerald-500 to-green-500' },
-    { type: 'shorttext' as FieldType, icon: '📄', label: 'Short Text', gradient: 'from-sky-500 to-cyan-500' },
-    { type: 'longtext' as FieldType, icon: '📑', label: 'Long Text', gradient: 'from-blue-500 to-indigo-500' },
-    { type: 'number' as FieldType, icon: '🔢', label: 'Number', gradient: 'from-teal-500 to-cyan-500' },
-    { type: 'dropdown' as FieldType, icon: '⬇️', label: 'Dropdown', gradient: 'from-fuchsia-500 to-pink-500' },
-    { type: 'checkbox' as FieldType, icon: '☑️', label: 'Checkbox', gradient: 'from-lime-500 to-green-500' },
-    { type: 'radio' as FieldType, icon: '⚪', label: 'Radio', gradient: 'from-orange-500 to-red-500' },
-    { type: 'file' as FieldType, icon: '📎', label: 'File Upload', gradient: 'from-rose-500 to-pink-500' },
+    { type: 'heading' as FieldType, icon: <IconHeading />, label: 'Heading', color: '#8b5cf6', bg: '#f3e8ff' },
+    { type: 'fullname' as FieldType, icon: <IconUser />, label: 'Full Name', color: '#3b82f6', bg: '#dbeafe' },
+    { type: 'email' as FieldType, icon: <IconMail />, label: 'Email', color: '#10b981', bg: '#d1fae5' },
+    { type: 'address' as FieldType, icon: <IconAddress />, label: 'Address', color: '#ef4444', bg: '#fee2e2' },
+    { type: 'phone' as FieldType, icon: <IconPhone />, label: 'Phone', color: '#6366f1', bg: '#e0e7ff' },
+    { type: 'datepicker' as FieldType, icon: <IconCalendar />, label: 'Date Picker', color: '#06b6d4', bg: '#cffafe' },
+    { type: 'appointment' as FieldType, icon: <IconCalendar />, label: 'Appointment', color: '#8b5cf6', bg: '#ede9fe' },
+    { type: 'signature' as FieldType, icon: <IconSignature />, label: 'Signature', color: '#f59e0b', bg: '#fef3c7' },
+    { type: 'fillintheblank' as FieldType, icon: <IconText />, label: 'Fill in the Blank', color: '#22c55e', bg: '#dcfce7' },
+    { type: 'shorttext' as FieldType, icon: <IconText />, label: 'Short Text', color: '#0ea5e9', bg: '#e0f2fe' },
+    { type: 'longtext' as FieldType, icon: <IconTextarea />, label: 'Long Text', color: '#3b82f6', bg: '#dbeafe' },
+    { type: 'number' as FieldType, icon: <IconNumber />, label: 'Number', color: '#14b8a6', bg: '#ccfbf1' },
+    { type: 'dropdown' as FieldType, icon: <IconDropdown />, label: 'Dropdown', color: '#d946ef', bg: '#fae8ff' },
+    { type: 'checkbox' as FieldType, icon: <IconCheckbox />, label: 'Checkbox', color: '#84cc16', bg: '#ecfccb' },
+    { type: 'radio' as FieldType, icon: <IconRadio />, label: 'Radio', color: '#f97316', bg: '#ffedd5' },
+    { type: 'file' as FieldType, icon: <IconFile />, label: 'File Upload', color: '#ec4899', bg: '#fce7f3' },
   ];
 
   const paymentElements = [
-    { type: 'square' as FieldType, icon: '⬛', label: 'Square', gradient: 'from-gray-700 to-gray-900' },
-    { type: 'paypal' as FieldType, icon: '💙', label: 'PayPal', gradient: 'from-blue-600 to-blue-800' },
-    { type: 'authorizenet' as FieldType, icon: '🅰️', label: 'Authorize.Net', gradient: 'from-red-600 to-red-800' },
-    { type: 'stripe' as FieldType, icon: '💜', label: 'Stripe', gradient: 'from-purple-600 to-purple-800' },
-    { type: 'stripecheckout' as FieldType, icon: '💜', label: 'Stripe Checkout', gradient: 'from-purple-700 to-purple-900' },
-    { type: 'braintree' as FieldType, icon: '🧠', label: 'Braintree', gradient: 'from-indigo-600 to-indigo-800' },
-    { type: 'cashapppay' as FieldType, icon: '💚', label: 'Cash App Pay', gradient: 'from-green-600 to-green-800' },
-    { type: 'afterpay' as FieldType, icon: '🔶', label: 'Afterpay', gradient: 'from-orange-600 to-orange-800' },
-    { type: 'clearpay' as FieldType, icon: '🔷', label: 'Clearpay', gradient: 'from-cyan-600 to-cyan-800' },
-    { type: 'applepay' as FieldType, icon: '🍎', label: 'Apple Pay & Google Pay', gradient: 'from-gray-800 to-black' },
-    { type: 'mollie' as FieldType, icon: 'Ⓜ️', label: 'Mollie', gradient: 'from-blue-500 to-cyan-600' },
-    { type: 'cybersource' as FieldType, icon: '🔐', label: 'CyberSource', gradient: 'from-red-700 to-red-900' },
+    { type: 'square' as FieldType, icon: <IconCreditCard />, label: 'Square', color: '#1f2937', bg: '#f3f4f6' },
+    { type: 'paypal' as FieldType, icon: <IconCreditCard />, label: 'PayPal', color: '#003087', bg: '#e0f2fe' },
+    { type: 'authorizenet' as FieldType, icon: <IconCreditCard />, label: 'Authorize.Net', color: '#dc2626', bg: '#fee2e2' },
+    { type: 'stripe' as FieldType, icon: <IconCreditCard />, label: 'Stripe', color: '#6366f1', bg: '#e0e7ff' },
+    { type: 'stripecheckout' as FieldType, icon: <IconCreditCard />, label: 'Stripe Checkout', color: '#7c3aed', bg: '#ede9fe' },
+    { type: 'braintree' as FieldType, icon: <IconCreditCard />, label: 'Braintree', color: '#4f46e5', bg: '#e0e7ff' },
+    { type: 'cashapppay' as FieldType, icon: <IconCreditCard />, label: 'Cash App Pay', color: '#00d632', bg: '#dcfce7' },
+    { type: 'afterpay' as FieldType, icon: <IconCreditCard />, label: 'Afterpay', color: '#b2fce4', bg: '#fef3c7' },
+    { type: 'clearpay' as FieldType, icon: <IconCreditCard />, label: 'Clearpay', color: '#00d4ff', bg: '#cffafe' },
+    { type: 'applepay' as FieldType, icon: <IconCreditCard />, label: 'Apple Pay & Google Pay', color: '#000000', bg: '#f3f4f6' },
+    { type: 'mollie' as FieldType, icon: <IconCreditCard />, label: 'Mollie', color: '#0ea5e9', bg: '#e0f2fe' },
+    { type: 'cybersource' as FieldType, icon: <IconCreditCard />, label: 'CyberSource', color: '#b91c1c', bg: '#fee2e2' },
   ];
 
   const widgetElements = [
-    { type: 'formcalculation' as FieldType, icon: '🧮', label: 'Form Calculation', gradient: 'from-violet-500 to-purple-600' },
-    { type: 'configurablelist' as FieldType, icon: '📋', label: 'Configurable List', gradient: 'from-blue-500 to-indigo-600' },
-    { type: 'multipletextfields' as FieldType, icon: '📝', label: 'Multiple Text Fields', gradient: 'from-green-500 to-emerald-600' },
-    { type: 'termsandconditions' as FieldType, icon: '📜', label: 'Terms & Conditions', gradient: 'from-amber-500 to-orange-600' },
-    { type: 'takephoto' as FieldType, icon: '📷', label: 'Take Photo', gradient: 'from-pink-500 to-rose-600' },
-    { type: 'checklist' as FieldType, icon: '✅', label: 'Checklist', gradient: 'from-lime-500 to-green-600' },
-    { type: 'dynamictextbox' as FieldType, icon: '📦', label: 'Dynamic Textbox', gradient: 'from-cyan-500 to-teal-600' },
-    { type: 'addoptions' as FieldType, icon: '➕', label: 'Add Options', gradient: 'from-indigo-500 to-purple-600' },
-    { type: 'datagrid' as FieldType, icon: '📊', label: 'Data Grid', gradient: 'from-blue-600 to-cyan-700' },
-    { type: 'dynamicdropdowns' as FieldType, icon: '⬇️', label: 'Dynamic Dropdowns', gradient: 'from-fuchsia-500 to-pink-600' },
-    { type: 'pdfembedder' as FieldType, icon: '📄', label: 'PDF Embedder', gradient: 'from-red-500 to-rose-600' },
+    { type: 'formcalculation' as FieldType, icon: <IconCalculator />, label: 'Form Calculation', color: '#8b5cf6', bg: '#f3e8ff' },
+    { type: 'configurablelist' as FieldType, icon: <IconList />, label: 'Configurable List', color: '#3b82f6', bg: '#dbeafe' },
+    { type: 'multipletextfields' as FieldType, icon: <IconText />, label: 'Multiple Text Fields', color: '#10b981', bg: '#d1fae5' },
+    { type: 'termsandconditions' as FieldType, icon: <IconFile />, label: 'Terms & Conditions', color: '#f59e0b', bg: '#fef3c7' },
+    { type: 'takephoto' as FieldType, icon: <IconCamera />, label: 'Take Photo', color: '#ec4899', bg: '#fce7f3' },
+    { type: 'checklist' as FieldType, icon: <IconCheckbox />, label: 'Checklist', color: '#22c55e', bg: '#dcfce7' },
+    { type: 'dynamictextbox' as FieldType, icon: <IconText />, label: 'Dynamic Textbox', color: '#06b6d4', bg: '#cffafe' },
+    { type: 'addoptions' as FieldType, icon: <IconDropdown />, label: 'Add Options', color: '#6366f1', bg: '#e0e7ff' },
+    { type: 'datagrid' as FieldType, icon: <IconGrid />, label: 'Data Grid', color: '#0284c7', bg: '#e0f2fe' },
+    { type: 'dynamicdropdowns' as FieldType, icon: <IconDropdown />, label: 'Dynamic Dropdowns', color: '#d946ef', bg: '#fae8ff' },
+    { type: 'pdfembedder' as FieldType, icon: <IconPdf />, label: 'PDF Embedder', color: '#ef4444', bg: '#fee2e2' },
   ];
 
   return (
-    <div className={`h-screen flex flex-col bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 ${isDarkMode ? 'dark' : ''}`}>
-      {/* Modern Header */}
-      <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-b border-gray-200 dark:border-gray-700 px-6 py-4 sticky top-0 z-50">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-4">
+    <div className={`h-screen flex flex-col bg-gray-50 dark:from-gray-900 dark:to-gray-800 ${isDarkMode ? 'dark' : ''}`}>
+      {/* Clean Professional Header */}
+      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-2.5 sticky top-0 z-50">
+        <div className="flex items-center justify-between">
+          {/* Left Section - Back Button & Form Title */}
+          <div className="flex items-center gap-6">
             <button
               onClick={() => navigate('/dashboard/forms')}
-              className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 font-semibold transition-colors"
+              className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 hover:text-[#1a73e8] dark:hover:text-[#1a73e8] font-medium transition-colors text-sm px-3 py-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
               Back
             </button>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="text-xl font-bold border-none focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-lg px-3 py-1 bg-transparent dark:text-white"
-            />
+
+            {/* Form Title Box */}
+            <div className="flex items-center gap-2 bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-1.5">
+              <svg className="w-4 h-4 text-[#1a73e8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="text-sm font-semibold border-none focus:outline-none focus:ring-0 bg-transparent dark:text-white text-gray-900 min-w-[150px]"
+                placeholder="Enter form name..."
+              />
+            </div>
           </div>
-          <div className="flex items-center gap-3">
+
+          {/* Center Navigation Tabs */}
+          <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+            <button
+              onClick={() => setActiveTab('build')}
+              className={`px-5 py-2 font-semibold rounded-md transition-all duration-200 text-sm ${activeTab === 'build' ? 'bg-[#1a73e8] text-white shadow-sm' : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'}`}
+            >
+              Build
+            </button>
+            <button
+              onClick={() => setActiveTab('settings')}
+              className={`px-5 py-2 font-semibold rounded-md transition-all duration-200 text-sm ${activeTab === 'settings' ? 'bg-[#1a73e8] text-white shadow-sm' : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'}`}
+            >
+              Settings
+            </button>
+            <button
+              onClick={() => setActiveTab('logic')}
+              className={`px-5 py-2 font-semibold rounded-md transition-all duration-200 text-sm flex items-center gap-1.5 ${activeTab === 'logic' ? 'bg-[#1a73e8] text-white shadow-sm' : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'}`}
+            >
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Logic
+            </button>
+            <button
+              onClick={() => setActiveTab('publish')}
+              className={`px-5 py-2 font-semibold rounded-md transition-all duration-200 text-sm ${activeTab === 'publish' ? 'bg-[#1a73e8] text-white shadow-sm' : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'}`}
+            >
+              Publish
+            </button>
+          </div>
+
+          {/* Right Actions */}
+          <div className="flex items-center gap-2">
             <button
               onClick={() => setShowPreview(!showPreview)}
-              className={`px-4 py-2 font-semibold rounded-lg transition-all ${
+              className={`px-4 py-2 font-medium rounded-lg transition-all text-sm ${
                 showPreview
-                  ? 'bg-indigo-600 text-white'
-                  : 'text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20'
+                  ? 'bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-white'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
-              {showPreview ? 'Exit Preview' : 'Preview'}
+              Preview
             </button>
             <button
               onClick={handleSave}
               disabled={saving}
-              className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-2 rounded-lg hover:from-indigo-700 hover:to-purple-700 font-semibold disabled:opacity-50 shadow-lg shadow-indigo-500/30 transition-all duration-200 transform hover:scale-105 active:scale-95"
+              className="bg-[#1a73e8] hover:bg-[#1557b0] text-white px-5 py-2 rounded-lg font-semibold disabled:opacity-50 transition-all duration-200 text-sm"
             >
               {saving ? 'Saving...' : 'Save'}
             </button>
           </div>
-        </div>
-
-        {/* Top Tabs */}
-        <div className="flex gap-2 justify-center">
-          <button
-            onClick={() => setActiveTab('build')}
-            className={`px-6 py-2.5 font-bold rounded-lg transition-all duration-200 ${activeTab === 'build' ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30 transform scale-105' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
-          >
-            Build
-          </button>
-          <button
-            onClick={() => setActiveTab('settings')}
-            className={`px-6 py-2.5 font-bold rounded-lg transition-all duration-200 ${activeTab === 'settings' ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30 transform scale-105' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
-          >
-            Settings
-          </button>
-          <button
-            onClick={() => setActiveTab('logic')}
-            className={`px-6 py-2.5 font-bold rounded-lg transition-all duration-200 flex items-center gap-2 ${activeTab === 'logic' ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30 transform scale-105' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
-          >
-            <span>⚡</span> Logic
-          </button>
-          <button
-            onClick={() => setActiveTab('publish')}
-            className={`px-6 py-2.5 font-bold rounded-lg transition-all duration-200 ${activeTab === 'publish' ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30 transform scale-105' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
-          >
-            Publish
-          </button>
         </div>
       </header>
 
@@ -939,57 +1055,57 @@ const FormBuilderPage = () => {
         {/* BUILD TAB */}
         {activeTab === 'build' && (
           <>
-            {/* Modern Sidebar with Elements */}
+            {/* Clean Professional Sidebar */}
             {showSidebar && (
-              <aside className="w-80 bg-white dark:bg-gray-900 text-gray-900 dark:text-white h-full overflow-y-auto border-r border-gray-200 dark:border-gray-800">
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">Form Elements</h2>
-                    <button onClick={() => setShowSidebar(false)} className="p-2 rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <aside className="w-72 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white h-full overflow-y-auto border-r border-gray-200 dark:border-gray-800">
+                <div className="p-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-base font-semibold text-[#1a73e8]">Form Elements</h2>
+                    <button onClick={() => setShowSidebar(false)} className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800 transition-all">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </button>
                   </div>
 
-                  {/* Horizontal Category Tabs */}
-                  <div className="flex gap-1 mb-5 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl">
+                  {/* Clean Category Tabs */}
+                  <div className="flex gap-0.5 mb-4 bg-white dark:bg-gray-800 p-1 rounded-lg border border-gray-200 dark:border-gray-700">
                     <button
                       onClick={() => setSidebarTab('basic')}
-                      className={`flex-1 px-3 py-2.5 text-sm font-bold rounded-lg transition-all duration-200 ${sidebarTab === 'basic' ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
+                      className={`flex-1 px-3 py-2 text-xs font-semibold rounded-md transition-all duration-200 ${sidebarTab === 'basic' ? 'bg-[#1a73e8] text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'}`}
                     >
                       Basic
                     </button>
                     <button
                       onClick={() => setSidebarTab('payments')}
-                      className={`flex-1 px-3 py-2.5 text-sm font-bold rounded-lg transition-all duration-200 ${sidebarTab === 'payments' ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
+                      className={`flex-1 px-3 py-2 text-xs font-semibold rounded-md transition-all duration-200 ${sidebarTab === 'payments' ? 'bg-[#1a73e8] text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'}`}
                     >
                       Payments
                     </button>
                     <button
                       onClick={() => setSidebarTab('widgets')}
-                      className={`flex-1 px-3 py-2.5 text-sm font-bold rounded-lg transition-all duration-200 ${sidebarTab === 'widgets' ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
+                      className={`flex-1 px-3 py-2 text-xs font-semibold rounded-md transition-all duration-200 ${sidebarTab === 'widgets' ? 'bg-[#1a73e8] text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'}`}
                     >
                       Widgets
                     </button>
                   </div>
 
                   {/* Search */}
-                  <div className="mb-6">
+                  <div className="mb-4">
                     <div className="relative">
-                      <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                       </svg>
                       <input
                         type="text"
                         placeholder={`Search ${sidebarTab}...`}
-                        className="w-full pl-10 pr-4 py-3 bg-white dark:bg-gray-800/50 text-gray-900 dark:text-white rounded-xl border border-gray-300 dark:border-gray-700 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                        className="w-full pl-9 pr-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg border border-gray-200 dark:border-gray-700 focus:outline-none focus:border-[#1a73e8] focus:ring-1 focus:ring-[#1a73e8]/20 transition-all"
                       />
                     </div>
                   </div>
 
-                  {/* Elements List with Gradient Icons */}
-                  <div className="space-y-2.5">
+                  {/* Elements List with Professional Icons */}
+                  <div className="space-y-2">
                     {sidebarTab === 'basic' && basicElements.map((element) => (
                       <button
                         key={element.type}
@@ -997,12 +1113,15 @@ const FormBuilderPage = () => {
                         draggable
                         onDragStart={handleDragStart(element.type)}
                         onDragEnd={handleDragEnd}
-                        className="w-full flex items-center gap-3 px-4 py-3.5 bg-white dark:bg-gray-800 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 dark:hover:from-gray-800 dark:hover:to-gray-700 rounded-xl transition-all duration-200 text-left group transform hover:scale-[1.02] hover:shadow-lg hover:shadow-indigo-500/10 border border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-700 cursor-grab active:cursor-grabbing active:scale-[0.98]"
+                        className="w-full flex items-center gap-3 px-3 py-2.5 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750 rounded-lg transition-all duration-200 text-left group border border-gray-100 dark:border-gray-700 hover:border-gray-200 dark:hover:border-gray-600 cursor-grab active:cursor-grabbing"
                       >
-                        <div className={`w-11 h-11 rounded-lg bg-gradient-to-br ${element.gradient} flex items-center justify-center text-lg shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200`}>
+                        <div
+                          className="w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200"
+                          style={{ backgroundColor: element.bg, color: element.color }}
+                        >
                           {element.icon}
                         </div>
-                        <span className="font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{element.label}</span>
+                        <span className="font-medium text-sm text-gray-700 dark:text-gray-200">{element.label}</span>
                       </button>
                     ))}
 
@@ -1013,12 +1132,15 @@ const FormBuilderPage = () => {
                         draggable
                         onDragStart={handleDragStart(element.type)}
                         onDragEnd={handleDragEnd}
-                        className="w-full flex items-center gap-3 px-4 py-3.5 bg-white dark:bg-gray-800 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 dark:hover:from-gray-800 dark:hover:to-gray-700 rounded-xl transition-all duration-200 text-left group transform hover:scale-[1.02] hover:shadow-lg hover:shadow-indigo-500/10 border border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-700 cursor-grab active:cursor-grabbing active:scale-[0.98]"
+                        className="w-full flex items-center gap-3 px-3 py-2.5 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750 rounded-lg transition-all duration-200 text-left group border border-gray-100 dark:border-gray-700 hover:border-gray-200 dark:hover:border-gray-600 cursor-grab active:cursor-grabbing"
                       >
-                        <div className={`w-11 h-11 rounded-lg bg-gradient-to-br ${element.gradient} flex items-center justify-center text-lg shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200`}>
+                        <div
+                          className="w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200"
+                          style={{ backgroundColor: element.bg, color: element.color }}
+                        >
                           {element.icon}
                         </div>
-                        <span className="font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{element.label}</span>
+                        <span className="font-medium text-sm text-gray-700 dark:text-gray-200">{element.label}</span>
                       </button>
                     ))}
 
@@ -1029,12 +1151,15 @@ const FormBuilderPage = () => {
                         draggable
                         onDragStart={handleDragStart(element.type)}
                         onDragEnd={handleDragEnd}
-                        className="w-full flex items-center gap-3 px-4 py-3.5 bg-white dark:bg-gray-800 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 dark:hover:from-gray-800 dark:hover:to-gray-700 rounded-xl transition-all duration-200 text-left group transform hover:scale-[1.02] hover:shadow-lg hover:shadow-indigo-500/10 border border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-700 cursor-grab active:cursor-grabbing active:scale-[0.98]"
+                        className="w-full flex items-center gap-3 px-3 py-2.5 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750 rounded-lg transition-all duration-200 text-left group border border-gray-100 dark:border-gray-700 hover:border-gray-200 dark:hover:border-gray-600 cursor-grab active:cursor-grabbing"
                       >
-                        <div className={`w-11 h-11 rounded-lg bg-gradient-to-br ${element.gradient} flex items-center justify-center text-lg shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-200`}>
+                        <div
+                          className="w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200"
+                          style={{ backgroundColor: element.bg, color: element.color }}
+                        >
                           {element.icon}
                         </div>
-                        <span className="font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{element.label}</span>
+                        <span className="font-medium text-sm text-gray-700 dark:text-gray-200">{element.label}</span>
                       </button>
                     ))}
                   </div>
@@ -1043,17 +1168,17 @@ const FormBuilderPage = () => {
             )}
 
             {/* Form Canvas */}
-            <main className="flex-1 p-8 overflow-y-auto relative bg-gray-50 dark:bg-gray-900">
+            <main className="flex-1 p-6 overflow-y-auto relative bg-gray-100 dark:bg-gray-900">
               {!showSidebar && (
                 <button
                   onClick={() => setShowSidebar(true)}
-                  className="mb-6 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 shadow-lg shadow-indigo-500/30 transform hover:scale-105 active:scale-95 transition-all font-semibold"
+                  className="mb-4 px-4 py-2 bg-[#1a73e8] text-white rounded-lg hover:bg-[#1557b0] transition-all font-medium text-sm"
                 >
                   Show Elements Panel
                 </button>
               )}
 
-              <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
+              <div className="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
                 {/* Logo Upload Area */}
                 <div className="relative mb-8">
                   <input
@@ -1417,99 +1542,129 @@ const FormBuilderPage = () => {
         {/* SETTINGS TAB */}
         {activeTab === 'settings' && (
           <div className="flex flex-1 overflow-hidden">
-            <aside className="w-72 bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-white h-full overflow-y-auto p-6">
-              <h3 className="font-bold text-xl mb-6 bg-gradient-to-r from-indigo-600 to-cyan-600 dark:from-indigo-400 dark:to-cyan-400 bg-clip-text text-transparent">Settings</h3>
-              <div className="space-y-2">
-                {[
-                  { icon: '⚙️', label: 'Form Settings', active: true },
-                  { icon: '✉️', label: 'Emails', active: false },
-                  { icon: '🔀', label: 'Conditions', active: false },
-                  { icon: '✅', label: 'Thank You Page', active: false },
-                  { icon: '🔔', label: 'Notifications', active: false },
-                  { icon: '🔌', label: 'Integrations', active: false },
-                  { icon: '🔄', label: 'Workflows', active: false },
-                ].map((item) => (
-                  <button key={item.label} className={`w-full text-left px-4 py-3.5 rounded-xl flex items-center gap-3 transition-all duration-200 ${item.active ? 'bg-gradient-to-r from-indigo-500 to-cyan-500 text-white shadow-lg' : 'hover:bg-gray-200 dark:hover:bg-gray-800/50'}`}>
-                    <span className="text-xl">{item.icon}</span>
-                    <span className="font-medium">{item.label}</span>
-                  </button>
-                ))}
+            <aside className="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 h-full overflow-y-auto">
+              <div className="p-4">
+                <h3 className="font-semibold text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4 px-3">Settings</h3>
+                <nav className="space-y-1">
+                  {[
+                    { icon: (
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                    ), label: 'Form Settings', active: true },
+                    { icon: (
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                    ), label: 'Emails', active: false },
+                    { icon: (
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                      </svg>
+                    ), label: 'Conditions', active: false },
+                    { icon: (
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    ), label: 'Thank You Page', active: false },
+                    { icon: (
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                      </svg>
+                    ), label: 'Notifications', active: false },
+                    { icon: (
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+                      </svg>
+                    ), label: 'Integrations', active: false },
+                    { icon: (
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                      </svg>
+                    ), label: 'Workflows', active: false },
+                  ].map((item) => (
+                    <button key={item.label} className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-3 transition-all duration-200 ${item.active ? 'bg-[#1a73e8] text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}`}>
+                      <span className={item.active ? 'text-white' : 'text-gray-500 dark:text-gray-400'}>{item.icon}</span>
+                      <span className="font-medium text-sm">{item.label}</span>
+                    </button>
+                  ))}
+                </nav>
               </div>
             </aside>
 
-            <main className="flex-1 p-8 overflow-y-auto">
-              <div className="max-w-4xl mx-auto bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-8 shadow-2xl border border-gray-200 dark:border-gray-700">
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="bg-gradient-to-br from-indigo-500 to-cyan-500 text-white p-4 rounded-2xl shadow-lg">
-                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <main className="flex-1 p-6 overflow-y-auto bg-gray-50 dark:bg-gray-900">
+              <div className="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
+                  <div className="bg-[#e8f0fe] dark:bg-[#1a73e8]/20 text-[#1a73e8] p-2.5 rounded-lg">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                   </div>
                   <div>
-                    <h2 className="text-3xl font-bold dark:text-white">Form Settings</h2>
-                    <p className="text-gray-600 dark:text-gray-400">Customize form status and properties</p>
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">Form Settings</h2>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Customize form status and properties</p>
                   </div>
                 </div>
 
                 {/* Title */}
-                <div className="mb-8">
-                  <label className="block font-semibold mb-2 dark:text-white">Title</label>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Enter a name for your form</p>
+                <div className="mb-6">
+                  <label className="block font-medium text-sm text-gray-700 dark:text-gray-300 mb-1.5">Title</label>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Enter a name for your form</p>
                   <input
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    className="w-full border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 dark:text-white transition-all"
+                    className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#1a73e8] focus:ring-2 focus:ring-[#1a73e8]/20 dark:text-white transition-all"
                   />
                 </div>
 
                 {/* Folder Selection */}
-                <div className="mb-8">
-                  <label className="block font-semibold mb-2 dark:text-white">Folder</label>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Organize your form by selecting a folder</p>
+                <div className="mb-6">
+                  <label className="block font-medium text-sm text-gray-700 dark:text-gray-300 mb-1.5">Folder</label>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Organize your form by selecting a folder</p>
                   <select
                     value={selectedFolder}
                     onChange={(e) => setSelectedFolder(e.target.value)}
-                    className="w-full border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 dark:text-white transition-all cursor-pointer"
+                    className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#1a73e8] focus:ring-2 focus:ring-[#1a73e8]/20 dark:text-white transition-all cursor-pointer"
                   >
-                    <option value="home">📁 Home</option>
-                    <option value="registration">📋 Registration Forms</option>
-                    <option value="feedback">💬 Feedback Forms</option>
-                    <option value="surveys">📊 Surveys</option>
-                    <option value="contact">📧 Contact Forms</option>
+                    <option value="home">Home</option>
+                    <option value="registration">Registration Forms</option>
+                    <option value="feedback">Feedback Forms</option>
+                    <option value="surveys">Surveys</option>
+                    <option value="contact">Contact Forms</option>
                   </select>
                 </div>
 
                 {/* Form Status */}
-                <div className="mb-8">
-                  <label className="block font-semibold mb-2 dark:text-white">Form Status</label>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Enable, disable, or conditionally enable your form</p>
-                  <div className="border-2 border-gray-300 dark:border-gray-600 rounded-xl p-6 flex items-center justify-between hover:border-indigo-500 dark:hover:border-indigo-400 cursor-pointer transition-all bg-green-50 dark:bg-green-900/20">
-                    <div className="flex items-center gap-4">
-                      <div className="bg-green-100 dark:bg-green-800 p-3 rounded-xl">
-                        <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="mb-6">
+                  <label className="block font-medium text-sm text-gray-700 dark:text-gray-300 mb-1.5">Form Status</label>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Enable, disable, or conditionally enable your form</p>
+                  <div className="border border-green-200 dark:border-green-700 rounded-lg p-4 flex items-center justify-between hover:border-green-300 dark:hover:border-green-600 cursor-pointer transition-all bg-green-50 dark:bg-green-900/20">
+                    <div className="flex items-center gap-3">
+                      <div className="bg-green-100 dark:bg-green-800 p-2 rounded-lg">
+                        <svg className="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
                       </div>
                       <div>
-                        <p className="font-bold text-lg dark:text-white">ENABLED</p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">Your form is currently visible and able to receive submissions</p>
+                        <p className="font-semibold text-sm text-gray-900 dark:text-white">ENABLED</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">Your form is currently visible and able to receive submissions</p>
                       </div>
                     </div>
-                    <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </div>
                 </div>
 
                 {/* Encrypt Form Data */}
-                <div className="mb-8 p-6 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-indigo-400 dark:hover:border-indigo-500 transition-all">
+                <div className="mb-6 p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-gray-300 dark:hover:border-gray-600 transition-all">
                   <div className="flex items-center justify-between">
                     <div>
-                      <label className="font-semibold dark:text-white block mb-1">Encrypt Form Data</label>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Encrypt your form responses to store sensitive data securely.</p>
-                      <a href="#" className="text-indigo-600 dark:text-indigo-400 text-sm font-semibold hover:underline">Learn more</a>
+                      <label className="font-medium text-sm text-gray-900 dark:text-white block mb-0.5">Encrypt Form Data</label>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Encrypt your form responses to store sensitive data securely.</p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
@@ -1518,17 +1673,17 @@ const FormBuilderPage = () => {
                         onChange={(e) => setEncryptData(e.target.checked)}
                         className="sr-only peer"
                       />
-                      <div className="w-14 h-7 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-indigo-600 peer-checked:to-cyan-500"></div>
+                      <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#1a73e8]/30 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#1a73e8]"></div>
                     </label>
                   </div>
                 </div>
 
                 {/* Draft Mode */}
-                <div className="p-6 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-indigo-400 dark:hover:border-indigo-500 transition-all">
+                <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-gray-300 dark:hover:border-gray-600 transition-all">
                   <div className="flex items-center justify-between">
                     <div>
-                      <label className="font-semibold dark:text-white block mb-1">Draft Mode</label>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">Edit form in draft mode and sync updates to the live form at any time.</p>
+                      <label className="font-medium text-sm text-gray-900 dark:text-white block mb-0.5">Draft Mode</label>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Edit form in draft mode and sync updates to the live form at any time.</p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
@@ -1537,7 +1692,7 @@ const FormBuilderPage = () => {
                         onChange={(e) => setDraftMode(e.target.checked)}
                         className="sr-only peer"
                       />
-                      <div className="w-14 h-7 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-indigo-600 peer-checked:to-cyan-500"></div>
+                      <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#1a73e8]/30 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#1a73e8]"></div>
                     </label>
                   </div>
                 </div>
@@ -1548,28 +1703,33 @@ const FormBuilderPage = () => {
 
         {/* LOGIC TAB */}
         {activeTab === 'logic' && (
-          <main className="flex-1 overflow-y-auto">
-            <div className="max-w-5xl mx-auto p-4 md:p-6 lg:p-8">
+          <main className="flex-1 overflow-y-auto bg-gray-50 dark:bg-gray-900">
+            <div className="max-w-4xl mx-auto p-6">
               {/* Header */}
-              <div className="mb-6">
-                <div className="flex items-start gap-3 mb-3">
-                  <div className="bg-gradient-to-br from-purple-500 to-pink-500 text-white p-2.5 rounded-xl shadow-lg flex-shrink-0">
-                    <span className="text-xl">⚡</span>
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 mb-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="bg-[#fff3e0] dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 p-2.5 rounded-lg">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
                   </div>
-                  <div className="flex-1">
-                    <h1 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-0.5">
+                  <div>
+                    <h1 className="text-xl font-bold text-gray-900 dark:text-white">
                       Conditional Logic Builder
                     </h1>
-                    <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400">Create rules to show or hide fields based on user responses</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Create rules to show or hide fields based on user responses</p>
                   </div>
                 </div>
 
                 {/* How it works info */}
-                <div className="bg-purple-50 dark:bg-purple-900/30 rounded-lg p-3 border border-purple-200 dark:border-purple-700">
-                  <h3 className="font-semibold text-xs mb-1.5 flex items-center gap-1.5 text-purple-900 dark:text-purple-200">
-                    <span>💡</span> How it works
+                <div className="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-3 border border-amber-200 dark:border-amber-700/50">
+                  <h3 className="font-medium text-xs mb-1.5 flex items-center gap-1.5 text-amber-800 dark:text-amber-300">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    How it works
                   </h3>
-                  <ul className="text-xs text-gray-700 dark:text-gray-300 grid sm:grid-cols-2 gap-x-4 gap-y-0.5">
+                  <ul className="text-xs text-gray-600 dark:text-gray-400 grid sm:grid-cols-2 gap-x-4 gap-y-0.5">
                     <li>• Choose a field to watch</li>
                     <li>• Set condition & value</li>
                     <li>• Select action (show/hide)</li>
@@ -1580,24 +1740,24 @@ const FormBuilderPage = () => {
 
               {/* Existing Logic Rules */}
               {logicRules.length > 0 && (
-                <div className="mb-6">
-                  <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                    <span className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-2 py-0.5 rounded text-xs">
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 mb-6">
+                  <h2 className="text-base font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                    <span className="bg-[#1a73e8] text-white px-2 py-0.5 rounded text-xs font-medium">
                       {logicRules.length}
                     </span>
                     Active Rules
                   </h2>
-                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <div className="grid sm:grid-cols-2 gap-3">
                     {logicRules.map((rule) => {
                       const sourceField = fields.find(f => f.id === rule.sourceFieldId);
                       const targetField = fields.find(f => f.id === rule.targetFieldId);
                       return (
-                        <div key={rule.id} className="bg-white dark:bg-gray-800 rounded-lg p-3 shadow border-l-4 border-purple-500 hover:shadow-md transition-shadow">
+                        <div key={rule.id} className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 border border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 transition-all">
                           <div className="flex justify-between items-start mb-2">
-                            <span className="text-[10px] font-semibold text-purple-600 dark:text-purple-400 bg-purple-100 dark:bg-purple-900/50 px-1.5 py-0.5 rounded uppercase">Rule</span>
+                            <span className="text-[10px] font-medium text-[#1a73e8] bg-[#e8f0fe] dark:bg-[#1a73e8]/20 px-1.5 py-0.5 rounded uppercase">Rule</span>
                             <button
                               onClick={() => setLogicRules(logicRules.filter(r => r.id !== rule.id))}
-                              className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 p-0.5 rounded transition-colors"
+                              className="text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 p-0.5 rounded transition-colors"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -1606,13 +1766,13 @@ const FormBuilderPage = () => {
                           </div>
                           <div className="space-y-1.5">
                             <p className="text-xs font-medium text-gray-900 dark:text-white">
-                              <span className="text-purple-600 dark:text-purple-400 font-semibold">IF</span> "{sourceField?.label || 'Unknown'}"
+                              <span className="text-[#1a73e8] font-semibold">IF</span> "{sourceField?.label || 'Unknown'}"
                             </p>
-                            <p className="text-[11px] text-gray-600 dark:text-gray-400 pl-3 border-l-2 border-gray-300 dark:border-gray-600">
+                            <p className="text-[11px] text-gray-500 dark:text-gray-400 pl-3 border-l-2 border-gray-300 dark:border-gray-600">
                               {rule.condition.replace(/_/g, ' ')} <strong>"{rule.value}"</strong>
                             </p>
                             <p className="text-xs font-medium text-gray-900 dark:text-white">
-                              <span className="text-pink-600 dark:text-pink-400 font-semibold">THEN</span> {rule.action.toUpperCase()} "{targetField?.label || 'Unknown'}"
+                              <span className="text-green-600 dark:text-green-400 font-semibold">THEN</span> {rule.action.toUpperCase()} "{targetField?.label || 'Unknown'}"
                             </p>
                           </div>
                         </div>
@@ -1623,21 +1783,21 @@ const FormBuilderPage = () => {
               )}
 
               {/* Add New Rule Form */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 md:p-6 mb-6 border border-gray-200 dark:border-gray-700">
-                <h2 className="text-base md:text-lg font-bold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
-                  <span className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-2 py-0.5 rounded text-xs uppercase">New</span>
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 mb-6">
+                <h2 className="text-base font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
+                  <span className="bg-green-500 text-white px-2 py-0.5 rounded text-xs font-medium uppercase">New</span>
                   Add Logic Rule
                 </h2>
 
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {/* Source Field Selection */}
                   <div>
-                    <label className="block text-xs font-medium mb-1 text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium mb-1.5 text-gray-700 dark:text-gray-300">
                       When this field...
                     </label>
                     <select
                       id="logic-source-field"
-                      className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none transition-colors"
+                      className="w-full px-3 py-2.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-[#1a73e8] focus:ring-2 focus:ring-[#1a73e8]/20 focus:outline-none transition-colors"
                     >
                       <option value="">Select a field</option>
                       {fields.map(field => (
@@ -1648,12 +1808,12 @@ const FormBuilderPage = () => {
 
                   {/* Condition Selection */}
                   <div>
-                    <label className="block text-xs font-medium mb-1 text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium mb-1.5 text-gray-700 dark:text-gray-300">
                       Meets this condition...
                     </label>
                     <select
                       id="logic-condition"
-                      className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none transition-colors"
+                      className="w-full px-3 py-2.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-[#1a73e8] focus:ring-2 focus:ring-[#1a73e8]/20 focus:outline-none transition-colors"
                     >
                       <option value="equals">Equals</option>
                       <option value="not_equals">Does not equal</option>
@@ -1665,25 +1825,25 @@ const FormBuilderPage = () => {
 
                   {/* Value Input */}
                   <div>
-                    <label className="block text-xs font-medium mb-1 text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium mb-1.5 text-gray-700 dark:text-gray-300">
                       With this value...
                     </label>
                     <input
                       id="logic-value"
                       type="text"
                       placeholder="Enter value to compare"
-                      className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none transition-colors"
+                      className="w-full px-3 py-2.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:border-[#1a73e8] focus:ring-2 focus:ring-[#1a73e8]/20 focus:outline-none transition-colors"
                     />
                   </div>
 
                   {/* Action Selection */}
                   <div>
-                    <label className="block text-xs font-medium mb-1 text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium mb-1.5 text-gray-700 dark:text-gray-300">
                       Then perform this action...
                     </label>
                     <select
                       id="logic-action"
-                      className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none transition-colors"
+                      className="w-full px-3 py-2.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-[#1a73e8] focus:ring-2 focus:ring-[#1a73e8]/20 focus:outline-none transition-colors"
                     >
                       <option value="show">Show field</option>
                       <option value="hide">Hide field</option>
@@ -1692,12 +1852,12 @@ const FormBuilderPage = () => {
 
                   {/* Target Field Selection */}
                   <div>
-                    <label className="block text-xs font-medium mb-1 text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium mb-1.5 text-gray-700 dark:text-gray-300">
                       On this field...
                     </label>
                     <select
                       id="logic-target-field"
-                      className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none transition-colors"
+                      className="w-full px-3 py-2.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-[#1a73e8] focus:ring-2 focus:ring-[#1a73e8]/20 focus:outline-none transition-colors"
                     >
                       <option value="">Select a field</option>
                       {fields.map(field => (
@@ -1743,22 +1903,24 @@ const FormBuilderPage = () => {
                       (document.getElementById('logic-action') as HTMLSelectElement).value = 'show';
                       (document.getElementById('logic-target-field') as HTMLSelectElement).value = '';
                     }}
-                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-2.5 px-4 rounded-lg shadow hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm"
+                    className="w-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-medium py-2.5 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 text-sm"
                   >
-                    <span className="text-base">⚡</span>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
                     Add Logic Rule
                   </button>
                 </div>
               </div>
 
               {/* Preview Section */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 md:p-6 border border-gray-200 dark:border-gray-700">
-                <h2 className="text-base md:text-lg font-bold mb-3 flex items-center gap-2 text-gray-900 dark:text-white">
-                  <span className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-2 py-0.5 rounded text-xs uppercase">Preview</span>
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                <h2 className="text-base font-semibold mb-3 flex items-center gap-2 text-gray-900 dark:text-white">
+                  <span className="bg-[#e8f0fe] text-[#1a73e8] px-2 py-0.5 rounded text-xs font-medium uppercase">Preview</span>
                   Test Your Logic Rules
                 </h2>
 
-                <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-4">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
                   Fill out the fields below to see how your logic rules work in real-time
                 </p>
 
@@ -1859,76 +2021,83 @@ const FormBuilderPage = () => {
 
         {/* PUBLISH TAB */}
         {activeTab === 'publish' && (
-          <main className="flex-1 p-8 overflow-y-auto">
-            <div className="max-w-4xl mx-auto">
+          <main className="flex-1 p-6 overflow-y-auto bg-gray-50 dark:bg-gray-900">
+            <div className="max-w-3xl mx-auto">
               {/* Publish Button Section */}
               {formPublishStatus !== 'PUBLISHED' ? (
-                <div className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border-2 border-yellow-300 dark:border-yellow-700 rounded-2xl p-8 mb-8 shadow-lg">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="font-bold text-2xl text-yellow-900 dark:text-yellow-200 mb-3">Form Not Published Yet</h3>
-                      <p className="text-yellow-800 dark:text-yellow-300">Your form is currently in DRAFT mode. Click the button below to publish it and make it available for submissions.</p>
+                <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl p-5 mb-6">
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <div className="bg-amber-100 dark:bg-amber-800/50 p-2 rounded-lg">
+                        <svg className="w-5 h-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-base text-gray-900 dark:text-white">Form Not Published Yet</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Your form is in DRAFT mode. Publish it to start collecting responses.</p>
+                      </div>
                     </div>
                     <button
                       onClick={handlePublish}
-                      className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-orange-500/30 transform hover:scale-105 transition-all"
+                      className="bg-[#1a73e8] hover:bg-[#1557b0] text-white px-5 py-2.5 rounded-lg font-medium text-sm transition-colors flex-shrink-0"
                     >
                       Publish Form
                     </button>
                   </div>
                 </div>
               ) : (
-                <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-2 border-green-300 dark:border-green-700 rounded-2xl p-6 mb-8 flex items-center gap-4 shadow-lg">
-                  <div className="bg-gradient-to-br from-green-500 to-emerald-500 text-white p-4 rounded-xl shadow-lg">
-                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-xl p-5 mb-6 flex items-center gap-3">
+                  <div className="bg-green-100 dark:bg-green-800/50 p-2 rounded-lg">
+                    <svg className="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
                   <div>
-                    <h3 className="font-bold text-xl text-green-900 dark:text-green-200">Form Published Successfully!</h3>
-                    <p className="text-sm text-green-700 dark:text-green-300">Your form is live and ready to receive submissions</p>
+                    <h3 className="font-semibold text-base text-gray-900 dark:text-white">Form Published</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Your form is live and ready to receive submissions</p>
                   </div>
                 </div>
               )}
 
               {/* Share with Link */}
-              <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-2xl p-8 mb-8 border border-gray-200 dark:border-gray-700">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="bg-gradient-to-br from-indigo-500 to-cyan-500 text-white p-4 rounded-2xl shadow-lg">
-                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 mb-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="bg-[#e8f0fe] dark:bg-[#1a73e8]/20 text-[#1a73e8] p-2.5 rounded-lg">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold dark:text-white">Share with Link</h3>
-                    <p className="text-gray-600 dark:text-gray-400">Share this link with anyone to collect responses</p>
+                    <h3 className="text-base font-semibold text-gray-900 dark:text-white">Share with Link</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Share this link with anyone to collect responses</p>
                   </div>
                 </div>
 
-                <div className="flex gap-3 mb-6">
-                  <div className="flex items-center gap-3 flex-1 border-2 border-gray-300 dark:border-gray-600 rounded-xl px-4 py-3.5 bg-gray-50 dark:bg-gray-700/50">
-                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex gap-2 mb-4">
+                  <div className="flex items-center gap-2 flex-1 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2.5 bg-gray-50 dark:bg-gray-700/50">
+                    <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                     </svg>
                     <input
                       type="text"
                       value={id ? `${window.location.origin}/forms/${id}` : 'Save form to get link'}
                       readOnly
-                      className="flex-1 border-none focus:outline-none bg-transparent dark:text-white"
+                      className="flex-1 border-none focus:outline-none bg-transparent text-sm dark:text-white"
                     />
                   </div>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex gap-2">
                   <button
                     onClick={handleCopyLink}
-                    className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg shadow-green-500/30 transform hover:scale-105 transition-all"
+                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors"
                   >
                     {copied ? 'Copied!' : 'Copy Link'}
                   </button>
                   <button
                     onClick={handleOpenInNewTab}
-                    className="bg-gradient-to-r from-indigo-600 to-cyan-500 hover:from-indigo-700 hover:to-cyan-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg shadow-indigo-500/30 transform hover:scale-105 transition-all"
+                    className="bg-[#1a73e8] hover:bg-[#1557b0] text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors"
                   >
                     Open in New Tab
                   </button>
@@ -1936,36 +2105,65 @@ const FormBuilderPage = () => {
               </div>
 
               {/* Invite by Email */}
-              <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-2xl p-8 mb-8 border border-gray-200 dark:border-gray-700">
-                <h3 className="text-xl font-bold mb-4 dark:text-white">Invite by Email</h3>
-                <div className="flex items-center gap-3">
-                  <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 mb-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="bg-[#fce4ec] dark:bg-pink-900/30 text-pink-600 dark:text-pink-400 p-2.5 rounded-lg">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-base font-semibold text-gray-900 dark:text-white">Invite by Email</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Send direct invitations to collect responses</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
                   <input
                     type="email"
-                    placeholder="Enter email addresses to send invitation with permissions."
-                    className="flex-1 border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 dark:text-white transition-all"
+                    placeholder="Enter email addresses..."
+                    className="flex-1 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-[#1a73e8] focus:ring-2 focus:ring-[#1a73e8]/20 dark:text-white transition-all"
                   />
+                  <button className="bg-[#1a73e8] hover:bg-[#1557b0] text-white px-4 py-2.5 rounded-lg font-medium text-sm transition-colors">
+                    Send
+                  </button>
                 </div>
               </div>
 
               {/* Share Form Social */}
-              <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-gray-200 dark:border-gray-700">
-                <h3 className="text-xl font-bold mb-2 dark:text-white">Share Form</h3>
-                <p className="text-gray-600 dark:text-gray-400 mb-6">Share your form link in various social posts and through email.</p>
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="bg-[#e3f2fd] dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 p-2.5 rounded-lg">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-base font-semibold text-gray-900 dark:text-white">Share on Social</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">Share your form on social media platforms</p>
+                  </div>
+                </div>
 
-                <div className="flex items-center gap-4">
-                  {[
-                    { color: 'bg-green-500 hover:bg-green-600', icon: '💬' },
-                    { color: 'bg-blue-600 hover:bg-blue-700', icon: 'f' },
-                    { color: 'bg-blue-700 hover:bg-blue-800', icon: 'in' },
-                    { color: 'bg-gray-800 hover:bg-gray-900', icon: '𝕏' },
-                  ].map((social, index) => (
-                    <button key={index} className={`w-12 h-12 ${social.color} text-white rounded-xl flex items-center justify-center shadow-lg transform hover:scale-110 transition-all`}>
-                      {social.icon}
-                    </button>
-                  ))}
+                <div className="flex items-center gap-3">
+                  <button className="w-10 h-10 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-lg flex items-center justify-center transition-colors">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                  </button>
+                  <button className="w-10 h-10 bg-[#1877F2] hover:bg-[#166fe5] text-white rounded-lg flex items-center justify-center transition-colors">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                  </button>
+                  <button className="w-10 h-10 bg-[#0A66C2] hover:bg-[#095196] text-white rounded-lg flex items-center justify-center transition-colors">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                  </button>
+                  <button className="w-10 h-10 bg-black hover:bg-gray-800 text-white rounded-lg flex items-center justify-center transition-colors">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                  </button>
                 </div>
               </div>
             </div>

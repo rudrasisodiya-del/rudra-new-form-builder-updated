@@ -8,8 +8,6 @@ import {
   CircularProgress,
   Select,
   MenuItem,
-  FormControl,
-  InputLabel,
   Grid,
   Paper,
   alpha,
@@ -434,51 +432,104 @@ const Analytics = () => {
       <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: '1600px', mx: 'auto' }}>
         {/* Actions Bar */}
         {forms.length > 1 && (
-          <Stack direction="row" justifyContent="flex-end" spacing={2} alignItems="center" sx={{ mb: 3 }}>
+          <Stack direction="row" justifyContent="flex-end" spacing={1.5} alignItems="center" sx={{ mb: 3 }}>
             <Tooltip title="Refresh Data">
               <IconButton
                 onClick={fetchAnalytics}
+                size="small"
                 sx={{
-                  background: isDark ? alpha('#fff', 0.05) : alpha('#000', 0.03),
+                  width: 36,
+                  height: 36,
+                  background: isDark ? alpha('#fff', 0.05) : '#ffffff',
+                  border: '1px solid',
+                  borderColor: isDark ? alpha('#fff', 0.1) : '#e2e8f0',
                   '&:hover': {
                     background: '#1a73e8',
+                    borderColor: '#1a73e8',
                     color: 'white',
                   },
                 }}
               >
-                <RefreshIcon />
+                <RefreshIcon sx={{ fontSize: 18 }} />
               </IconButton>
             </Tooltip>
-            <FormControl size="small" sx={{ minWidth: 250 }}>
-              <InputLabel>Select Form</InputLabel>
-              <Select
-                value={selectedForm.id}
-                label="Select Form"
-                onChange={(e) => {
-                  const form = forms.find((f) => f.id === e.target.value);
-                  setSelectedForm(form);
-                  setLoading(true);
-                }}
-                sx={{
-                  borderRadius: 2,
-                  '& .MuiOutlinedInput-notchedOutline': {
+            <Select
+              value={selectedForm.id}
+              onChange={(e) => {
+                const form = forms.find((f) => f.id === e.target.value);
+                setSelectedForm(form);
+                setLoading(true);
+              }}
+              size="small"
+              displayEmpty
+              renderValue={(value) => {
+                const form = forms.find((f) => f.id === value);
+                return (
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <DescriptionIcon sx={{ fontSize: 16, color: '#1a73e8' }} />
+                    <Typography sx={{ fontWeight: 600, fontSize: '0.875rem' }}>
+                      {form?.title || 'Select Form'}
+                    </Typography>
+                  </Stack>
+                );
+              }}
+              sx={{
+                minWidth: 180,
+                height: 36,
+                bgcolor: isDark ? alpha('#fff', 0.05) : '#ffffff',
+                borderRadius: 2,
+                '& .MuiSelect-select': {
+                  py: 0.75,
+                  px: 1.5,
+                },
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: isDark ? alpha('#fff', 0.1) : '#e2e8f0',
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#1a73e8',
+                },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: '#1a73e8',
+                  borderWidth: 1,
+                },
+              }}
+              MenuProps={{
+                PaperProps: {
+                  sx: {
+                    mt: 0.5,
+                    borderRadius: 2,
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+                    border: '1px solid',
                     borderColor: isDark ? alpha('#fff', 0.1) : '#e2e8f0',
                   },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#1a73e8',
-                  },
-                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#1a73e8',
-                  },
-                }}
-              >
-                {forms.map((form) => (
-                  <MenuItem key={form.id} value={form.id}>
-                    {form.title}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+                },
+              }}
+            >
+              {forms.map((form) => (
+                <MenuItem
+                  key={form.id}
+                  value={form.id}
+                  sx={{
+                    py: 1,
+                    px: 2,
+                    '&:hover': {
+                      bgcolor: alpha('#1a73e8', 0.08),
+                    },
+                    '&.Mui-selected': {
+                      bgcolor: alpha('#1a73e8', 0.12),
+                      '&:hover': {
+                        bgcolor: alpha('#1a73e8', 0.16),
+                      },
+                    },
+                  }}
+                >
+                  <Stack direction="row" alignItems="center" spacing={1.5}>
+                    <DescriptionIcon sx={{ fontSize: 16, color: '#64748b' }} />
+                    <Typography sx={{ fontSize: '0.875rem' }}>{form.title}</Typography>
+                  </Stack>
+                </MenuItem>
+              ))}
+            </Select>
           </Stack>
         )}
 
