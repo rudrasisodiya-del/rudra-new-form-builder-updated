@@ -46,12 +46,13 @@ import {
 import UserLayout from '../../components/layout/UserLayout';
 import api from '../../services/api';
 
-// Modern Stat Card Component - Clean Professional Style
+// Modern Stat Card Component - Professional with Subtle Colors
 const AnimatedStatCard = ({
   title,
   value,
   icon,
   accentColor,
+  lightBg,
   percentage,
   trend = 'up',
   delay = 0
@@ -64,16 +65,15 @@ const AnimatedStatCard = ({
       sx={{
         position: 'relative',
         overflow: 'hidden',
-        background: isDark ? alpha('#1e293b', 0.8) : '#ffffff',
-        border: '1px solid',
-        borderColor: isDark ? alpha('#fff', 0.1) : '#e2e8f0',
+        background: isDark ? alpha('#1e293b', 0.8) : lightBg || '#ffffff',
         borderRadius: 3,
-        boxShadow: isDark ? 'none' : '0 1px 3px rgba(0,0,0,0.04)',
+        boxShadow: 'none',
+        border: 'none',
+        borderLeft: `4px solid ${accentColor}`,
         transition: 'all 0.3s ease',
         '&:hover': {
           transform: 'translateY(-2px)',
-          boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.3)' : '0 4px 12px rgba(0,0,0,0.08)',
-          borderColor: accentColor,
+          boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.3)' : '0 4px 16px rgba(0,0,0,0.08)',
         },
       }}
     >
@@ -82,7 +82,7 @@ const AnimatedStatCard = ({
           <Box sx={{ flex: 1 }}>
             <Typography
               sx={{
-                color: isDark ? alpha('#fff', 0.6) : '#64748b',
+                color: isDark ? alpha('#fff', 0.6) : '#475569',
                 fontWeight: 600,
                 letterSpacing: '0.5px',
                 textTransform: 'uppercase',
@@ -126,10 +126,10 @@ const AnimatedStatCard = ({
           </Box>
           <Box
             sx={{
-              width: 52,
-              height: 52,
-              borderRadius: 2.5,
-              bgcolor: alpha(accentColor, 0.1),
+              width: 48,
+              height: 48,
+              borderRadius: '50%',
+              bgcolor: isDark ? alpha(accentColor, 0.2) : alpha(accentColor, 0.15),
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -137,7 +137,7 @@ const AnimatedStatCard = ({
           >
             {React.cloneElement(icon, {
               sx: {
-                fontSize: 26,
+                fontSize: 24,
                 color: accentColor,
               }
             })}
@@ -384,6 +384,7 @@ const Dashboard = () => {
               value={stats.forms}
               icon={<DescriptionIcon />}
               accentColor="#f59e0b"
+              lightBg="#fffbeb"
               percentage={12.5}
               trend="up"
             />
@@ -394,6 +395,7 @@ const Dashboard = () => {
               value={stats.submissions}
               icon={<CheckCircleIcon />}
               accentColor="#1a73e8"
+              lightBg="#eff6ff"
               percentage={8.2}
               trend="up"
             />
@@ -404,6 +406,7 @@ const Dashboard = () => {
               value={stats.views}
               icon={<VisibilityIcon />}
               accentColor="#06b6d4"
+              lightBg="#ecfeff"
               percentage={15.3}
               trend="up"
             />
@@ -414,6 +417,7 @@ const Dashboard = () => {
               value={stats.forms > 0 ? `${Math.round((stats.submissions / (stats.views || 1)) * 100)}%` : '0%'}
               icon={<AutoGraphIcon />}
               accentColor="#10b981"
+              lightBg="#ecfdf5"
               percentage={3.1}
               trend="up"
             />

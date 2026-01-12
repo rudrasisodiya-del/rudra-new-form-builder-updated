@@ -15,7 +15,6 @@ import {
   InputAdornment,
   Menu,
   MenuItem,
-  Tooltip,
   Fade,
   useTheme,
   alpha,
@@ -26,7 +25,6 @@ import {
   Delete as DeleteIcon,
   Description as DescriptionIcon,
   Visibility as ViewIcon,
-  InsertDriveFile as FileIcon,
   Search as SearchIcon,
   FilterList as FilterIcon,
   Share as ShareIcon,
@@ -161,19 +159,7 @@ const MyForms = () => {
     });
   }, [forms, searchQuery, filterStatus, currentFolder]);
 
-  // Pabbly-style light pastel colors for cards
-  const pastelColors = [
-    { bg: '#dcfce7', accent: '#10b981' }, // Light mint green
-    { bg: '#dbeafe', accent: '#1a73e8' }, // Light blue
-    { bg: '#fef3c7', accent: '#f59e0b' }, // Light amber
-    { bg: '#ede9fe', accent: '#8b5cf6' }, // Light purple
-    { bg: '#cffafe', accent: '#06b6d4' }, // Light cyan
-    { bg: '#fce7f3', accent: '#ec4899' }, // Light pink
-    { bg: '#fee2e2', accent: '#ef4444' }, // Light red
-    { bg: '#ccfbf1', accent: '#14b8a6' }, // Light teal
-  ];
-
-  const getPastelColor = (index: number) => pastelColors[index % pastelColors.length];
+  const isDark = theme.palette.mode === 'dark';
 
   return (
     <UserLayout>
@@ -455,66 +441,60 @@ const MyForms = () => {
                       display: 'flex',
                       flexDirection: 'column',
                       borderRadius: 3,
-                      boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-                      border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
-                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      background: isDark ? alpha('#1e293b', 0.8) : '#ffffff',
+                      border: '1px solid',
+                      borderColor: isDark ? alpha('#fff', 0.1) : '#e2e8f0',
+                      boxShadow: isDark ? 'none' : '0 1px 3px rgba(0,0,0,0.04)',
+                      transition: 'all 0.3s ease',
                       '&:hover': {
-                        transform: 'translateY(-8px)',
-                        boxShadow: '0 12px 24px rgba(0,0,0,0.15)',
-                        '& .card-header-icon': {
-                          transform: 'scale(1.1) rotate(5deg)',
-                        },
-                        '& .action-button': {
-                          opacity: 1,
-                        },
+                        transform: 'translateY(-4px)',
+                        boxShadow: isDark ? '0 8px 24px rgba(0,0,0,0.3)' : '0 8px 24px rgba(0,0,0,0.1)',
+                        borderColor: '#1a73e8',
                       },
                     }}
                   >
-                    {/* Card Header with Light Pastel Background */}
-                    <Box
-                      sx={{
-                        height: 140,
-                        background: getPastelColor(index).bg,
-                        position: 'relative',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        overflow: 'hidden',
-                      }}
-                    >
-                      <FileIcon
-                        className="card-header-icon"
-                        sx={{
-                          fontSize: 56,
-                          color: getPastelColor(index).accent,
-                          opacity: 0.9,
-                          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.05))',
-                          transition: 'all 0.3s ease',
-                          zIndex: 1,
-                        }}
-                      />
-                      <Box sx={{ position: 'absolute', top: 16, right: 16, zIndex: 2 }}>
+                    <CardContent sx={{ p: 3, flex: 1, display: 'flex', flexDirection: 'column' }}>
+                      {/* Header with Icon and Status */}
+                      <Stack direction="row" justifyContent="space-between" alignItems="flex-start" sx={{ mb: 2 }}>
+                        <Box
+                          sx={{
+                            width: 48,
+                            height: 48,
+                            borderRadius: 2,
+                            bgcolor: form.status === 'PUBLISHED' ? alpha('#10b981', 0.1) : alpha('#f59e0b', 0.1),
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <DescriptionIcon
+                            sx={{
+                              fontSize: 24,
+                              color: form.status === 'PUBLISHED' ? '#10b981' : '#f59e0b',
+                            }}
+                          />
+                        </Box>
                         <Chip
                           label={form.status === 'PUBLISHED' ? 'Published' : 'Draft'}
                           size="small"
                           sx={{
-                            bgcolor: form.status === 'PUBLISHED' ? '#10b981' : '#f59e0b',
-                            color: 'white',
-                            fontWeight: 700,
-                            fontSize: '0.75rem',
-                            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                            bgcolor: form.status === 'PUBLISHED' ? alpha('#10b981', 0.1) : alpha('#f59e0b', 0.1),
+                            color: form.status === 'PUBLISHED' ? '#10b981' : '#f59e0b',
+                            fontWeight: 600,
+                            fontSize: '0.7rem',
+                            height: 24,
                           }}
                         />
-                      </Box>
-                    </Box>
+                      </Stack>
 
-                    <CardContent sx={{ p: 3, flex: 1, display: 'flex', flexDirection: 'column' }}>
+                      {/* Title and Description */}
                       <Typography
                         variant="h6"
                         fontWeight={700}
                         sx={{
-                          mb: 1.5,
-                          fontSize: '1.125rem',
+                          mb: 0.5,
+                          fontSize: '1rem',
+                          color: isDark ? '#fff' : '#1e293b',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
                           display: '-webkit-box',
@@ -526,156 +506,149 @@ const MyForms = () => {
                       </Typography>
                       <Typography
                         variant="body2"
-                        color="text.secondary"
                         sx={{
                           mb: 3,
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
                           display: '-webkit-box',
-                          WebkitLineClamp: 2,
+                          WebkitLineClamp: 1,
                           WebkitBoxOrient: 'vertical',
-                          minHeight: 40,
-                          lineHeight: 1.6,
+                          color: isDark ? alpha('#fff', 0.6) : '#64748b',
+                          fontSize: '0.875rem',
                         }}
                       >
                         {form.description || 'No description provided'}
                       </Typography>
 
-                      {/* Stats */}
+                      {/* Stats Row */}
                       <Stack
                         direction="row"
-                        spacing={3}
+                        spacing={4}
                         sx={{
                           mb: 3,
                           pb: 3,
-                          borderBottom: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+                          borderBottom: '1px solid',
+                          borderColor: isDark ? alpha('#fff', 0.1) : '#e2e8f0',
                         }}
                       >
-                        <Tooltip title="Submissions" arrow>
-                          <Stack direction="row" spacing={1} alignItems="center">
-                            <Box
+                        <Stack direction="row" spacing={1.5} alignItems="center">
+                          <AssignmentIcon sx={{ fontSize: 18, color: isDark ? alpha('#fff', 0.5) : '#94a3b8' }} />
+                          <Box>
+                            <Typography
+                              variant="caption"
                               sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: 32,
-                                height: 32,
-                                borderRadius: 1.5,
-                                bgcolor: alpha('#1a73e8', 0.1),
+                                color: isDark ? alpha('#fff', 0.5) : '#94a3b8',
+                                fontSize: '0.7rem',
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.5px',
                               }}
                             >
-                              <AssignmentIcon sx={{ fontSize: 16, color: '#1a73e8' }} />
-                            </Box>
-                            <Box>
-                              <Typography variant="caption" color="text.secondary" display="block" sx={{ lineHeight: 1 }}>
-                                Submissions
-                              </Typography>
-                              <Typography variant="body2" fontWeight={700} sx={{ lineHeight: 1.2, mt: 0.5 }}>
-                                {form.submissionCount || 0}
-                              </Typography>
-                            </Box>
-                          </Stack>
-                        </Tooltip>
-                        <Tooltip title="Views" arrow>
-                          <Stack direction="row" spacing={1} alignItems="center">
-                            <Box
+                              Submissions
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              fontWeight={700}
+                              sx={{ color: isDark ? '#fff' : '#1e293b' }}
+                            >
+                              {form.submissionCount || 0}
+                            </Typography>
+                          </Box>
+                        </Stack>
+                        <Stack direction="row" spacing={1.5} alignItems="center">
+                          <ViewIcon sx={{ fontSize: 18, color: isDark ? alpha('#fff', 0.5) : '#94a3b8' }} />
+                          <Box>
+                            <Typography
+                              variant="caption"
                               sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: 32,
-                                height: 32,
-                                borderRadius: 1.5,
-                                bgcolor: alpha('#1a73e8', 0.1),
+                                color: isDark ? alpha('#fff', 0.5) : '#94a3b8',
+                                fontSize: '0.7rem',
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.5px',
                               }}
                             >
-                              <ViewIcon sx={{ fontSize: 16, color: '#1a73e8' }} />
-                            </Box>
-                            <Box>
-                              <Typography variant="caption" color="text.secondary" display="block" sx={{ lineHeight: 1 }}>
-                                Views
-                              </Typography>
-                              <Typography variant="body2" fontWeight={700} sx={{ lineHeight: 1.2, mt: 0.5 }}>
-                                {form.views || 0}
-                              </Typography>
-                            </Box>
-                          </Stack>
-                        </Tooltip>
+                              Views
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              fontWeight={700}
+                              sx={{ color: isDark ? '#fff' : '#1e293b' }}
+                            >
+                              {form.views || 0}
+                            </Typography>
+                          </Box>
+                        </Stack>
                       </Stack>
 
                       {/* Actions */}
                       <Stack direction="row" spacing={1} sx={{ mt: 'auto' }}>
-                        <Tooltip title="Edit Form" arrow>
-                          <Button
-                            variant="contained"
-                            startIcon={<EditIcon fontSize="small" />}
-                            component={Link}
-                            to={`/dashboard/forms/builder/${form.id}`}
-                            fullWidth
-                            sx={{
-                              background: '#1a73e8',
-                              textTransform: 'none',
-                              fontWeight: 600,
-                              fontSize: '0.875rem',
-                              py: 1,
-                              borderRadius: 2,
+                        <Button
+                          variant="contained"
+                          startIcon={<EditIcon sx={{ fontSize: 18 }} />}
+                          component={Link}
+                          to={`/dashboard/forms/builder/${form.id}`}
+                          sx={{
+                            flex: 1,
+                            bgcolor: '#1a73e8',
+                            textTransform: 'none',
+                            fontWeight: 600,
+                            fontSize: '0.875rem',
+                            py: 1,
+                            borderRadius: 2,
+                            boxShadow: 'none',
+                            '&:hover': {
+                              bgcolor: '#1557b0',
                               boxShadow: 'none',
-                              '&:hover': {
-                                background: '#1557b0',
-                              },
-                            }}
-                          >
-                            Edit
-                          </Button>
-                        </Tooltip>
-                        <Tooltip title="Move to Folder" arrow>
-                          <IconButton
-                            onClick={(e) => handleFolderMenuClick(e, form)}
-                            sx={{
-                              border: `1px solid ${theme.palette.divider}`,
-                              color: '#f59e0b',
-                              borderRadius: 2,
-                              '&:hover': {
-                                bgcolor: alpha('#f59e0b', 0.08),
-                                borderColor: '#f59e0b',
-                              },
-                            }}
-                          >
-                            <FolderIcon fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip title="View Responses" arrow>
-                          <IconButton
-                            component={Link}
-                            to={`/dashboard/submissions/${form.id}`}
-                            sx={{
-                              border: `1px solid ${theme.palette.divider}`,
-                              color: '#1a73e8',
-                              borderRadius: 2,
-                              '&:hover': {
-                                bgcolor: alpha('#1a73e8', 0.08),
-                                borderColor: '#1a73e8',
-                              },
-                            }}
-                          >
-                            <ChartIcon fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip title="More Actions" arrow>
-                          <IconButton
-                            onClick={(e) => handleMenuClick(e, form)}
-                            sx={{
-                              border: `2px solid ${alpha(theme.palette.divider, 0.2)}`,
-                              borderRadius: 2,
-                              '&:hover': {
-                                bgcolor: alpha(theme.palette.primary.main, 0.05),
-                                borderColor: theme.palette.primary.main,
-                              },
-                            }}
-                          >
-                            <MoreIcon fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
+                            },
+                          }}
+                        >
+                          Edit
+                        </Button>
+                        <IconButton
+                          onClick={(e) => handleFolderMenuClick(e, form)}
+                          sx={{
+                            border: '1px solid',
+                            borderColor: isDark ? alpha('#fff', 0.2) : '#e2e8f0',
+                            color: '#f59e0b',
+                            borderRadius: 2,
+                            '&:hover': {
+                              bgcolor: alpha('#f59e0b', 0.1),
+                              borderColor: '#f59e0b',
+                            },
+                          }}
+                        >
+                          <FolderIcon sx={{ fontSize: 20 }} />
+                        </IconButton>
+                        <IconButton
+                          component={Link}
+                          to={`/dashboard/submissions/${form.id}`}
+                          sx={{
+                            border: '1px solid',
+                            borderColor: isDark ? alpha('#fff', 0.2) : '#e2e8f0',
+                            color: '#1a73e8',
+                            borderRadius: 2,
+                            '&:hover': {
+                              bgcolor: alpha('#1a73e8', 0.1),
+                              borderColor: '#1a73e8',
+                            },
+                          }}
+                        >
+                          <ChartIcon sx={{ fontSize: 20 }} />
+                        </IconButton>
+                        <IconButton
+                          onClick={(e) => handleMenuClick(e, form)}
+                          sx={{
+                            border: '1px solid',
+                            borderColor: isDark ? alpha('#fff', 0.2) : '#e2e8f0',
+                            color: isDark ? alpha('#fff', 0.7) : '#64748b',
+                            borderRadius: 2,
+                            '&:hover': {
+                              bgcolor: isDark ? alpha('#fff', 0.1) : alpha('#000', 0.04),
+                              borderColor: isDark ? alpha('#fff', 0.3) : '#cbd5e1',
+                            },
+                          }}
+                        >
+                          <MoreIcon sx={{ fontSize: 20 }} />
+                        </IconButton>
                       </Stack>
                     </CardContent>
                   </Card>
