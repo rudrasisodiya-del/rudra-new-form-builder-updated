@@ -79,6 +79,8 @@ const Settings = () => {
   const [formSubmissions, setFormSubmissions] = useState(true);
   const [weeklyReports, setWeeklyReports] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [sendingTestEmail, setSendingTestEmail] = useState(false);
+  const [testEmailResult, setTestEmailResult] = useState<{ success: boolean; message: string; previewUrl?: string } | null>(null);
 
   const theme = useTheme();
 
@@ -95,12 +97,30 @@ const Settings = () => {
       setEmail(userData.email || '');
       setCompany(userData.company || '');
 
-      // Load notification preferences if they exist
-      if (userData.preferences) {
-        setEmailNotifications(userData.preferences.emailNotifications ?? true);
-        setFormSubmissions(userData.preferences.formSubmissions ?? true);
-        setWeeklyReports(userData.preferences.weeklyReports ?? false);
-        setDarkMode(userData.preferences.darkMode ?? false);
+      // Load notification preferences from the new API endpoint
+      try {
+        const prefsResponse = await api.get('/auth/notifications');
+        if (prefsResponse.data.preferences) {
+          setEmailNotifications(prefsResponse.data.preferences.notifyEmail ?? true);
+          setFormSubmissions(prefsResponse.data.preferences.notifySubmissions ?? true);
+          setWeeklyReports(prefsResponse.data.preferences.notifyWeeklyReports ?? false);
+        }
+      } catch (prefsError) {
+        console.error('Error fetching notification preferences:', prefsError);
+        // Fall back to userData preferences if the endpoint doesn't exist yet
+        if (userData.preferences) {
+          setEmailNotifications(userData.preferences.emailNotifications ?? true);
+          setFormSubmissions(userData.preferences.formSubmissions ?? true);
+          setWeeklyReports(userData.preferences.weeklyReports ?? false);
+        }
+      }
+
+      // Load dark mode from localStorage or userData
+      const savedDarkMode = localStorage.getItem('darkMode');
+      if (savedDarkMode !== null) {
+        setDarkMode(savedDarkMode === 'true');
+      } else if (userData.preferences?.darkMode !== undefined) {
+        setDarkMode(userData.preferences.darkMode);
       }
     } catch (error) {
       console.error('Error fetching user:', error);
@@ -118,11 +138,15 @@ const Settings = () => {
     e.preventDefault();
     setSaving(true);
     try {
-      await api.put('/auth/profile', { name, company });
+      const response = await api.put('/auth/profile', { name, email, company });
+      // Update local state with new email
+      if (response.data.user) {
+        setEmail(response.data.user.email);
+      }
       showSuccess('Profile updated successfully!');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating profile:', error);
-      alert('Failed to update profile');
+      alert(error.response?.data?.error || 'Failed to update profile');
     } finally {
       setSaving(false);
     }
@@ -152,18 +176,43 @@ const Settings = () => {
   const handlePreferencesSave = async () => {
     setSaving(true);
     try {
-      await api.put('/auth/preferences', {
-        emailNotifications,
-        formSubmissions,
-        weeklyReports,
-        darkMode,
+      // Save notification preferences to the new API endpoint
+      await api.put('/auth/notifications', {
+        notifyEmail: emailNotifications,
+        notifySubmissions: formSubmissions,
+        notifyWeeklyReports: weeklyReports,
       });
+
+      // Save dark mode to localStorage
+      localStorage.setItem('darkMode', String(darkMode));
+
       showSuccess('Preferences saved successfully!');
     } catch (error) {
       console.error('Error saving preferences:', error);
       alert('Failed to save preferences');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleSendTestEmail = async () => {
+    setSendingTestEmail(true);
+    setTestEmailResult(null);
+    try {
+      const response = await api.post('/auth/send-test-email');
+      setTestEmailResult({
+        success: true,
+        message: `Test email sent to ${response.data.email}!`,
+        previewUrl: response.data.previewUrl,
+      });
+    } catch (error: any) {
+      console.error('Error sending test email:', error);
+      setTestEmailResult({
+        success: false,
+        message: error.response?.data?.details || 'Failed to send test email',
+      });
+    } finally {
+      setSendingTestEmail(false);
     }
   };
 
@@ -317,22 +366,25 @@ const Settings = () => {
                         label="Email Address"
                         type="email"
                         value={email}
-                        disabled
+                        onChange={(e) => setEmail(e.target.value)}
                         InputProps={{
                           startAdornment: (
                             <EmailIcon sx={{ color: 'text.secondary', mr: 1 }} />
                           ),
                         }}
                         sx={{
-                          '& .MuiInputBase-input.Mui-disabled': {
-                            bgcolor: alpha(theme.palette.divider, 0.05),
-                            cursor: 'not-allowed',
-                          },
                           '& .MuiOutlinedInput-root': {
                             borderRadius: 2,
+                            transition: 'all 0.3s',
+                            '&:hover': {
+                              boxShadow: `0 0 0 2px ${alpha('#1a73e8', 0.1)}`,
+                            },
+                            '&.Mui-focused': {
+                              boxShadow: `0 0 0 2px ${alpha('#1a73e8', 0.2)}`,
+                            },
                           },
                         }}
-                        helperText="Email cannot be changed"
+                        helperText="You can change your email address here"
                       />
                       <TextField
                         fullWidth
@@ -513,6 +565,33 @@ const Settings = () => {
                   <Typography variant="h6" fontWeight={700} sx={{ mb: 3 }}>
                     Notification Settings
                   </Typography>
+
+                  {/* Test Email Result */}
+                  {testEmailResult && (
+                    <Alert
+                      severity={testEmailResult.success ? 'success' : 'error'}
+                      sx={{ mb: 2, borderRadius: 2 }}
+                      action={
+                        testEmailResult.previewUrl && (
+                          <Button
+                            color="inherit"
+                            size="small"
+                            onClick={() => window.open(testEmailResult.previewUrl, '_blank')}
+                          >
+                            View Email
+                          </Button>
+                        )
+                      }
+                    >
+                      {testEmailResult.message}
+                      {testEmailResult.previewUrl && (
+                        <Typography variant="caption" display="block" sx={{ mt: 0.5 }}>
+                          Click "View Email" to see the test email in your browser
+                        </Typography>
+                      )}
+                    </Alert>
+                  )}
+
                   <Stack spacing={2}>
                     <Box
                       sx={{
@@ -536,18 +615,37 @@ const Settings = () => {
                           Receive email updates about your account
                         </Typography>
                       </Box>
-                      <Switch
-                        checked={emailNotifications}
-                        onChange={(e) => setEmailNotifications(e.target.checked)}
-                        sx={{
-                          '& .MuiSwitch-switchBase.Mui-checked': {
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={handleSendTestEmail}
+                          disabled={sendingTestEmail}
+                          sx={{
+                            textTransform: 'none',
+                            borderColor: '#1a73e8',
                             color: '#1a73e8',
-                          },
-                          '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                            backgroundColor: '#1a73e8',
-                          },
-                        }}
-                      />
+                            '&:hover': {
+                              borderColor: '#1557b0',
+                              bgcolor: alpha('#1a73e8', 0.05),
+                            },
+                          }}
+                        >
+                          {sendingTestEmail ? 'Sending...' : 'Send Test Email'}
+                        </Button>
+                        <Switch
+                          checked={emailNotifications}
+                          onChange={(e) => setEmailNotifications(e.target.checked)}
+                          sx={{
+                            '& .MuiSwitch-switchBase.Mui-checked': {
+                              color: '#1a73e8',
+                            },
+                            '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                              backgroundColor: '#1a73e8',
+                            },
+                          }}
+                        />
+                      </Stack>
                     </Box>
                     <Box
                       sx={{

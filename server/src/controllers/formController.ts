@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { AuthRequest } from '../middleware/auth';
+import { parseFormFromUrl, parseHtmlForm } from '../utils/formParser';
 
 const prisma = new PrismaClient();
 
@@ -211,5 +212,68 @@ export const incrementViews = async (req: Request, res: Response) => {
     res.json({ success: true });
   } catch (error: any) {
     res.status(500).json({ error: 'Failed to increment views', details: error.message });
+  }
+};
+
+// Parse form from URL (Google Forms, etc.)
+export const parseFormUrl = async (req: Request, res: Response) => {
+  try {
+    const { url } = req.body;
+
+    if (!url) {
+      return res.status(400).json({ error: 'URL is required' });
+    }
+
+    // Validate URL
+    try {
+      new URL(url);
+    } catch {
+      return res.status(400).json({ error: 'Invalid URL format' });
+    }
+
+    console.log(`Parsing form from URL: ${url}`);
+    const parsedForm = await parseFormFromUrl(url);
+
+    res.json({
+      success: true,
+      title: parsedForm.title,
+      description: parsedForm.description,
+      fields: parsedForm.fields,
+      source: new URL(url).hostname,
+    });
+  } catch (error: any) {
+    console.error('Error parsing form URL:', error);
+    res.status(500).json({
+      error: 'Failed to parse form',
+      details: error.message,
+    });
+  }
+};
+
+// Parse form from HTML code
+export const parseFormHtml = async (req: Request, res: Response) => {
+  try {
+    const { html } = req.body;
+
+    if (!html) {
+      return res.status(400).json({ error: 'HTML code is required' });
+    }
+
+    console.log('Parsing form from HTML code');
+    const parsedForm = await parseHtmlForm(html);
+
+    res.json({
+      success: true,
+      title: parsedForm.title,
+      description: parsedForm.description,
+      fields: parsedForm.fields,
+      source: 'HTML',
+    });
+  } catch (error: any) {
+    console.error('Error parsing HTML form:', error);
+    res.status(500).json({
+      error: 'Failed to parse HTML',
+      details: error.message,
+    });
   }
 };

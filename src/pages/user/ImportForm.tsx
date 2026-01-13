@@ -75,38 +75,42 @@ const ImportForm = () => {
     setProgress(0);
     setError('');
 
-    // Simulate import progress
-    const progressInterval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 90) {
-          clearInterval(progressInterval);
-          return 90;
-        }
-        return prev + 15;
-      });
-    }, 400);
-
     try {
-      // In real implementation, you would fetch and parse the form
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      // Step 1: Parse the form from URL
+      setProgress(20);
+      const parseResponse = await api.post('/forms/import/url', { url: formUrl });
 
-      // Mock extracted fields
-      const mockFields = [
-        { id: 'name', type: 'text', label: 'Name', required: true },
-        { id: 'email', type: 'email', label: 'Email', required: true },
-        { id: 'message', type: 'textarea', label: 'Message', required: false },
-      ];
+      if (!parseResponse.data.success) {
+        throw new Error(parseResponse.data.error || 'Failed to parse form');
+      }
 
+      setProgress(60);
+
+      const { title, description, fields, source } = parseResponse.data;
+
+      console.log('Parsed fields:', fields);
+
+      // Check if we got any fields
+      if (!fields || fields.length === 0) {
+        throw new Error('No form fields could be detected. The form may be protected or use unsupported format.');
+      }
+
+      // Step 2: Create the form with parsed fields
       const formData = {
-        title: 'Imported Form',
-        description: `Imported from ${new URL(formUrl).hostname}`,
-        fields: mockFields,
+        title: title || 'Imported Form',
+        description: description || `Imported from ${source}`,
+        fields: fields.map((field: any) => ({
+          ...field,
+          id: field.id || `field-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        })),
         settings: {
           importedFrom: formUrl,
-          importedAt: new Date().toISOString()
+          importedAt: new Date().toISOString(),
+          source: source,
         }
       };
 
+      setProgress(80);
       const response = await api.post('/forms', formData);
       setProgress(100);
 
@@ -115,10 +119,9 @@ const ImportForm = () => {
       }, 500);
     } catch (error: any) {
       console.error('Error importing form:', error);
-      setError(error.response?.data?.message || 'Failed to import form');
+      setError(error.response?.data?.details || error.response?.data?.error || error.message || 'Failed to import form. Make sure the form is publicly accessible.');
       setProgress(0);
     } finally {
-      clearInterval(progressInterval);
       setImporting(false);
     }
   };
@@ -133,35 +136,41 @@ const ImportForm = () => {
     setProgress(0);
     setError('');
 
-    const progressInterval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 90) {
-          clearInterval(progressInterval);
-          return 90;
-        }
-        return prev + 15;
-      });
-    }, 400);
-
     try {
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      // Step 1: Parse the HTML
+      setProgress(20);
+      const parseResponse = await api.post('/forms/import/html', { html: htmlCode });
 
-      // Parse HTML and extract form fields (mock implementation)
-      const mockFields = [
-        { id: 'field-1', type: 'text', label: 'Text Field', required: false },
-        { id: 'field-2', type: 'email', label: 'Email Field', required: false },
-      ];
+      if (!parseResponse.data.success) {
+        throw new Error(parseResponse.data.error || 'Failed to parse HTML');
+      }
 
+      setProgress(60);
+
+      const { title, description, fields } = parseResponse.data;
+
+      console.log('Parsed HTML fields:', fields);
+
+      // Check if we got any fields
+      if (!fields || fields.length === 0) {
+        throw new Error('No form fields could be detected in the HTML code.');
+      }
+
+      // Step 2: Create the form with parsed fields
       const formData = {
-        title: 'Imported HTML Form',
-        description: 'Imported from HTML code',
-        fields: mockFields,
+        title: title || 'Imported HTML Form',
+        description: description || 'Imported from HTML code',
+        fields: fields.map((field: any) => ({
+          ...field,
+          id: field.id || `field-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        })),
         settings: {
           importedFromHtml: true,
           importedAt: new Date().toISOString()
         }
       };
 
+      setProgress(80);
       const response = await api.post('/forms', formData);
       setProgress(100);
 
@@ -170,10 +179,9 @@ const ImportForm = () => {
       }, 500);
     } catch (error: any) {
       console.error('Error importing HTML form:', error);
-      setError(error.response?.data?.message || 'Failed to import HTML form');
+      setError(error.response?.data?.details || error.response?.data?.error || error.message || 'Failed to import HTML form');
       setProgress(0);
     } finally {
-      clearInterval(progressInterval);
       setImporting(false);
     }
   };

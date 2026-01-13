@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Card,
@@ -38,6 +39,7 @@ import UserLayout from '../../components/layout/UserLayout';
 import api from '../../services/api';
 
 const APIKeys = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
@@ -523,6 +525,7 @@ const APIKeys = () => {
                   <Button
                     fullWidth
                     variant="contained"
+                    onClick={() => navigate('/dashboard/api-docs')}
                     sx={{
                       bgcolor: 'white',
                       color: '#1a73e8',

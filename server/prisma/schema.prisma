@@ -22,6 +22,12 @@ model User {
   apiKey        String?  @unique @map("api_key")
   isActive      Boolean  @default(true) @map("is_active")
   emailVerified Boolean  @default(false) @map("email_verified")
+
+  // Notification Preferences
+  notifyEmail           Boolean @default(true) @map("notify_email")
+  notifySubmissions     Boolean @default(true) @map("notify_submissions")
+  notifyWeeklyReports   Boolean @default(false) @map("notify_weekly_reports")
+
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 

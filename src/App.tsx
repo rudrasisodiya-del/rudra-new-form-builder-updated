@@ -38,6 +38,7 @@ const ESignFormBuilder = lazy(() => import('./pages/user/ESignFormBuilder'));
 const ImportForm = lazy(() => import('./pages/user/ImportForm'));
 const TestFeaturesPage = lazy(() => import('./pages/user/TestFeaturesPage'));
 const HelpPage = lazy(() => import('./pages/user/HelpPage'));
+const ApiDocumentation = lazy(() => import('./pages/user/ApiDocumentation'));
 
 // Loading component
 const PageLoader = () => (
@@ -162,6 +163,10 @@ function AppContent() {
             <Route
               path="/dashboard/webhooks"
               element={isAuthenticated ? <Webhooks /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/dashboard/api-docs"
+              element={isAuthenticated ? <ApiDocumentation /> : <Navigate to="/login" />}
             />
           </Routes>
 

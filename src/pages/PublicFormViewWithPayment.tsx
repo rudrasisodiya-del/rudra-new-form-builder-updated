@@ -38,10 +38,22 @@ const PublicFormViewWithPayment = () => {
   const [formValues, setFormValues] = useState<Record<string, any>>({});
   const [paymentCompleted, setPaymentCompleted] = useState(false);
   const [paymentData, setPaymentData] = useState<any>(null);
+  const [filePreviews, setFilePreviews] = useState<Record<string, { url: string; type: string; name: string }>>({});
 
   useEffect(() => {
     fetchForm();
   }, [id]);
+
+  // Cleanup file preview URLs on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      Object.values(filePreviews).forEach(preview => {
+        if (preview.url) {
+          URL.revokeObjectURL(preview.url);
+        }
+      });
+    };
+  }, [filePreviews]);
 
   const fetchForm = async () => {
     try {
@@ -57,6 +69,14 @@ const PublicFormViewWithPayment = () => {
           initialValues[field.id] = 0;
         } else if (field.type === 'fullname') {
           initialValues[field.id] = { firstName: '', lastName: '' };
+        } else if (field.type === 'address') {
+          initialValues[field.id] = { street: '', city: '', state: '', zip: '' };
+        } else if (field.type === 'appointment') {
+          initialValues[field.id] = { date: '', time: '' };
+        } else if (field.type === 'termsandconditions') {
+          initialValues[field.id] = false;
+        } else if (field.type === 'pdfembedder') {
+          initialValues[field.id] = null;
         } else {
           initialValues[field.id] = '';
         }
@@ -321,7 +341,498 @@ const PublicFormViewWithPayment = () => {
       );
     }
 
-    return null;
+    // Short text field
+    if (field.type === 'shorttext') {
+      return (
+        <div key={field.id} className="mb-6">
+          <label className="block font-semibold text-gray-700 mb-2">
+            {field.label} {field.required && <span className="text-red-500">*</span>}
+          </label>
+          <input
+            type="text"
+            value={value || ''}
+            onChange={(e) => handleInputChange(field.id, e.target.value)}
+            placeholder={field.placeholder || ''}
+            className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required={field.required}
+          />
+        </div>
+      );
+    }
+
+    // Long text field
+    if (field.type === 'longtext') {
+      return (
+        <div key={field.id} className="mb-6">
+          <label className="block font-semibold text-gray-700 mb-2">
+            {field.label} {field.required && <span className="text-red-500">*</span>}
+          </label>
+          <textarea
+            value={value || ''}
+            onChange={(e) => handleInputChange(field.id, e.target.value)}
+            placeholder={field.placeholder || ''}
+            rows={4}
+            className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required={field.required}
+          />
+        </div>
+      );
+    }
+
+    // Dropdown field
+    if (field.type === 'dropdown' || field.type === 'select') {
+      return (
+        <div key={field.id} className="mb-6">
+          <label className="block font-semibold text-gray-700 mb-2">
+            {field.label} {field.required && <span className="text-red-500">*</span>}
+          </label>
+          <select
+            value={value || ''}
+            onChange={(e) => handleInputChange(field.id, e.target.value)}
+            className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required={field.required}
+          >
+            <option value="">Select...</option>
+            {(field.options || []).map((option: any, idx: number) => (
+              <option key={idx} value={option.value || option}>{option.label || option}</option>
+            ))}
+          </select>
+        </div>
+      );
+    }
+
+    // Phone field
+    if (field.type === 'phone') {
+      return (
+        <div key={field.id} className="mb-6">
+          <label className="block font-semibold text-gray-700 mb-2">
+            {field.label} {field.required && <span className="text-red-500">*</span>}
+          </label>
+          <input
+            type="tel"
+            value={value || ''}
+            onChange={(e) => handleInputChange(field.id, e.target.value)}
+            placeholder={field.placeholder || '(xxx) xxx-xxxx'}
+            className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required={field.required}
+          />
+        </div>
+      );
+    }
+
+    // Number field
+    if (field.type === 'number') {
+      return (
+        <div key={field.id} className="mb-6">
+          <label className="block font-semibold text-gray-700 mb-2">
+            {field.label} {field.required && <span className="text-red-500">*</span>}
+          </label>
+          <input
+            type="number"
+            value={value || ''}
+            onChange={(e) => handleInputChange(field.id, e.target.value)}
+            placeholder={field.placeholder || ''}
+            className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required={field.required}
+          />
+        </div>
+      );
+    }
+
+    // Date field
+    if (field.type === 'date' || field.type === 'datepicker') {
+      return (
+        <div key={field.id} className="mb-6">
+          <label className="block font-semibold text-gray-700 mb-2">
+            {field.label} {field.required && <span className="text-red-500">*</span>}
+          </label>
+          <input
+            type="date"
+            value={value || ''}
+            onChange={(e) => handleInputChange(field.id, e.target.value)}
+            className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required={field.required}
+          />
+        </div>
+      );
+    }
+
+    // Radio field
+    if (field.type === 'radio') {
+      return (
+        <div key={field.id} className="mb-6">
+          <label className="block font-semibold text-gray-700 mb-2">
+            {field.label} {field.required && <span className="text-red-500">*</span>}
+          </label>
+          <div className="space-y-2">
+            {(field.options || []).map((option: any, idx: number) => (
+              <label key={idx} className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  name={field.id}
+                  value={option.value || option}
+                  checked={value === (option.value || option)}
+                  onChange={(e) => handleInputChange(field.id, e.target.value)}
+                  className="w-4 h-4 text-blue-600"
+                  required={field.required}
+                />
+                <span>{option.label || option}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // File upload field with preview
+    if (field.type === 'file') {
+      const preview = filePreviews[field.id];
+      const isImage = preview?.type?.startsWith('image/');
+      const isPdf = preview?.type === 'application/pdf';
+
+      const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+          // Create preview URL
+          const previewUrl = URL.createObjectURL(file);
+          setFilePreviews(prev => ({
+            ...prev,
+            [field.id]: {
+              url: previewUrl,
+              type: file.type,
+              name: file.name
+            }
+          }));
+          handleInputChange(field.id, {
+            fileName: file.name,
+            fileSize: file.size,
+            fileType: file.type
+          });
+        }
+      };
+
+      const removeFile = () => {
+        if (preview?.url) {
+          URL.revokeObjectURL(preview.url);
+        }
+        setFilePreviews(prev => {
+          const updated = { ...prev };
+          delete updated[field.id];
+          return updated;
+        });
+        handleInputChange(field.id, '');
+      };
+
+      return (
+        <div key={field.id} className="mb-6">
+          <label className="block font-semibold text-gray-700 mb-2">
+            {field.label} {field.required && <span className="text-red-500">*</span>}
+          </label>
+
+          {!preview ? (
+            // Upload area
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors cursor-pointer">
+              <input
+                type="file"
+                onChange={handleFileChange}
+                className="hidden"
+                id={`file-upload-${field.id}`}
+                required={field.required}
+              />
+              <label htmlFor={`file-upload-${field.id}`} className="cursor-pointer block">
+                <div className="text-4xl mb-2">📁</div>
+                <p className="text-gray-600 font-medium">Click to upload file</p>
+                <p className="text-sm text-gray-500 mt-1">Supports images, PDFs, and documents</p>
+              </label>
+            </div>
+          ) : (
+            // Preview area
+            <div className="border border-gray-300 rounded-lg overflow-hidden">
+              {/* Image Preview */}
+              {isImage && (
+                <div className="relative bg-gray-100 p-4 flex items-center justify-center" style={{ maxHeight: '300px' }}>
+                  <img
+                    src={preview.url}
+                    alt={preview.name}
+                    className="max-w-full max-h-64 object-contain rounded"
+                  />
+                </div>
+              )}
+
+              {/* PDF Preview */}
+              {isPdf && (
+                <div className="bg-gray-100">
+                  <iframe
+                    src={preview.url}
+                    width="100%"
+                    height="300"
+                    title={preview.name}
+                    className="border-0"
+                  />
+                </div>
+              )}
+
+              {/* Other file types - show icon */}
+              {!isImage && !isPdf && (
+                <div className="bg-gray-100 p-8 flex flex-col items-center justify-center">
+                  <div className="text-5xl mb-3">📄</div>
+                  <p className="text-gray-700 font-medium">{preview.name}</p>
+                  <p className="text-sm text-gray-500 mt-1">File uploaded successfully</p>
+                </div>
+              )}
+
+              {/* File info and actions */}
+              <div className="p-3 bg-white border-t border-gray-200 flex items-center justify-between">
+                <div className="flex items-center gap-2 overflow-hidden">
+                  <span className="text-lg">
+                    {isImage ? '🖼️' : isPdf ? '📄' : '📁'}
+                  </span>
+                  <span className="text-sm text-gray-700 truncate max-w-xs">{preview.name}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  {/* View button for images and PDFs */}
+                  {(isImage || isPdf) && (
+                    <a
+                      href={preview.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                    >
+                      View
+                    </a>
+                  )}
+                  {/* Remove button */}
+                  <button
+                    type="button"
+                    onClick={removeFile}
+                    className="text-red-600 hover:text-red-800 text-sm font-medium"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // Address field
+    if (field.type === 'address') {
+      return (
+        <div key={field.id} className="mb-6">
+          <label className="block font-semibold text-gray-700 mb-2">
+            {field.label} {field.required && <span className="text-red-500">*</span>}
+          </label>
+          <input
+            type="text"
+            placeholder="Street Address"
+            value={value?.street || ''}
+            onChange={(e) => handleInputChange(field.id, { ...value, street: e.target.value })}
+            className="border border-gray-300 rounded-lg px-4 py-2 w-full mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required={field.required}
+          />
+          <div className="grid grid-cols-2 gap-3 mb-3">
+            <input
+              type="text"
+              placeholder="City"
+              value={value?.city || ''}
+              onChange={(e) => handleInputChange(field.id, { ...value, city: e.target.value })}
+              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              type="text"
+              placeholder="State"
+              value={value?.state || ''}
+              onChange={(e) => handleInputChange(field.id, { ...value, state: e.target.value })}
+              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <input
+            type="text"
+            placeholder="ZIP Code"
+            value={value?.zip || ''}
+            onChange={(e) => handleInputChange(field.id, { ...value, zip: e.target.value })}
+            className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+      );
+    }
+
+    // Terms and Conditions field - checkbox with terms text
+    if (field.type === 'termsandconditions') {
+      return (
+        <div key={field.id} className="mb-6">
+          <div className="border border-gray-300 rounded-lg p-4 bg-gray-50 max-h-40 overflow-y-auto mb-3">
+            <p className="text-sm text-gray-700 whitespace-pre-wrap">
+              {field.termsText || 'By submitting this form, you agree to our Terms of Service and Privacy Policy. Your information will be processed in accordance with our data protection guidelines. You may withdraw your consent at any time by contacting us.'}
+            </p>
+          </div>
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={value || false}
+              onChange={(e) => handleInputChange(field.id, e.target.checked)}
+              className="w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+              required={field.required}
+            />
+            <span className="text-gray-700 font-medium">
+              I agree to the Terms and Conditions {field.required && <span className="text-red-500">*</span>}
+            </span>
+          </label>
+        </div>
+      );
+    }
+
+    // Appointment field - date and time picker
+    if (field.type === 'appointment') {
+      return (
+        <div key={field.id} className="mb-6">
+          <label className="block font-semibold text-gray-700 mb-2">
+            {field.label} {field.required && <span className="text-red-500">*</span>}
+          </label>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm text-gray-600 mb-1">Select Date</label>
+              <input
+                type="date"
+                value={value?.date || ''}
+                onChange={(e) => handleInputChange(field.id, { ...value, date: e.target.value })}
+                className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required={field.required}
+                min={new Date().toISOString().split('T')[0]}
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-gray-600 mb-1">Select Time</label>
+              <input
+                type="time"
+                value={value?.time || ''}
+                onChange={(e) => handleInputChange(field.id, { ...value, time: e.target.value })}
+                className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required={field.required}
+              />
+            </div>
+          </div>
+          <p className="text-sm text-gray-500 mt-2">Please select your preferred appointment date and time</p>
+        </div>
+      );
+    }
+
+    // PDF Embedder field - displays embedded PDF from URL configured by form creator
+    if (field.type === 'pdfembedder') {
+      const pdfUrl = field.pdfUrl;
+      const pdfHeight = field.pdfHeight || 500;
+      const showDownload = field.showDownload !== false;
+
+      if (!pdfUrl) {
+        return (
+          <div key={field.id} className="mb-6">
+            <label className="block font-semibold text-gray-700 mb-2">{field.label}</label>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center bg-gray-50">
+              <div className="text-4xl mb-2">📄</div>
+              <p className="text-gray-500">No PDF document configured</p>
+            </div>
+          </div>
+        );
+      }
+
+      return (
+        <div key={field.id} className="mb-6">
+          <label className="block font-semibold text-gray-700 mb-2">{field.label}</label>
+          <div className="border border-gray-300 rounded-lg overflow-hidden">
+            <iframe
+              src={`${pdfUrl}#toolbar=${showDownload ? '1' : '0'}`}
+              width="100%"
+              height={pdfHeight}
+              title={field.label || 'PDF Document'}
+              className="border-0"
+              style={{ backgroundColor: '#f5f5f5' }}
+            />
+          </div>
+          {showDownload && (
+            <div className="mt-2 text-right">
+              <a
+                href={pdfUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                download
+                className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Download PDF
+              </a>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // Signature field
+    if (field.type === 'signature') {
+      return (
+        <div key={field.id} className="mb-6">
+          <label className="block font-semibold text-gray-700 mb-2">
+            {field.label} {field.required && <span className="text-red-500">*</span>}
+          </label>
+          <div className="border-2 border-gray-300 rounded-lg p-4 bg-gray-50">
+            <input
+              type="text"
+              value={value || ''}
+              onChange={(e) => handleInputChange(field.id, e.target.value)}
+              placeholder="Type your full name as signature"
+              className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 font-cursive text-xl"
+              style={{ fontFamily: 'cursive' }}
+              required={field.required}
+            />
+            <p className="text-sm text-gray-500 mt-2">By typing your name above, you agree this constitutes your electronic signature</p>
+          </div>
+        </div>
+      );
+    }
+
+    // Checklist field
+    if (field.type === 'checklist') {
+      return (
+        <div key={field.id} className="mb-6">
+          <label className="block font-semibold text-gray-700 mb-2">
+            {field.label} {field.required && <span className="text-red-500">*</span>}
+          </label>
+          <div className="space-y-2">
+            {(field.options || ['Item 1', 'Item 2', 'Item 3']).map((option: any, idx: number) => (
+              <label key={idx} className="flex items-center gap-3 p-2 rounded hover:bg-gray-50 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={(value || []).includes(option.value || option)}
+                  onChange={(e) => handleCheckboxChange(field.id, option.value || option, e.target.checked)}
+                  className="w-5 h-5 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+                />
+                <span className="text-gray-700">{option.label || option}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // Default fallback - render as text input
+    return (
+      <div key={field.id} className="mb-6">
+        <label className="block font-semibold text-gray-700 mb-2">
+          {field.label} {field.required && <span className="text-red-500">*</span>}
+        </label>
+        <input
+          type="text"
+          value={value || ''}
+          onChange={(e) => handleInputChange(field.id, e.target.value)}
+          placeholder={field.placeholder || ''}
+          className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+          required={field.required}
+        />
+      </div>
+    );
   };
 
   if (loading) {

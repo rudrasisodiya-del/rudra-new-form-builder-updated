@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { dispatchWebhooks } from '../utils/webhookDispatcher';
+import { sendSubmissionNotification } from '../utils/emailService';
 
 const prisma = new PrismaClient();
 
@@ -36,6 +37,28 @@ export const submitForm = async (req: Request, res: Response) => {
     dispatchWebhooks(formId, form.title, submission.id, data).catch(err => {
       console.error('Webhook dispatch error:', err);
     });
+
+    // Send email notification if user has enabled it
+    try {
+      const formOwner = await prisma.user.findUnique({
+        where: { id: form.userId },
+        select: { email: true, notifyEmail: true, notifySubmissions: true }
+      });
+
+      if (formOwner && formOwner.notifyEmail && formOwner.notifySubmissions) {
+        sendSubmissionNotification(formOwner.email, {
+          formTitle: form.title,
+          formId: form.id,
+          submissionId: submission.id,
+          submissionData: data,
+          submittedAt: submission.createdAt.toISOString()
+        }).catch(err => {
+          console.error('Email notification error:', err);
+        });
+      }
+    } catch (emailError) {
+      console.error('Error checking notification preferences:', emailError);
+    }
 
     res.status(201).json({ success: true, message: 'Form submitted successfully', submission });
   } catch (error: any) {

@@ -8,6 +8,7 @@ type FieldType =
   | 'heading' | 'fullname' | 'email' | 'address' | 'phone' | 'datepicker'
   | 'appointment' | 'signature' | 'fillintheblank' | 'shorttext' | 'longtext'
   | 'text' | 'textarea' | 'number' | 'dropdown' | 'checkbox' | 'radio' | 'date' | 'file'
+  | 'rating'
   // Payment Elements
   | 'square' | 'paypal' | 'authorizenet' | 'stripe' | 'stripecheckout'
   | 'braintree' | 'cashapppay' | 'afterpay' | 'clearpay' | 'applepay' | 'mollie' | 'cybersource'
@@ -105,7 +106,7 @@ const FormBuilderPage = () => {
       'textarea': 'longtext',
       'select': 'dropdown',
       'file': 'file',
-      'rating': 'radio', // Map rating to radio for now
+      'rating': 'rating',
     };
     return typeMap[aiType] || 'shorttext';
   };
@@ -262,6 +263,7 @@ const FormBuilderPage = () => {
       radio: { label: 'Radio Button', options: ['Option 1', 'Option 2'] },
       date: { label: 'Date', placeholder: 'Select date' },
       file: { label: 'File Upload', placeholder: 'Choose file' },
+      rating: { label: 'Rating', placeholder: 'Rate from 1 to 5' },
 
       // Payment Elements
       square: { label: 'Square Payment', placeholder: 'Pay with Square' },
@@ -551,9 +553,29 @@ const FormBuilderPage = () => {
         return (
           <div className={baseClasses} onClick={() => setSelectedField(field.id)}>
             <label className="font-semibold block mb-3 dark:text-white">{field.label}</label>
-            <div className="border-2 border-gray-300 dark:border-gray-600 rounded-lg h-64 flex items-center justify-center bg-gray-50 dark:bg-gray-700/50">
-              <span className="text-gray-400">PDF Document</span>
-            </div>
+            {field.pdfUrl ? (
+              <div className="border-2 border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
+                <iframe
+                  src={`${field.pdfUrl}#toolbar=0`}
+                  width="100%"
+                  height={field.pdfHeight || 300}
+                  title={field.label || 'PDF Document'}
+                  className="border-0"
+                  style={{ backgroundColor: '#f5f5f5' }}
+                />
+                {field.showDownload && (
+                  <div className="p-2 bg-gray-100 dark:bg-gray-700 text-right">
+                    <span className="text-xs text-gray-500 dark:text-gray-400">Download enabled</span>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg h-64 flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-700/50">
+                <span className="text-4xl mb-2">📄</span>
+                <span className="text-gray-400 dark:text-gray-500">No PDF URL configured</span>
+                <span className="text-xs text-gray-400 dark:text-gray-500 mt-1">Configure PDF URL in settings</span>
+              </div>
+            )}
           </div>
         );
 
@@ -1445,6 +1467,45 @@ const FormBuilderPage = () => {
                                 placeholder="10"
                                 className="w-full border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:border-indigo-500 dark:text-white text-sm"
                               />
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* PDF Embedder specific settings */}
+                      {field.type === 'pdfembedder' && (
+                        <div className="mb-4 p-4 border-2 border-red-200 dark:border-red-700 rounded-lg bg-red-50 dark:bg-red-900/20">
+                          <h4 className="text-sm font-semibold dark:text-white mb-3">PDF Embedder Settings</h4>
+                          <div className="space-y-3">
+                            <div>
+                              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">PDF URL</label>
+                              <input
+                                type="url"
+                                value={field.pdfUrl || ''}
+                                onChange={(e) => updateField(field.id, { pdfUrl: e.target.value })}
+                                placeholder="https://example.com/document.pdf"
+                                className="w-full border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:border-indigo-500 dark:text-white text-sm"
+                              />
+                              <p className="text-xs text-gray-500 mt-1">Enter the URL of the PDF you want to display</p>
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Height (px)</label>
+                              <input
+                                type="number"
+                                value={field.pdfHeight || 500}
+                                onChange={(e) => updateField(field.id, { pdfHeight: parseInt(e.target.value) || 500 })}
+                                placeholder="500"
+                                className="w-full border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 focus:border-indigo-500 dark:text-white text-sm"
+                              />
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="checkbox"
+                                checked={field.showDownload || false}
+                                onChange={(e) => updateField(field.id, { showDownload: e.target.checked })}
+                                className="w-4 h-4 text-indigo-600 rounded"
+                              />
+                              <span className="text-xs text-gray-600 dark:text-gray-400">Allow users to download PDF</span>
                             </div>
                           </div>
                         </div>
