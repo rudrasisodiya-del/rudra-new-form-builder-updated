@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import api from '../../services/api';
 import { useTheme } from '../../context/ThemeContext';
@@ -56,6 +56,36 @@ const FormBuilderPage = () => {
   const [showPreview, setShowPreview] = useState(false);
   const [logicRules, setLogicRules] = useState<LogicRule[]>([]);
   const [previewValues, setPreviewValues] = useState<Record<string, string>>({});
+
+  // Autosave state
+  const [autoSaveStatus, setAutoSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const autoSaveTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const isInitialLoadRef = useRef(true);
+
+  // Undo/Redo state
+  const [history, setHistory] = useState<FormField[][]>([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+  const isUndoRedoRef = useRef(false);
+
+  // Sidebar state for collapsible categories
+  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({
+    input: true,
+    choice: false,
+    layout: false,
+    advanced: false,
+    payments: false,
+  });
+  const [sidebarSearchQuery, setSidebarSearchQuery] = useState('');
+
+  // Toggle category expansion
+  const toggleCategory = (category: string) => {
+    setExpandedCategories(prev => ({
+      ...prev,
+      [category]: !prev[category]
+    }));
+  };
 
   // Form Settings State
   const [formStatus, setFormStatus] = useState<'enabled' | 'disabled'>('enabled');
@@ -206,6 +236,121 @@ const FormBuilderPage = () => {
     setFields(template.fields);
   };
 
+  // Autosave function
+  const performAutoSave = useCallback(async () => {
+    if (!hasUnsavedChanges) return;
+
+    setAutoSaveStatus('saving');
+    try {
+      const data = { title, description, fields, folder: selectedFolder };
+      if (id) {
+        await api.put(`/forms/${id}`, data);
+        setAutoSaveStatus('saved');
+        setLastSavedAt(new Date());
+        setHasUnsavedChanges(false);
+        setTimeout(() => setAutoSaveStatus('idle'), 3000);
+      } else {
+        const response = await api.post('/forms', data);
+        navigate(`/dashboard/forms/builder/${response.data.form.id}`, { replace: true });
+        setAutoSaveStatus('saved');
+        setLastSavedAt(new Date());
+        setHasUnsavedChanges(false);
+        setTimeout(() => setAutoSaveStatus('idle'), 3000);
+      }
+    } catch (error) {
+      console.error('Autosave failed:', error);
+      setAutoSaveStatus('error');
+      setTimeout(() => setAutoSaveStatus('idle'), 5000);
+    }
+  }, [id, title, description, fields, selectedFolder, hasUnsavedChanges, navigate]);
+
+  // Track changes for autosave
+  useEffect(() => {
+    if (isInitialLoadRef.current) {
+      isInitialLoadRef.current = false;
+      return;
+    }
+
+    if (isUndoRedoRef.current) {
+      isUndoRedoRef.current = false;
+    }
+
+    setHasUnsavedChanges(true);
+
+    if (autoSaveTimerRef.current) {
+      clearTimeout(autoSaveTimerRef.current);
+    }
+
+    autoSaveTimerRef.current = setTimeout(() => {
+      performAutoSave();
+    }, 3000);
+
+    return () => {
+      if (autoSaveTimerRef.current) {
+        clearTimeout(autoSaveTimerRef.current);
+      }
+    };
+  }, [title, description, fields]);
+
+  // Track field changes for undo/redo
+  useEffect(() => {
+    if (isUndoRedoRef.current) return;
+    if (isInitialLoadRef.current) return;
+
+    setHistory(prev => {
+      const newHistory = prev.slice(0, historyIndex + 1);
+      newHistory.push([...fields]);
+      return newHistory;
+    });
+    setHistoryIndex(prev => prev + 1);
+  }, [fields]);
+
+  // Undo function
+  const handleUndo = useCallback(() => {
+    if (historyIndex > 0) {
+      isUndoRedoRef.current = true;
+      setHistoryIndex(prev => prev - 1);
+      setFields(history[historyIndex - 1]);
+    }
+  }, [history, historyIndex]);
+
+  // Redo function
+  const handleRedo = useCallback(() => {
+    if (historyIndex < history.length - 1) {
+      isUndoRedoRef.current = true;
+      setHistoryIndex(prev => prev + 1);
+      setFields(history[historyIndex + 1]);
+    }
+  }, [history, historyIndex]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        performAutoSave();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        handleUndo();
+      }
+      if (((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'z') || ((e.ctrlKey || e.metaKey) && e.key === 'y')) {
+        e.preventDefault();
+        handleRedo();
+      }
+      if ((e.key === 'Delete' || e.key === 'Backspace') && selectedField) {
+        const activeElement = document.activeElement;
+        if (activeElement?.tagName !== 'INPUT' && activeElement?.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+          removeField(selectedField);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [performAutoSave, handleUndo, handleRedo, selectedField]);
+
   const handleSave = async () => {
     setSaving(true);
     try {
@@ -216,7 +361,10 @@ const FormBuilderPage = () => {
         const response = await api.post('/forms', data);
         navigate(`/dashboard/forms/builder/${response.data.form.id}`, { replace: true });
       }
-      alert('Form saved successfully!');
+      setAutoSaveStatus('saved');
+      setLastSavedAt(new Date());
+      setHasUnsavedChanges(false);
+      setTimeout(() => setAutoSaveStatus('idle'), 3000);
     } catch (error) {
       console.error('Error saving form:', error);
       alert('Failed to save form');
@@ -987,6 +1135,92 @@ const FormBuilderPage = () => {
     { type: 'pdfembedder' as FieldType, icon: <IconPdf />, label: 'PDF Embedder', color: '#ef4444', bg: '#fee2e2' },
   ];
 
+  // Organized element categories for cleaner sidebar
+  const elementCategories = [
+    {
+      id: 'input',
+      label: 'Input Fields',
+      icon: '📝',
+      elements: [
+        { type: 'shorttext' as FieldType, icon: <IconText />, label: 'Short Text', color: '#0ea5e9' },
+        { type: 'longtext' as FieldType, icon: <IconTextarea />, label: 'Long Text', color: '#3b82f6' },
+        { type: 'email' as FieldType, icon: <IconMail />, label: 'Email', color: '#10b981' },
+        { type: 'phone' as FieldType, icon: <IconPhone />, label: 'Phone', color: '#6366f1' },
+        { type: 'number' as FieldType, icon: <IconNumber />, label: 'Number', color: '#14b8a6' },
+        { type: 'fullname' as FieldType, icon: <IconUser />, label: 'Full Name', color: '#3b82f6' },
+        { type: 'address' as FieldType, icon: <IconAddress />, label: 'Address', color: '#ef4444' },
+      ]
+    },
+    {
+      id: 'choice',
+      label: 'Choice Fields',
+      icon: '☑️',
+      elements: [
+        { type: 'dropdown' as FieldType, icon: <IconDropdown />, label: 'Dropdown', color: '#d946ef' },
+        { type: 'checkbox' as FieldType, icon: <IconCheckbox />, label: 'Checkbox', color: '#84cc16' },
+        { type: 'radio' as FieldType, icon: <IconRadio />, label: 'Radio', color: '#f97316' },
+        { type: 'checklist' as FieldType, icon: <IconCheckbox />, label: 'Checklist', color: '#22c55e' },
+      ]
+    },
+    {
+      id: 'layout',
+      label: 'Layout & Media',
+      icon: '🎨',
+      elements: [
+        { type: 'heading' as FieldType, icon: <IconHeading />, label: 'Heading', color: '#8b5cf6' },
+        { type: 'file' as FieldType, icon: <IconFile />, label: 'File Upload', color: '#ec4899' },
+        { type: 'signature' as FieldType, icon: <IconSignature />, label: 'Signature', color: '#f59e0b' },
+        { type: 'takephoto' as FieldType, icon: <IconCamera />, label: 'Take Photo', color: '#ec4899' },
+        { type: 'pdfembedder' as FieldType, icon: <IconPdf />, label: 'PDF Embedder', color: '#ef4444' },
+      ]
+    },
+    {
+      id: 'advanced',
+      label: 'Advanced',
+      icon: '⚡',
+      elements: [
+        { type: 'datepicker' as FieldType, icon: <IconCalendar />, label: 'Date Picker', color: '#06b6d4' },
+        { type: 'appointment' as FieldType, icon: <IconCalendar />, label: 'Appointment', color: '#8b5cf6' },
+        { type: 'formcalculation' as FieldType, icon: <IconCalculator />, label: 'Calculation', color: '#8b5cf6' },
+        { type: 'dynamicdropdowns' as FieldType, icon: <IconDropdown />, label: 'Dynamic Dropdowns', color: '#d946ef' },
+        { type: 'configurablelist' as FieldType, icon: <IconList />, label: 'Configurable List', color: '#3b82f6' },
+        { type: 'termsandconditions' as FieldType, icon: <IconFile />, label: 'Terms & Conditions', color: '#f59e0b' },
+        { type: 'datagrid' as FieldType, icon: <IconGrid />, label: 'Data Grid', color: '#0284c7' },
+        { type: 'fillintheblank' as FieldType, icon: <IconText />, label: 'Fill in the Blank', color: '#22c55e' },
+        { type: 'multipletextfields' as FieldType, icon: <IconText />, label: 'Multiple Text', color: '#10b981' },
+        { type: 'dynamictextbox' as FieldType, icon: <IconText />, label: 'Dynamic Textbox', color: '#06b6d4' },
+        { type: 'addoptions' as FieldType, icon: <IconDropdown />, label: 'Add Options', color: '#6366f1' },
+      ]
+    },
+    {
+      id: 'payments',
+      label: 'Payments',
+      icon: '💳',
+      elements: [
+        { type: 'stripe' as FieldType, icon: <IconCreditCard />, label: 'Stripe', color: '#6366f1' },
+        { type: 'paypal' as FieldType, icon: <IconCreditCard />, label: 'PayPal', color: '#003087' },
+        { type: 'square' as FieldType, icon: <IconCreditCard />, label: 'Square', color: '#1f2937' },
+        { type: 'applepay' as FieldType, icon: <IconCreditCard />, label: 'Apple/Google Pay', color: '#000000' },
+        { type: 'stripecheckout' as FieldType, icon: <IconCreditCard />, label: 'Stripe Checkout', color: '#7c3aed' },
+        { type: 'braintree' as FieldType, icon: <IconCreditCard />, label: 'Braintree', color: '#4f46e5' },
+        { type: 'cashapppay' as FieldType, icon: <IconCreditCard />, label: 'Cash App Pay', color: '#00d632' },
+        { type: 'afterpay' as FieldType, icon: <IconCreditCard />, label: 'Afterpay', color: '#b2fce4' },
+        { type: 'clearpay' as FieldType, icon: <IconCreditCard />, label: 'Clearpay', color: '#00d4ff' },
+        { type: 'mollie' as FieldType, icon: <IconCreditCard />, label: 'Mollie', color: '#0ea5e9' },
+        { type: 'authorizenet' as FieldType, icon: <IconCreditCard />, label: 'Authorize.Net', color: '#dc2626' },
+        { type: 'cybersource' as FieldType, icon: <IconCreditCard />, label: 'CyberSource', color: '#b91c1c' },
+      ]
+    },
+  ];
+
+  // Filter elements based on search query
+  const filteredCategories = elementCategories.map(category => ({
+    ...category,
+    elements: category.elements.filter(element =>
+      element.label.toLowerCase().includes(sidebarSearchQuery.toLowerCase())
+    )
+  })).filter(category => category.elements.length > 0);
+
   return (
     <div className={`h-screen flex flex-col bg-gray-50 dark:from-gray-900 dark:to-gray-800 ${isDarkMode ? 'dark' : ''}`}>
       {/* Clean Professional Header */}
@@ -1016,6 +1250,46 @@ const FormBuilderPage = () => {
                 className="text-sm font-semibold border-none focus:outline-none focus:ring-0 bg-transparent dark:text-white text-gray-900 min-w-[150px]"
                 placeholder="Enter form name..."
               />
+            </div>
+
+            {/* Autosave Status Indicator */}
+            <div className="flex items-center gap-2">
+              {autoSaveStatus === 'saving' && (
+                <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-xs animate-pulse">
+                  <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  <span>Saving...</span>
+                </div>
+              )}
+              {autoSaveStatus === 'saved' && (
+                <div className="flex items-center gap-1.5 text-green-600 dark:text-green-400 text-xs">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Saved</span>
+                </div>
+              )}
+              {autoSaveStatus === 'error' && (
+                <div className="flex items-center gap-1.5 text-red-600 dark:text-red-400 text-xs">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span>Failed</span>
+                </div>
+              )}
+              {autoSaveStatus === 'idle' && hasUnsavedChanges && (
+                <div className="flex items-center gap-1 text-amber-600 dark:text-amber-400 text-xs">
+                  <div className="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
+                  <span>Unsaved</span>
+                </div>
+              )}
+              {autoSaveStatus === 'idle' && !hasUnsavedChanges && lastSavedAt && (
+                <span className="text-gray-400 dark:text-gray-500 text-xs">
+                  Saved {lastSavedAt.toLocaleTimeString()}
+                </span>
+              )}
             </div>
           </div>
 
@@ -1052,6 +1326,29 @@ const FormBuilderPage = () => {
 
           {/* Right Actions */}
           <div className="flex items-center gap-2">
+            {/* Undo/Redo Buttons */}
+            <div className="flex items-center gap-0.5 mr-2 border-r border-gray-200 dark:border-gray-600 pr-3">
+              <button
+                onClick={handleUndo}
+                disabled={historyIndex <= 0}
+                className="p-1.5 rounded text-gray-500 dark:text-gray-400 hover:text-[#1a73e8] dark:hover:text-[#1a73e8] hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                title="Undo (Ctrl+Z)"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                </svg>
+              </button>
+              <button
+                onClick={handleRedo}
+                disabled={historyIndex >= history.length - 1}
+                className="p-1.5 rounded text-gray-500 dark:text-gray-400 hover:text-[#1a73e8] dark:hover:text-[#1a73e8] hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                title="Redo (Ctrl+Shift+Z)"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 10h-10a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6" />
+                </svg>
+              </button>
+            </div>
             <button
               onClick={() => setShowPreview(!showPreview)}
               className={`px-4 py-2 font-medium rounded-lg transition-all text-sm ${
@@ -1062,13 +1359,6 @@ const FormBuilderPage = () => {
             >
               Preview
             </button>
-            <button
-              onClick={handleSave}
-              disabled={saving}
-              className="bg-[#1a73e8] hover:bg-[#1557b0] text-white px-5 py-2 rounded-lg font-semibold disabled:opacity-50 transition-all duration-200 text-sm"
-            >
-              {saving ? 'Saving...' : 'Save'}
-            </button>
           </div>
         </div>
       </header>
@@ -1077,113 +1367,105 @@ const FormBuilderPage = () => {
         {/* BUILD TAB */}
         {activeTab === 'build' && (
           <>
-            {/* Clean Professional Sidebar */}
+            {/* Cleaner Sidebar with Collapsible Categories */}
             {showSidebar && (
-              <aside className="w-72 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white h-full overflow-y-auto border-r border-gray-200 dark:border-gray-800">
-                <div className="p-4">
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-base font-semibold text-[#1a73e8]">Form Elements</h2>
-                    <button onClick={() => setShowSidebar(false)} className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800 transition-all">
+              <aside className="w-64 bg-white dark:bg-gray-900 text-gray-900 dark:text-white h-full overflow-y-auto border-r border-gray-200 dark:border-gray-800">
+                <div className="p-3">
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Elements</h2>
+                    <button onClick={() => setShowSidebar(false)} className="p-1 rounded text-gray-400 hover:text-gray-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </button>
                   </div>
 
-                  {/* Clean Category Tabs */}
-                  <div className="flex gap-0.5 mb-4 bg-white dark:bg-gray-800 p-1 rounded-lg border border-gray-200 dark:border-gray-700">
-                    <button
-                      onClick={() => setSidebarTab('basic')}
-                      className={`flex-1 px-3 py-2 text-xs font-semibold rounded-md transition-all duration-200 ${sidebarTab === 'basic' ? 'bg-[#1a73e8] text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'}`}
-                    >
-                      Basic
-                    </button>
-                    <button
-                      onClick={() => setSidebarTab('payments')}
-                      className={`flex-1 px-3 py-2 text-xs font-semibold rounded-md transition-all duration-200 ${sidebarTab === 'payments' ? 'bg-[#1a73e8] text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'}`}
-                    >
-                      Payments
-                    </button>
-                    <button
-                      onClick={() => setSidebarTab('widgets')}
-                      className={`flex-1 px-3 py-2 text-xs font-semibold rounded-md transition-all duration-200 ${sidebarTab === 'widgets' ? 'bg-[#1a73e8] text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'}`}
-                    >
-                      Widgets
-                    </button>
-                  </div>
-
                   {/* Search */}
-                  <div className="mb-4">
+                  <div className="mb-3">
                     <div className="relative">
-                      <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="absolute left-2.5 top-1/2 transform -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                       </svg>
                       <input
                         type="text"
-                        placeholder={`Search ${sidebarTab}...`}
-                        className="w-full pl-9 pr-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg border border-gray-200 dark:border-gray-700 focus:outline-none focus:border-[#1a73e8] focus:ring-1 focus:ring-[#1a73e8]/20 transition-all"
+                        placeholder="Search elements..."
+                        value={sidebarSearchQuery}
+                        onChange={(e) => setSidebarSearchQuery(e.target.value)}
+                        className="w-full pl-8 pr-2 py-1.5 text-xs bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white rounded-md border border-gray-200 dark:border-gray-700 focus:outline-none focus:border-[#1a73e8] transition-all"
                       />
                     </div>
                   </div>
 
-                  {/* Elements List with Professional Icons */}
-                  <div className="space-y-2">
-                    {sidebarTab === 'basic' && basicElements.map((element) => (
-                      <button
-                        key={element.type}
-                        onClick={(e) => handleElementClick(e, element.type)}
-                        draggable
-                        onDragStart={handleDragStart(element.type)}
-                        onDragEnd={handleDragEnd}
-                        className="w-full flex items-center gap-3 px-3 py-2.5 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750 rounded-lg transition-all duration-200 text-left group border border-gray-100 dark:border-gray-700 hover:border-gray-200 dark:hover:border-gray-600 cursor-grab active:cursor-grabbing"
-                      >
-                        <div
-                          className="w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200"
-                          style={{ backgroundColor: element.bg, color: element.color }}
+                  {/* Collapsible Categories */}
+                  <div className="space-y-1.5">
+                    {filteredCategories.map((category) => (
+                      <div key={category.id} className="border border-gray-200 dark:border-gray-700 rounded-md overflow-hidden">
+                        {/* Category Header */}
+                        <button
+                          onClick={() => toggleCategory(category.id)}
+                          className="w-full flex items-center justify-between px-2.5 py-2 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors"
                         >
-                          {element.icon}
-                        </div>
-                        <span className="font-medium text-sm text-gray-700 dark:text-gray-200">{element.label}</span>
-                      </button>
-                    ))}
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm">{category.icon}</span>
+                            <span className="font-medium text-xs text-gray-700 dark:text-gray-200">{category.label}</span>
+                            <span className="text-[10px] text-gray-400 bg-gray-200 dark:bg-gray-700 px-1.5 py-0.5 rounded-full">{category.elements.length}</span>
+                          </div>
+                          <svg
+                            className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-200 ${expandedCategories[category.id] ? 'rotate-180' : ''}`}
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
 
-                    {sidebarTab === 'payments' && paymentElements.map((element) => (
-                      <button
-                        key={element.type}
-                        onClick={(e) => handleElementClick(e, element.type)}
-                        draggable
-                        onDragStart={handleDragStart(element.type)}
-                        onDragEnd={handleDragEnd}
-                        className="w-full flex items-center gap-3 px-3 py-2.5 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750 rounded-lg transition-all duration-200 text-left group border border-gray-100 dark:border-gray-700 hover:border-gray-200 dark:hover:border-gray-600 cursor-grab active:cursor-grabbing"
-                      >
-                        <div
-                          className="w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200"
-                          style={{ backgroundColor: element.bg, color: element.color }}
-                        >
-                          {element.icon}
-                        </div>
-                        <span className="font-medium text-sm text-gray-700 dark:text-gray-200">{element.label}</span>
-                      </button>
+                        {/* Category Elements */}
+                        {expandedCategories[category.id] && (
+                          <div className="p-1.5 space-y-0.5 bg-white dark:bg-gray-900">
+                            {category.elements.map((element) => (
+                              <button
+                                key={element.type}
+                                onClick={(e) => handleElementClick(e, element.type)}
+                                draggable
+                                onDragStart={handleDragStart(element.type)}
+                                onDragEnd={handleDragEnd}
+                                className="w-full flex items-center gap-2 px-2 py-1.5 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-all duration-150 text-left group cursor-grab active:cursor-grabbing"
+                              >
+                                <div className="w-6 h-6 rounded flex items-center justify-center flex-shrink-0" style={{ color: element.color }}>
+                                  {element.icon}
+                                </div>
+                                <span className="text-xs text-gray-600 dark:text-gray-300 group-hover:text-[#1a73e8] dark:group-hover:text-[#1a73e8] transition-colors truncate">{element.label}</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     ))}
+                  </div>
 
-                    {sidebarTab === 'widgets' && widgetElements.map((element) => (
-                      <button
-                        key={element.type}
-                        onClick={(e) => handleElementClick(e, element.type)}
-                        draggable
-                        onDragStart={handleDragStart(element.type)}
-                        onDragEnd={handleDragEnd}
-                        className="w-full flex items-center gap-3 px-3 py-2.5 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750 rounded-lg transition-all duration-200 text-left group border border-gray-100 dark:border-gray-700 hover:border-gray-200 dark:hover:border-gray-600 cursor-grab active:cursor-grabbing"
-                      >
-                        <div
-                          className="w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-200"
-                          style={{ backgroundColor: element.bg, color: element.color }}
-                        >
-                          {element.icon}
-                        </div>
-                        <span className="font-medium text-sm text-gray-700 dark:text-gray-200">{element.label}</span>
-                      </button>
-                    ))}
+                  {/* Keyboard Shortcuts Hint */}
+                  <div className="mt-3 p-2 bg-gray-50 dark:bg-gray-800 rounded-md border border-gray-200 dark:border-gray-700">
+                    <p className="text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-1.5">Shortcuts</p>
+                    <div className="space-y-1 text-[10px] text-gray-500 dark:text-gray-400">
+                      <div className="flex justify-between">
+                        <span>Save</span>
+                        <kbd className="px-1 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-[9px]">Ctrl+S</kbd>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Undo</span>
+                        <kbd className="px-1 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-[9px]">Ctrl+Z</kbd>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Redo</span>
+                        <kbd className="px-1 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-[9px]">Ctrl+Y</kbd>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Delete</span>
+                        <kbd className="px-1 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-[9px]">Del</kbd>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </aside>

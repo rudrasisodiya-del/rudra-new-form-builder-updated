@@ -168,14 +168,9 @@ const MyForms = () => {
         maxWidth: '1400px',
         mx: 'auto',
       }}>
-        {/* Actions Bar */}
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          sx={{ mb: 3 }}
-        >
-          {currentFolder && (
+        {/* Folder indicator */}
+        {currentFolder && (
+          <Box sx={{ mb: 2 }}>
             <Chip
               icon={<FolderOpenIcon sx={{ fontSize: 16 }} />}
               label={`Folder: ${currentFolder.name}`}
@@ -187,173 +182,127 @@ const MyForms = () => {
                 fontWeight: 600,
               }}
             />
-          )}
-          <Box sx={{ flex: 1 }} />
+          </Box>
+        )}
+
+        {/* Toolbar - Search, Filters, and Create Button */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
+            alignItems: { xs: 'stretch', md: 'center' },
+            gap: 2,
+            mb: 4,
+            p: 2,
+            borderRadius: 3,
+            bgcolor: isDark ? alpha('#1e293b', 0.5) : '#f8fafc',
+            border: '1px solid',
+            borderColor: isDark ? alpha('#fff', 0.08) : '#e2e8f0',
+          }}
+        >
+          {/* Search Input */}
+          <TextField
+            placeholder="Search forms..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            size="small"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon sx={{ color: 'text.secondary', fontSize: 20 }} />
+                </InputAdornment>
+              ),
+            }}
+            sx={{
+              width: { xs: '100%', md: 280 },
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2,
+                backgroundColor: isDark ? alpha('#0f172a', 0.6) : '#ffffff',
+                '& fieldset': {
+                  borderColor: isDark ? alpha('#fff', 0.1) : '#e2e8f0',
+                },
+                '&:hover fieldset': {
+                  borderColor: theme.palette.primary.main,
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: theme.palette.primary.main,
+                  borderWidth: 1,
+                },
+              },
+            }}
+          />
+
+          {/* Filter Chips */}
+          <Stack direction="row" spacing={1} sx={{ flexShrink: 0 }}>
+            {[
+              { key: 'all', label: 'All', color: '#1a73e8' },
+              { key: 'PUBLISHED', label: 'Published', color: '#10b981' },
+              { key: 'DRAFT', label: 'Draft', color: '#f59e0b' },
+            ].map((filter) => (
+              <Chip
+                key={filter.key}
+                label={filter.label}
+                onClick={() => setFilterStatus(filter.key)}
+                variant={filterStatus === filter.key ? 'filled' : 'outlined'}
+                sx={{
+                  fontWeight: 600,
+                  fontSize: '0.8125rem',
+                  height: 32,
+                  borderRadius: 2,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  ...(filterStatus === filter.key ? {
+                    bgcolor: filter.color,
+                    color: '#fff',
+                    borderColor: filter.color,
+                    '&:hover': {
+                      bgcolor: filter.color,
+                      opacity: 0.9,
+                    },
+                  } : {
+                    bgcolor: 'transparent',
+                    color: isDark ? alpha('#fff', 0.7) : '#64748b',
+                    borderColor: isDark ? alpha('#fff', 0.15) : '#e2e8f0',
+                    '&:hover': {
+                      bgcolor: alpha(filter.color, 0.08),
+                      borderColor: filter.color,
+                      color: filter.color,
+                    },
+                  }),
+                }}
+              />
+            ))}
+          </Stack>
+
+          {/* Spacer */}
+          <Box sx={{ flex: 1, display: { xs: 'none', md: 'block' } }} />
+
+          {/* Create Form Button */}
           <Button
             variant="contained"
             startIcon={<AddIcon />}
             component={Link}
             to="/dashboard/forms/create"
             sx={{
-              background: '#1a73e8',
+              background: 'linear-gradient(135deg, #1a73e8 0%, #1557b0 100%)',
               textTransform: 'none',
               fontWeight: 600,
-              px: 3,
-              py: 1.25,
+              px: 2.5,
+              py: 1,
               borderRadius: 2,
-              boxShadow: '0 2px 8px rgba(26, 115, 232, 0.25)',
-              transition: 'all 0.3s ease',
+              boxShadow: '0 2px 8px rgba(26, 115, 232, 0.3)',
+              whiteSpace: 'nowrap',
+              transition: 'all 0.2s ease',
               '&:hover': {
-                background: '#1557b0',
-                boxShadow: '0 4px 12px rgba(26, 115, 232, 0.35)',
-                transform: 'translateY(-2px)',
+                background: 'linear-gradient(135deg, #1557b0 0%, #0d47a1 100%)',
+                boxShadow: '0 4px 12px rgba(26, 115, 232, 0.4)',
+                transform: 'translateY(-1px)',
               },
             }}
           >
             Create Form
           </Button>
-        </Stack>
-
-        {/* Search and Filter Bar */}
-        <Card
-          sx={{
-            mb: 4,
-            borderRadius: 3,
-            boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-            border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
-          }}
-        >
-          <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
-            <Stack
-              direction={{ xs: 'column', sm: 'row' }}
-              spacing={2}
-              alignItems="stretch"
-            >
-              <TextField
-                fullWidth
-                placeholder="Search forms..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon sx={{ color: 'text.secondary' }} />
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: 2,
-                    backgroundColor: alpha(theme.palette.background.default, 0.5),
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      backgroundColor: theme.palette.background.default,
-                      boxShadow: `0 0 0 2px ${alpha(theme.palette.primary.main, 0.1)}`,
-                    },
-                    '&.Mui-focused': {
-                      backgroundColor: theme.palette.background.default,
-                      boxShadow: `0 0 0 3px ${alpha(theme.palette.primary.main, 0.15)}`,
-                      '& fieldset': {
-                        borderColor: theme.palette.primary.main,
-                        borderWidth: 2,
-                      },
-                    },
-                  },
-                }}
-              />
-              <Stack direction="row" spacing={1}>
-                <Button
-                  variant={filterStatus === 'all' ? 'contained' : 'outlined'}
-                  onClick={() => setFilterStatus('all')}
-                  startIcon={<FilterIcon />}
-                  sx={{
-                    textTransform: 'none',
-                    fontWeight: 600,
-                    borderRadius: 2,
-                    px: 3,
-                    whiteSpace: 'nowrap',
-                    transition: 'all 0.2s ease',
-                    ...(filterStatus === 'all' ? {
-                      background: '#1a73e8',
-                      boxShadow: 'none',
-                      '&:hover': {
-                        background: '#1557b0',
-                      },
-                    } : {
-                      borderColor: theme.palette.divider,
-                      color: theme.palette.text.secondary,
-                      '&:hover': {
-                        bgcolor: alpha(theme.palette.primary.main, 0.04),
-                        borderColor: theme.palette.primary.main,
-                        color: theme.palette.primary.main,
-                      },
-                    }),
-                  }}
-                >
-                  All
-                </Button>
-                <Button
-                  variant={filterStatus === 'PUBLISHED' ? 'contained' : 'outlined'}
-                  onClick={() => setFilterStatus('PUBLISHED')}
-                  sx={{
-                    textTransform: 'none',
-                    fontWeight: 600,
-                    borderRadius: 2,
-                    px: 3,
-                    whiteSpace: 'nowrap',
-                    transition: 'all 0.2s ease',
-                    ...(filterStatus === 'PUBLISHED' ? {
-                      background: '#10b981',
-                      boxShadow: 'none',
-                      '&:hover': {
-                        background: '#059669',
-                      },
-                    } : {
-                      borderColor: theme.palette.divider,
-                      color: theme.palette.text.secondary,
-                      '&:hover': {
-                        bgcolor: alpha('#10b981', 0.04),
-                        borderColor: '#10b981',
-                        color: '#10b981',
-                      },
-                    }),
-                  }}
-                >
-                  Published
-                </Button>
-                <Button
-                  variant={filterStatus === 'DRAFT' ? 'contained' : 'outlined'}
-                  onClick={() => setFilterStatus('DRAFT')}
-                  sx={{
-                    textTransform: 'none',
-                    fontWeight: 600,
-                    borderRadius: 2,
-                    px: 3,
-                    whiteSpace: 'nowrap',
-                    transition: 'all 0.2s ease',
-                    ...(filterStatus === 'DRAFT' ? {
-                      background: '#f59e0b',
-                      boxShadow: 'none',
-                      '&:hover': {
-                        background: '#d97706',
-                      },
-                    } : {
-                      borderColor: theme.palette.divider,
-                      color: theme.palette.text.secondary,
-                      '&:hover': {
-                        bgcolor: alpha('#f59e0b', 0.04),
-                        borderColor: '#f59e0b',
-                        color: '#f59e0b',
-                      },
-                    }),
-                  }}
-                >
-                  Draft
-                </Button>
-              </Stack>
-            </Stack>
-          </CardContent>
-        </Card>
+        </Box>
 
         {loading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', py: 12 }}>
