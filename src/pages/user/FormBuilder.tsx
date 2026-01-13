@@ -1367,24 +1367,31 @@ const FormBuilderPage = () => {
         {/* BUILD TAB */}
         {activeTab === 'build' && (
           <>
-            {/* Cleaner Sidebar with Collapsible Categories */}
+            {/* Enhanced Professional Sidebar with Collapsible Categories */}
             {showSidebar && (
-              <aside className="w-64 bg-white dark:bg-gray-900 text-gray-900 dark:text-white h-full overflow-y-auto border-r border-gray-200 dark:border-gray-800">
-                <div className="p-3">
-                  {/* Header */}
-                  <div className="flex items-center justify-between mb-3">
-                    <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Elements</h2>
-                    <button onClick={() => setShowSidebar(false)} className="p-1 rounded text-gray-400 hover:text-gray-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all">
+              <aside className="w-72 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-900/95 text-gray-900 dark:text-white h-full overflow-y-auto border-r border-gray-200 dark:border-gray-700 shadow-sm">
+                <div className="p-4">
+                  {/* Header with Icon */}
+                  <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center shadow-md">
+                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                        </svg>
+                      </div>
+                      <h2 className="text-base font-bold text-gray-900 dark:text-white">Elements</h2>
+                    </div>
+                    <button onClick={() => setShowSidebar(false)} className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
                     </button>
                   </div>
 
-                  {/* Search */}
-                  <div className="mb-3">
+                  {/* Enhanced Search */}
+                  <div className="mb-4">
                     <div className="relative">
-                      <svg className="absolute left-2.5 top-1/2 transform -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                       </svg>
                       <input
@@ -1392,27 +1399,27 @@ const FormBuilderPage = () => {
                         placeholder="Search elements..."
                         value={sidebarSearchQuery}
                         onChange={(e) => setSidebarSearchQuery(e.target.value)}
-                        className="w-full pl-8 pr-2 py-1.5 text-xs bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white rounded-md border border-gray-200 dark:border-gray-700 focus:outline-none focus:border-[#1a73e8] transition-all"
+                        className="w-full pl-10 pr-3 py-2.5 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-xl border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all shadow-sm"
                       />
                     </div>
                   </div>
 
-                  {/* Collapsible Categories */}
-                  <div className="space-y-1.5">
+                  {/* Enhanced Collapsible Categories */}
+                  <div className="space-y-2">
                     {filteredCategories.map((category) => (
-                      <div key={category.id} className="border border-gray-200 dark:border-gray-700 rounded-md overflow-hidden">
+                      <div key={category.id} className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm bg-white dark:bg-gray-800/50 backdrop-blur-sm">
                         {/* Category Header */}
                         <button
                           onClick={() => toggleCategory(category.id)}
-                          className="w-full flex items-center justify-between px-2.5 py-2 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors"
+                          className="w-full flex items-center justify-between px-3.5 py-3 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-800/80 hover:from-gray-100 hover:to-gray-100 dark:hover:from-gray-750 dark:hover:to-gray-750 transition-all group"
                         >
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm">{category.icon}</span>
-                            <span className="font-medium text-xs text-gray-700 dark:text-gray-200">{category.label}</span>
-                            <span className="text-[10px] text-gray-400 bg-gray-200 dark:bg-gray-700 px-1.5 py-0.5 rounded-full">{category.elements.length}</span>
+                          <div className="flex items-center gap-2.5">
+                            <span className="text-lg transform group-hover:scale-110 transition-transform">{category.icon}</span>
+                            <span className="font-semibold text-sm text-gray-800 dark:text-gray-100">{category.label}</span>
+                            <span className="text-[10px] font-medium text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-700 px-2 py-0.5 rounded-full border border-gray-200 dark:border-gray-600">{category.elements.length}</span>
                           </div>
                           <svg
-                            className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-200 ${expandedCategories[category.id] ? 'rotate-180' : ''}`}
+                            className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform duration-300 ${expandedCategories[category.id] ? 'rotate-180' : ''}`}
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -1423,7 +1430,7 @@ const FormBuilderPage = () => {
 
                         {/* Category Elements */}
                         {expandedCategories[category.id] && (
-                          <div className="p-1.5 space-y-0.5 bg-white dark:bg-gray-900">
+                          <div className="p-2 space-y-1 bg-white dark:bg-gray-900/50">
                             {category.elements.map((element) => (
                               <button
                                 key={element.type}
@@ -1431,12 +1438,12 @@ const FormBuilderPage = () => {
                                 draggable
                                 onDragStart={handleDragStart(element.type)}
                                 onDragEnd={handleDragEnd}
-                                className="w-full flex items-center gap-2 px-2 py-1.5 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-all duration-150 text-left group cursor-grab active:cursor-grabbing"
+                                className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-cyan-50 dark:hover:from-indigo-900/20 dark:hover:to-cyan-900/20 rounded-lg transition-all duration-200 text-left group cursor-grab active:cursor-grabbing border border-transparent hover:border-indigo-200 dark:hover:border-indigo-800/50 hover:shadow-sm"
                               >
-                                <div className="w-6 h-6 rounded flex items-center justify-center flex-shrink-0" style={{ color: element.color }}>
+                                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 bg-gradient-to-br group-hover:scale-110 transition-transform shadow-sm" style={{ backgroundColor: `${element.color}15`, color: element.color }}>
                                   {element.icon}
                                 </div>
-                                <span className="text-xs text-gray-600 dark:text-gray-300 group-hover:text-[#1a73e8] dark:group-hover:text-[#1a73e8] transition-colors truncate">{element.label}</span>
+                                <span className="text-sm font-medium text-gray-700 dark:text-gray-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors truncate">{element.label}</span>
                               </button>
                             ))}
                           </div>
@@ -1445,25 +1452,30 @@ const FormBuilderPage = () => {
                     ))}
                   </div>
 
-                  {/* Keyboard Shortcuts Hint */}
-                  <div className="mt-3 p-2 bg-gray-50 dark:bg-gray-800 rounded-md border border-gray-200 dark:border-gray-700">
-                    <p className="text-[10px] font-medium text-gray-500 dark:text-gray-400 mb-1.5">Shortcuts</p>
-                    <div className="space-y-1 text-[10px] text-gray-500 dark:text-gray-400">
-                      <div className="flex justify-between">
-                        <span>Save</span>
-                        <kbd className="px-1 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-[9px]">Ctrl+S</kbd>
+                  {/* Enhanced Keyboard Shortcuts Hint */}
+                  <div className="mt-4 p-3 bg-gradient-to-br from-indigo-50 to-cyan-50 dark:from-indigo-900/20 dark:to-cyan-900/20 rounded-xl border border-indigo-100 dark:border-indigo-800/30 shadow-sm">
+                    <div className="flex items-center gap-2 mb-2">
+                      <svg className="w-4 h-4 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                      <p className="text-xs font-bold text-indigo-700 dark:text-indigo-300">Shortcuts</p>
+                    </div>
+                    <div className="space-y-1.5 text-xs text-gray-600 dark:text-gray-300">
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium">Save</span>
+                        <kbd className="px-2 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-[10px] font-mono shadow-sm">Ctrl+S</kbd>
                       </div>
-                      <div className="flex justify-between">
-                        <span>Undo</span>
-                        <kbd className="px-1 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-[9px]">Ctrl+Z</kbd>
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium">Undo</span>
+                        <kbd className="px-2 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-[10px] font-mono shadow-sm">Ctrl+Z</kbd>
                       </div>
-                      <div className="flex justify-between">
-                        <span>Redo</span>
-                        <kbd className="px-1 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-[9px]">Ctrl+Y</kbd>
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium">Redo</span>
+                        <kbd className="px-2 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-[10px] font-mono shadow-sm">Ctrl+Y</kbd>
                       </div>
-                      <div className="flex justify-between">
-                        <span>Delete</span>
-                        <kbd className="px-1 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-[9px]">Del</kbd>
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium">Delete</span>
+                        <kbd className="px-2 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-[10px] font-mono shadow-sm">Del</kbd>
                       </div>
                     </div>
                   </div>
